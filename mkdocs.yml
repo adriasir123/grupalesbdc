@@ -1,0 +1,7 @@
+site_name: Sysadmin Docs
+theme: windmill
+nav:
+    - Home: index.md
+    - Sección 1: seccion1.md
+    - Sección 2: seccion2.md
+    - About: about.md
