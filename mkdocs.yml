@@ -2,12 +2,12 @@ site_name: conocimiento-en-bits
 theme:
   name: 'material'
   palette: 
-    primary: pink
     - scheme: default
       toggle:
         icon: material/toggle-switch-off-outline
         name: Switch to dark mode
     - scheme: slate 
+      primary: pink
       toggle:
         icon: material/toggle-switch
         name: Switch to light mode
