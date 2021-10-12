@@ -1,7 +1,14 @@
 site_name: conocimiento-en-bits
-theme: material
-  palette:
-    scheme: slate
+theme:
+  palette: 
+    - scheme: default
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+    - scheme: slate 
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
 nav:
     - Home: index.md
     - 2asir3:
