@@ -1,5 +1,7 @@
 site_name: conocimiento-en-bits
 theme: material
+  palette:
+    scheme: slate
 nav:
     - Home: index.md
     - 2asir3:
