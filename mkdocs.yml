@@ -1,4 +1,5 @@
 site_name: conocimiento-en-bits
+site_url: https://conocimiento-en-bits.neocities.org/
 theme:
   name: 'material'
   palette: 
