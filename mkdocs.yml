@@ -2,6 +2,7 @@ site_name: conocimiento-en-bits
 theme:
   name: 'material'
   palette: 
+    primary: pink
     - scheme: default
       toggle:
         icon: material/toggle-switch-off-outline
