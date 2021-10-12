@@ -2,6 +2,6 @@ site_name: conocimiento-en-bits
 theme: material
 nav:
     - Home: index.md
-    - Sección 1: seccion1.md
-    - Sección 2: seccion2.md
+    - 2asir3:
+        - 'ej1-playbook-sencillo': '2021-09-22-ej1-playbook-sencillo.md'
     - About: about.md
