@@ -1,10 +1,8 @@
----
-title: "Ejercicio 3: Configuración del escenario router-nat"
----
+# EJ3: Configuración del escenario router-nat
 
 ![](https://fp.josedomingo.org/sri2122/u01/img/router.png)
 
-# ENUNCIADO
+## ENUNCIADO
 
 Crear playbook en ansible con los roles:
 
@@ -14,16 +12,16 @@ Crear playbook en ansible con los roles:
 
 
 
-# REALIZACIÓN
+## REALIZACIÓN
 
-## Rol common
+### Rol common
 
 ```
 - name: Actualizando paquetes...
   apt: update_cache=yes upgrade=yes
 ```
 
-## Rol router
+### Rol router
 Uso este plugin de ansible para el forwarding:
 ```
 ansible-galaxy collection install ansible.posix
@@ -53,7 +51,7 @@ mascara
 
 También un notify reboot para cuando cambie el interfaces
 
-## Rol cliente
+### Rol cliente
 
 ```
 - name: Borrando ruta por defecto...
@@ -74,7 +72,7 @@ AÚN ESTANDO FORWARDING ACTIVADO NO FUNCIONA EL PASO DE PAQUETES
 
 
 
-# ENTREGA
+## ENTREGA
 
 1. Desde cliente hacer ping a nombre de una web. Mostrar rutas para comprobar el camino.
 
