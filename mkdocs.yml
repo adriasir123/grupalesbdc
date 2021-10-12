@@ -3,11 +3,14 @@ theme:
   name: 'material'
   palette: 
     - scheme: default
+      primary: pink
+      accent: yellow
       toggle:
         icon: material/toggle-switch-off-outline
         name: Switch to dark mode
     - scheme: slate 
       primary: pink
+      accent: yellow
       toggle:
         icon: material/toggle-switch
         name: Switch to light mode
