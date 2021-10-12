@@ -1,5 +1,5 @@
-site_name: Sysadmin Docs
-theme: windmill
+site_name: conocimiento-en-bits
+theme: material
 nav:
     - Home: index.md
     - Sección 1: seccion1.md
