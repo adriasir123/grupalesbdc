@@ -23,6 +23,7 @@ nav:
         - 'ej2-router-nat-vagrant': '2021-10-1-ej2-router-nat-vagrant.md'
         - 'ej3-config-escenario-router-nat': '2021-10-3-ej3-config-escenario-router-nat.md'
         - 'app-web-estatica': '2021-10-5-implantacion-despliegue-aplicacion-web-estatica.md'
+        - 'ej2-pr-pag-compañero': '2021-10-14-ej2-pr-pag-compañero.md' 
     - About: about.md
 extra:
   disqus: conocimiento-en-bits-neocities-org
