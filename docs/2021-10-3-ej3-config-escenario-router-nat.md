@@ -28,9 +28,10 @@ traceroute to www.example.org (93.184.216.34), 30 hops max, 60 byte packets
 ```
 
 ### Parte 2
-> Screenshot accediendo por ssh a las dos máquinas con las condiciones:  
-- Nunca por eth0
-- Configurar las conexiones directas en ~/.ssh/config
+> Screenshot accediendo por ssh a las dos máquinas con las condiciones:
+>
+>- Nunca por eth0
+>- Configurar las conexiones directas en ~/.ssh/config
 
 Elijo la manera de acceso añadiendo mi clave ssh pública personal a ambas máquinas.
 
