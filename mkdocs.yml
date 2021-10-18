@@ -1,5 +1,4 @@
-site_name: conocimiento-en-bits
-site_url: https://conocimiento-en-bits.neocities.org/
+site_name: Plan de Seguridad para Comvive 
 theme:
   name: 'material'
   palette: 
@@ -17,13 +16,6 @@ theme:
         name: Switch to light mode
 nav:
     - Home: index.md
-    - 2asir3:
-        - 'ej1-playbook-sencillo': '2021-09-22-ej1-playbook-sencillo.md'
-        - 'ej1-pull-request': '2021-09-22-ej1-pull-request.md'
-        - 'ej2-router-nat-vagrant': '2021-10-1-ej2-router-nat-vagrant.md'
-        - 'ej3-config-escenario-router-nat': '2021-10-3-ej3-config-escenario-router-nat.md'
-        - 'app-web-estatica': '2021-10-5-implantacion-despliegue-aplicacion-web-estatica.md'
-        - 'ej2-pr-pag-compañero': '2021-10-14-ej2-pr-pag-compañero.md' 
-    - About: about.md
-extra:
-  disqus: conocimiento-en-bits-neocities-org
+    - Plan de seguridad:
+        - 'Inventario de Hardware': 'inventario-hardware.md'
+    - Plan de contingencias: about.md
