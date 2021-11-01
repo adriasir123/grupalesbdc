@@ -1,6 +1,6 @@
 # Welcome to MkLorum
 
-Empresa elegida: comvive-mini
+Empresa elegida: Comviviendo
 
 En un polígono industrial
 
