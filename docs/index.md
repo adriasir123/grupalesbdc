@@ -1,18 +1,39 @@
 # Welcome to MkLorum
 
+###############################################
+# Información general
+###############################################
+
 Empresa elegida: Comviviendo
 
+SECTOR: Servicios profesionales
+ https://itinerarios.incibe.es
+
+riesgos específicos de este sector como el robo y pérdida de datos, los derechos de autor, la propiedad intelectual y los riesgos particulares del sitio web o de las redes sociales.
+
+
+
+
+
+
+
 En un polígono industrial
+
+Os recomiendo ver los vídeos relativos al sector elegido para realizar la práctica más fácilmente.
+
+###############################################
+# Información general FIN
+###############################################
+
+
+
+
 
 Documento de referencia:
 https://dit.gonzalonazareno.org/moodle/pluginfile.php/14687/mod_resource/content/1/48ca15671b800.pdf
 
 
-En nuestra práctica, estudiaremos los sistemas de una PYME de uno de los sectores que aparecen en https://itinerarios.incibe.es
 
-Os recomiendo ver los vídeos relativos al sector elegido para realizar la práctica más fácilmente.
-Además, la página del INCIBE es una referencia y os puede ayudar mucho, por ejemplo, a la hora de desarrollar un plan de contingencias:
-https://www.incibe.es/protege-tu-empresa/que-te-interesa/plan-contingencia-continuidad-negocio
 
 o un plan director de seguridad:
 https://www.incibe.es/protege-tu-empresa/que-te-interesa/plan-director-seguridad
@@ -20,7 +41,7 @@ https://www.incibe.es/protege-tu-empresa/que-te-interesa/plan-director-seguridad
 
 La práctica tendrá las siguientes fases:
 
-    • Redacción de una política de seguridad en la que se detallen las medidas de protección y se incluya un plan de respuesta a las contingencias, especificando que hacer cuando alguno de los riesgos estudiados se haga realidad.
+    • Redacción de un Plan de seguridad en la que se detallen las medidas de protección y se incluya un plan de respuesta a las contingencias, especificando que hacer cuando alguno de los riesgos estudiados se haga realidad.
 
 
 AL FINAL, SE ENTREGAN 2 SECCIONES PRINCIPALES:
@@ -283,6 +304,9 @@ encuentre nadie dentro de la oficina.
 
 
 - Plan de contingencias  (soluciones, plan de respuesta)
+
+plan de contingencias:
+https://www.incibe.es/protege-tu-empresa/que-te-interesa/plan-contingencia-continuidad-negocio
 
 según daños
 
