@@ -24,6 +24,9 @@ Especificaciones de los servidores:
 
 ![](https://i.dell.com/is/image/DellContent//content/dam/global-asset-library/Products/Enterprise_Servers/PowerEdge/r6525/dellemc_per6525_4x35_emc-lcd-bezel_above_ff.psd?fmt=pjpg&amp;pscan=auto&amp;scl=1&amp;hei=402&amp;wid=1182&amp;qlt=100,0&amp;resMode=sharp2&amp;size=1182,402)
 
+SAIs por rack
+
+
 
 ## Portátiles
 

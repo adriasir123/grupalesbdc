@@ -24,6 +24,6 @@ Todos los portátiles parten de la misma configuración base y programas.
 
 ## Servidores CPD
     Dominios (servidores DNS)
-    Hosting
+    Hosting web
     Correo
     Openstack (VPS SSD)

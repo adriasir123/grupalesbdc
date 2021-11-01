@@ -1,21 +1,30 @@
-site_name: Plan de Seguridad para Comvive 
+site_name: Plan de Seguridad para Comviviendo
 theme:
   name: 'material'
-  palette: 
+  palette:
     - scheme: default
-      primary: pink
-      accent: yellow
+      primary: grey
+      accent: grey
       toggle:
         icon: material/toggle-switch-off-outline
         name: Switch to dark mode
-    - scheme: slate 
-      primary: pink
-      accent: yellow
+    - scheme: slate
+      primary: grey
+      accent: grey
       toggle:
         icon: material/toggle-switch
         name: Switch to light mode
 nav:
-    - Home: index.md
+    - Introducción: index.md
     - Plan de seguridad:
-        - 'Inventario de Hardware': 'inventario-hardware.md'
-    - Plan de contingencias: about.md
+        - 'Análisis de la empresa': 'analisis-empresa.md'
+        - Activos:
+            - 'Inventario de Hardware': 'inventario-hardware.md'
+            - 'Inventario de Software': 'inventario-software.md'
+            - 'Inventario de Comunicaciones': 'inventario-comunicaciones.md'
+            - 'Datos': 'datos-proteger.md'
+        - 'Identificación de amenazas': 'identificacion-amenazas.md'
+        - 'Valoración de amenazas': 'valoracion-amenazas.md'
+        - 'Protección contra amenazas': 'proteccion-amenazas.md'
+    - Plan de contingencias: plan-contingencias.md
+    - Controles periódicos: controles-periodicos.md
