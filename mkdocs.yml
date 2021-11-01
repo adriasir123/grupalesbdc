@@ -4,13 +4,13 @@ theme:
   palette:
     - scheme: default
       primary: grey
-      #accent: grey
+      accent: deep orange
       toggle:
         icon: material/toggle-switch-off-outline
         name: Switch to dark mode
     - scheme: slate
       primary: grey
-      #accent: grey
+      accent: deep orange
       toggle:
         icon: material/toggle-switch
         name: Switch to light mode
