@@ -1,6 +1,6 @@
 # Protección contra amenazas (+ coste).
 
-Incendios
+**Incendios**
 
  * Detectores y alarmas de humo.
  
@@ -23,7 +23,7 @@ Incendios
 la empresa para evitar posibles accidentes por manejo de materiales inflamables o uso de herramientas que puedan generar chispas.
 
 
-Accesos no autorizados al CPD
+**Accesos no autorizados al CPD**
 
  * Un sistema de alarma que sirva tanto para los momentos de ausencia del personal, así como una activa por si intentan acceder posibles intrusos y den una respuesta rápida a las autoridades. A tener en cuenta el refuerzo de potenciales puntos de acceso como puertas y ventanas.
 
@@ -34,14 +34,14 @@ Accesos no autorizados al CPD
  * Cámaras de seguridad interiores (cpd) en combinación con algunas perimetrales para tener controlado el recinto de la empresa. Importante que las cámaras tengan capacidad de captar imágenes en entornos de baja luminosidad.
 
 
-Interrupciones suministro eléctrico
+**Interrupciones suministro eléctrico**
 
  * SAIS, que permitan mantener los servidores encendidos el tiempo suficiente para activar la generación de copias de respaldo, alertas a los administradores y llegado a un periodo duradero de no poder recuperar el suministro, organizar un apagado controlado de los servidores.
  
  * Generador de gasolina, es un complemento para los SAIS en caso de momentos extremos y que su principal ventaja es que alarga más el tiempo de margen para recueperar la energía principal.
 
 
-Averías en la electrónica
+**Averías en la electrónica**
 
  * RAID en combinación a discos duros de repuesto, contribuirán a que no haya pérdida de datos para los clientes.
 
@@ -50,7 +50,7 @@ Averías en la electrónica
  * Para casos más extremos de averías, la alta disponibilidad y el servicio estaría garantizado entre local y la conmutación con AWS.
 
 
-Ransomware
+**Secuestro de datos (Ransomware)**
 
  * Copias de respaldo de manera periódica.
  
@@ -61,46 +61,56 @@ Ransomware
  * Formación y concienciación de los trabajadores en posibles fallos que se pueden cometer y los potenciales peligros a los que se puede someter una empresa de esta índole.
 
 
-Robo de dispositivos móviles
+**Robo de dispositivos móviles**
 
-- Estén encriptados
-- Se guarden la menor información crítica posible
-- Apps de rastreo y bloqueo
-- Backups
-
-
-Phishing
-- Formar a trabajadores
-- Firewall con Lista negra con páginas comunes de phishing
+ * Uso de algoritmos de encriptación para proteger la información que puedan disponer.
+ 
+ * Junto a lo primero, concienciar a los trabajadores para que tengan la menor cantidad de información crítica disponible en dichos dispositivos y realicen copias de seguridad de los mismos.
+ 
+ * Uso de aplicaciones de rastreo y bloqueo.
 
 
+**Suplantación de identidad (Phishing)**
 
-Compromiso de contraseñas
-- Formar trabajadores
-- Cambiar contraseñas regularmente
-- Usar algoritmos de encriptación robustos
-- Acceso con claves SSH y no con contraseña
-- Herramientas de fortaleza de contraseñas
-
-
-
-Exploits de vulnerabilidades
-- Aplicar parches de seguridad
-- Mantener los sistemas, paquetes y programas actualizados
-- Desinstalar plugins del navegador que no son necesarios
-- Tener solamente los puertos necesarios abiertos (y controlados)
-- Review created/homemade/specialty applications – Depending on your business, you may use in-house self-created applications OR have a vendor create ap
-- Instalar firewalls o aplicaciones de protección en puntos de frontera (SNORT con reglas que identifiquen)
-- Escáneres de vulnerabilidades
+ * Formación de los trabajadores en la materia.
+ 
+ * Habilitar en el Firewall de la empresa una lista negra con páginas comunes de phishing, integración de una herramienta antiphishing en los navegadores y en el cliente de correo electrónico añadir direcciones mail potencialmente peligrosas, reportadas por la comunidad o canales oficiales.
+ 
+ * Añadir una "pregunta secreta", en la que se pregunta una información que sólo debe ser conocida por el usuario y la empresa para garantizar que ese contenido está verificado como seguro.
 
 
+**Compromiso de contraseñas**
+
+ * Igual de importante que en otros puntos, la formación a los trabajadores es un vector importante para minimizar el riesgo humano.
+
+ * Cambiar contraseñas regularmente.
+ 
+ * Acceso con pares de claves como medida complementaria.
+
+ * Uso de herramientas de fortaleza de contraseñas, para garantizar que no son vulnerables a ataques de fuerza bruta o  que no se encuentran dentro de los diccionarios de claves que circulan por internet. 
 
 
+**Explotación de vulnerabilidades (Exploits)**
 
-Ataques de denegación de servicio
-- Balanceador de carga
-- ACLs (filtrado de tráfico entre subredes)
-- Usar redes CDN (cloudflare)
-- Mantener actualizado todo
-- Aumentar el ancho de banda
-- 3. Implement server-level DDoS protection
+ * Aplicar parches de seguridad a medida que se vayan distribuyendo en las fuentes oficiales, así como mantener actualizado el software en uso.
+
+ * Desinstalar complementos del navegador que no esten autorizados.
+ 
+ * Tener solamente los puertos necesarios abiertos y los que estén abiertos, siempre controlados.
+
+ * Tener un control de la aplicaciones especializadas creadas por los trabajadores o por un proveedor externo.
+
+ * Instalar cortafuegos, escaneo de vulnerabilidades o aplicaciones de protección en puntos de frontera (SNORT con reglas que identifiquen), tener un punto bastión entre la red interna e internet.
+
+ 
+**Ataques de denegación de servicio (DoS)**
+
+ * Uso de balanceadores de carga en conjunción a los cortafuegos.
+ 
+ * ACLs para controlar el flujo de tráfico en las subredes en caso de ataques internos.
+ 
+ * Usar redes CDN (cloudflare).
+ 
+ * Aumentar el ancho de banda en caso de que los filtros previos no retengan la totalidad de los ataques, un plan de escalado.
+ 
+ * Implementar a nivel del servidor protecciones contra ataques de denegación de servicio distribuido (DDoS) como el que realizan las redes de bots.
