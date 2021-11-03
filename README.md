@@ -1,11 +1,4 @@
-# p2-sad-politica-de-seguridad
+# Práctica 2 SAD: Plan de seguridad para Comviviendo
 
-Adrián
-
-Antonio
-
-Maria Jesus
-
-[Carlos](https://gifimage.net/wp-content/uploads/2017/08/rare-parrot-gif-8.gif)
-
+[Haz click aquí](https://adriasir123.github.io/p2-sad-politica-de-seguridad/) para ir a la publicación de la práctica.
 
