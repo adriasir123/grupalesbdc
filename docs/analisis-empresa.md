@@ -19,16 +19,16 @@ Nuestra empresa se encuentra ubicada en el Polígono Industrial Carretera de la 
 
 Somos una empresa emergente, así que por el momento contamos con cuatro administradores de sistemas:
 
-- Carlos Rivero Martín
-- Adrián Jaramillo Rodríguez
-- María Jesús Bohíguez Pérez
-- Antonio Castro Díaz
+- María Jesús Bohíguez Pérez *(CEO)*
+- Carlos Rivero Martín *(Responsable Operativo)*
+- Antonio Castro Díaz *(Responsable de Ventas)*
+- Adrián Jaramillo Rodríguez *(Responsable de RRHH)*
 
 Llegado el momento necesitaremos contratar a algunos desarrolladores, así que estimamos su número en 3.
 
 ## Arquitectura
 
-### Sala de Servidores
+### Sala de servidores
 
 ![](https://i.postimg.cc/tJ1Gcjvf/sala-de-servidores.png)
 
