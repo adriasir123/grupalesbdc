@@ -4,8 +4,6 @@ Existen 10 racks en la sala de servidores, cada uno con 15 servidores.
 
 ## Racks
 
-Todos son del mismo modelo, con las siguientes especificaciones:
-
 - Características Físicas
     - Altura: 25U (120,0 cm)
     - Peso: 81,8 kg
@@ -41,8 +39,6 @@ Todos son del mismo modelo, con las siguientes especificaciones:
 <https://www.startech.com/es-es/gestion-de-servidores/rk2537bkm>
 
 ## Servidores
-
-Todos son del mismo modelo, con las siguientes especificaciones:
 
 - Procesador: 2 AMD EPYC™ de 3.ª generación con hasta 64 núcleos por procesador
 - Sistema operativo: Canonical® Ubuntu® Server LTS
@@ -139,7 +135,7 @@ Todos son del mismo modelo, con las siguientes especificaciones:
 
 ## SAIS
 
-Tendremos 1 por rack, todos del mismo modelo, con las siguientes especificaciones:
+Tendremos 1 por rack.
 
 - Capacidad: 1000VA / 1000W
 - Entrada:
@@ -191,8 +187,6 @@ Tendremos 1 por rack, todos del mismo modelo, con las siguientes especificacione
 
 ## Portátiles
 
-Todos son del mismo modelo, con las siguientes especificaciones:
-
 - Procesador: AMD Ryzen 7 4800H (8 núcleos, 8MB Cache, 2.9GHz - 4.2GHz)
 - Memoria RAM: 16GB (3200MHz) DDR4-SDRAM (2 x 8)
 - Almacenamiento: 512GB SSD M.2 NVMe™ PCIe® 3.0
@@ -222,12 +216,11 @@ Todos son del mismo modelo, con las siguientes especificaciones:
 Normalmente se trabaja mucho más cómodamente con doble pantalla, así que contamos con una pantalla extra para cada trabajador:
 
 Cantidad total:
+
 - 4 para los actuales trabajadores
 - 3 para los que vayan viniendo
 
 De esta manera, todos tendrán 2 pantallas *(la del propio portátil + la extra)*.
-
-Especificaciones:
 
 - Pantalla:
     - Tamaño: 27 pulgadas
