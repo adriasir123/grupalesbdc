@@ -18,11 +18,10 @@ nav:
     - Introducción: index.md
     - Plan de seguridad:
         - 'Análisis de la empresa': 'analisis-empresa.md'
-        - Activos:
-            - 'Inventario de Hardware': 'inventario-hardware.md'
-            - 'Inventario de Software': 'inventario-software.md'
-            - 'Inventario de Comunicaciones': 'inventario-comunicaciones.md'
-            - 'Datos': 'datos-proteger.md'
+        - 'Inventario de Hardware': 'inventario-hardware.md'
+        - 'Inventario de Software': 'inventario-software.md'
+        - 'Inventario de Comunicaciones': 'inventario-comunicaciones.md'
+        - 'Datos': 'datos-proteger.md'
         - 'Identificación de amenazas': 'identificacion-amenazas.md'
         - 'Valoración de amenazas': 'valoracion-amenazas.md'
         - 'Protección contra amenazas': 'proteccion-amenazas.md'
