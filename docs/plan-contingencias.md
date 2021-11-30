@@ -1,18 +1,18 @@
-# Plan de contingencia
+# Plan de contingencias
 
-Plan de respuesta a las contingencias, especificando que hacer cuando alguno de los riesgos estudiados se haga realidad.
+En este apartado se contemplarán problemas que pueden ocurrir, junto con las directrices a seguir para solucionarlos en el menor tiempo posible.
 
-- Pérdida de datos (BD, configuraciones... )
+## Pérdida de datos (BD, configuraciones... )
 
-1. -Mantendremos la calma, apagueremos el servidor que haya sufrido la pérdida de información.
+1. Mantendremos la calma, apagueremos el servidor que haya sufrido la pérdida de información.
 
 2. Cargaremos una copia de seguridad.
 
 3. Realizaremos las configuraciones necesarias  y volveremos a restablecer el servicio en el servidor dañado.
 
-- Si se estropea el router principal
+## Fallo de router principal
 
-1. Reiniciar el router
+1. Reiniciar
 
 2. Verificar los conectores
 
@@ -22,27 +22,25 @@ Plan de respuesta a las contingencias, especificando que hacer cuando alguno de 
 
 5. Si fuera problema de suministro, contactar con la compañia telefonica.
 
-- Rompen servidores
+## Fallo de servidores
 
-1. Verificar que servidor esta dañado
+1. Verificar qué servidor está dañado
 
 2. Aislar el componente que falla
 
-3. Comprobar si se la avería se puede solucionar y  si es posible solucionar, intentamos arreglar la averia.
+3. Comprobar si se la avería se puede solucionar y  si es posible solucionar, intentamos arreglar la avería.
 
 5. Si no es posible arreglar la avería, cambio del componente o conjunto de componentes averiados.
 
 
-- Rompen discos duros:
+## Fallo de discos duros
+
 1. Detección y cambio de disco duro afectado.
 
 2. Una vez se active el raid, poner el disco duro como recambio.
 
+## Accesos no autorizados al CPD
 
-- Revisar el plan (cambios en hardware o software)
-PREGUNTAR
-
-- Accesos no autorizados al CPD *
 1. Intentar mantener la calma
 
 2. No hacer imprudencias
@@ -51,33 +49,35 @@ PREGUNTAR
 
 4. Llamar a las autoridades para que la detengan.
 
-- Interrupciones suministro eléctrico
-1. Asegurarnos del correcto funcionamiento de los SAI 
+## Interrupciones suministro eléctrico
 
-2. Si asado un tiempo prudencial seguimos sin suministro, avisaremos a los clientes de cese del servicio por interrupción de suministro eléctrico y procederemos a apagar los servidores de manera correcta para evitar corrupción datos.
+1. Asegurarnos del correcto funcionamiento de los SAI
 
-- Averías en la Electrónica 
-1. Verificar que componente esta dañado
+2. Si pasado un tiempo prudencial seguimos sin suministro, avisaremos a los clientes de cese del servicio por interrupción de suministro eléctrico y procederemos a apagar los servidores de manera correcta para evitar corrupción datos.
+
+## Averías en la Electrónica
+
+1. Verificar qué componente esta dañado
 
 2. Aislar el componente que falla
 
-3. Comprobar si se la avería se puede solucionar y  si es posible solucionar, intentamos arreglar la averia.
+3. Comprobar si la avería se puede solucionar y si es posible solucionar, intentamos arreglar la avería.
 
 5. Si no es posible arreglar la avería, cambio del componente o conjunto de componentes averiados.
 
+## Ataque de Ransomware
 
-- Ataque de Ransomware
-1. Restaurar los archivos afectados a partir de copias de seguridad limpias. Cuando recibamos un ataque de ransomware, hemos de asegurarnos de restaurar únicamente las copias de seguridad que sepamos que están limpias y estables. 
+1. Restaurar los archivos afectados a partir de copias de seguridad limpias. Cuando recibamos un ataque de ransomware, hemos de asegurarnos de restaurar únicamente las copias de seguridad que sepamos que están limpias y estables.
 
 2. Utilizar un firewall y software antivirus de buena reputación. La mejor defensa ante un ataque de randsomware es tener un firewall y software de AV que nos darán múltiples capas de defensa para ayudar a detener o desacelerar el camino del virus.
 
-3. Utilizar un escaner de vulnerabilidades para comprobar si queda rastro de algun fichero malicioso.
+3. Utilizar un escáner de vulnerabilidades para comprobar si queda rastro de algún fichero malicioso.
 
 4. Utilizar el escaneo/filtrado de contenido en los servidores de correo. Utilizando esta herramienta evitamos que el ransomware acceda a nuestros dispositivos por una de las principales rutas de infección.
 
-5. Actualizar y parchear los sistemas y software. 
+5. Actualizar y parchear los sistemas y software.
 
-- Robo de dispositivos móviles
+## Robo de dispositivos móviles
 
 1. Poner en marcha los mecanismos antirrobo de la aplicación de seguridad. Con estas 'apps' es posible desde hacer sonar una alarma en el dispositivo hasta geolocalizarlo e incluso, en última instancia, borrar en remoto el contenido almacenado.
 
@@ -86,28 +86,30 @@ PREGUNTAR
 3. Denunciar a la policia el robo
 
 
-- Phishing
+## Phishing
+
 1. Generar nuevas creedenciales para todos los usuarios.
 
 2. Comprobar la integridad de los archivos que han podido ser supcetible de modificaciones o alteraciones.
 
-3. Contratar empresa de ciberseguridad que nos haga un auditoria.
+3. Contratar empresa de ciberseguridad que nos haga un auditoría.
 
 
-- Exploit de vulnerabilidades
+## Exploit de vulnerabilidades
+
 1. Revisar aplicaciones, cortafuegos, puntos de frontera, etc..
 
-2. Contratar empresa de ciberseguridad que nos haga un auditoria.
+2. Contratar empresa de ciberseguridad que nos haga una auditoría.
 
-- Ataques de denegación de servicio
+
+## Ataques de denegación de servicio
+
 1. Bloquearemos IPs
 
 2. Aumentar ancho de banda para que no tumben el servicio
 
 3. Contratar empresa de ciberseguridad que nos haga un auditoria.
 
-- Tifones, terremotos y otros desastres naturales.
+## Tifones, terremotos y otros desastres naturales
 
 1. Tener contratada una replica de nuestro cpd en un servicio como amazon web service o otra empresa dedicada a los cpd.
-
- 
