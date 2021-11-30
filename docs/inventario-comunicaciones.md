@@ -1,25 +1,28 @@
 # Inventario de comunicaciones
 
-## En portátiles
+## Conexión a Internet
 
-Tarjetas de red
+2 proveedores:
 
+- Telefónica *(fibra 1 Gb)*
+- Orange *(fibra 1 Gb, tarifa Love Empresa 1)*
 
+## Dispositivos de red
 
-## En servidores
+- [Switches](https://www.router-switch.com/c1000-48t-4g-l.html)
+- [Cables RJ45 Cat.8](https://www.pccomponentes.com/bematik-cable-de-red-s-ftp-rj45-cat8-10m)
 
-Tarjetas de red
+## Servidores CPD + bastión + oficina
 
+2 LOM 1GE + OCP x16 intermedia 3.0
 
+## Sala de trabajo
 
-## De red
-Switch (en rack, y en oficina)
+- [Teléfono Fijo Alcatel Temporis 180](https://www.pccomponentes.com/alcatel-temporis-180-telefono-fijo-negro)
+- [Router Cisco RV160](https://www.cisco.com/c/es_es/products/routers/rv160-vpn-router/index.html)
 
-Cables (servidores, oficina)
+## Portátiles
 
-1 Router (3 redes, 1 para la LAN de trabajo 2 para el CPD 1 es de backup)
-
-
-## En la sala de trabajo
-
-Teléfonos voIP
+- Ethernet LAN Gigabit
+- Wi-Fi 6 (802.11ax) Dual band (2*2) RangeBoost
+- Bluetooth 5.1
