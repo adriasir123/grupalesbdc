@@ -139,9 +139,55 @@ Todos son del mismo modelo, con las siguientes especificaciones:
 
 ## SAIS
 
-Tendremos 1 por rack
+Tendremos 1 por rack, todos del mismo modelo, con las siguientes especificaciones:
 
-(buscar modelos)
+- Capacidad: 1000VA / 1000W
+- Entrada:
+    - Transferencia bajo voltaje: 160VAC / 140VAC / 120VAC / 110VAC +/- 5 %
+    - Regreso bajo voltaje: 170VAC / 150VAC / 130VAC / 120VAC +/- 5 %
+    - Transferencia alto voltaje: 300 VAC +/-5 %
+    - Regreso alto voltaje: 290 VAC +/-5 %
+    - Rango de frecuencia: 45-55Hz o 56-65Hz
+    - Fase: Monofásico con toma de tierra
+    - Factor de potencia: >= 0.99
+- Salida:
+    - Voltaje de salida: 208/220/230/240VAC
+    - Regulación voltaje AC (Modo Batería): +/- 1%
+    - Rango de frecuencia (sincronizada): 48~52Hz o 58.0~62.0Hz
+    - Rango de frecuencia (Modo Batería)) 50Hz +/-0.2Hz or 60Hz +/-0.2Hz
+    - Ratio actual de cresta: 3:1
+    - Distorsión armónica: <= 2% THD (carga lineal) / 8% Max.(Modo batería antes del apagado)
+    - Tiempo de transferencia: AC a modo batería: cero / Inverter to Bypass: 4ms (típica)
+    - Salida de onda: Onda sinusoidal pura
+- Conexiones:
+    - Toma externa: 4x IEC
+    - Puertos USB: 1
+    - Puertos RS232: 1
+    - Puertos RJ45 Teléfono/Modem/Fax: 2 (entrada /salida) protegidas
+- Batería:
+    - Tipo de batería: 12V/9Ah
+    - Número de baterías: 2
+    - Tiempo de recarga: 4 horas al 90%
+    - Carga (max.): 8.0 A
+    - Voltaje de carga: 27.4 VDC +/- 1%
+- Indicadores:
+    - Estado del SAI, nivel de carga, nivel de batería, Voltaje de entrada/salida, cronómetro de descarga y condiciones de fallo
+- Alarmas audibles:
+    - Modo batería: sonando cada 4 segundos
+    - Batería baja: sonando cada segundo
+    - Sobrecarga: sonando 2 veces por segundo
+    - Fallo: sonido continuo
+- Datos físicos:
+    - Peso neto : 9,1 Kg
+    - Dimensiones (FondoxAnchoxAlto) mm: 380 x 438 x 88 mm
+    - Altura : Sai rack 2U
+- Ambiente:
+    - Condiciones ambientales: 20-90% RH @ 0-40°C (No-condensada)
+    - Nivel de ruido: menos de 50 dB a 1 Metro
+
+![](https://www.sai-online.es/161-thickbox_default/sai-rack-1000-va-online-lcd-lapara.jpg)
+
+<https://www.sai-online.es/sai-online/sai-rack-1000-va-online-lcd-lapara>
 
 ## Portátiles
 
@@ -175,6 +221,7 @@ Todos son del mismo modelo, con las siguientes especificaciones:
 
 Normalmente se trabaja mucho más cómodamente con doble pantalla, así que contamos con una pantalla extra para cada trabajador:
 
+Cantidad total:
 - 4 para los actuales trabajadores
 - 3 para los que vayan viniendo
 
@@ -252,6 +299,8 @@ Especificaciones:
 
 ## Multifunción en red
 
+Disponible para todos los trabajadores, en la sala de trabajo *([ver en plano](https://adriasir123.github.io/p2-sad-politica-de-seguridad/analisis-empresa/#sala-de-trabajo))*.
+
 - General
     - Tipo de impresora Monocromo
     - Pantalla Pantalla LCD
@@ -270,7 +319,75 @@ Especificaciones:
     - Interfaz de red inalámbrica Sí. IEEE 802.11b/g/n
 - Conectividad móvil
     - Compatible AirPrint, Android Print Service Plugin, Google Cloud Print 2.0, iPrint&Scan, Mopria, WiFi Direct?
-
+- Copia
+    - Copia a doble cara automática No
+    - Copia N en 1 Sí
+    - Resolución Hasta 600 x 600 ppp
+    - Velocidad Hasta 30 cpm
+    - Ratio de ampliación / reducción Reduce o amplia documentos desde 25% a 400% en incrementos del 1%
+- Dimensiones y pesos
+    - Con caja 14.7 kg
+    - Peso 11.8 kg
+    - Con caja 580(An) x 517(F) x 434(Al) mm
+    - Sin caja 410(An) x 398.5(F) x 318.5(Al) mm
+- Consumo de energía
+    - Funcionamiento 440 vatios
+    - Modo silencioso 260 vatios
+    - Modo lista 42 vatios
+    - Hibernación 0.9 vatios
+    - Consumo de energía 440 vatios
+    - Apagado 0.03 vatios
+    - Ahorro de energía Sí
+    - Nivel de potencia sonora 6.48 dB
+    - Nivel de presión sonora 48 dBA
+    - Ahorro de tóner Sí
+    - Consumo eléctrico 1232 Vatios
+- Medio Ambiente
+    - Humedad de funcionamiento 20 - 80 %
+    - Temperatura de funcionamiento 10 - 32º
+    - Humedad de almacenamiento 35 - 85 %
+    - Temperatura de almacenamiento 0 - 40º
+    - Certificación medioambiental Blue Angel Sí
+    - Acreditación medioambiental Energy Star Sí
+- Fax
+    - Módem de fax 33.6 kbps
+    - PC-Fax Recibe faxes directamente a tu PC. Envía faxes directamente desde tu PC
+- Especificaciones de los soportes
+    - Tipos y gramajes Bandeja estándar: Normal, fino, grueso y reciclado (60 - 163g/m2). Ranura manual: Normal, fino, grueso, reciclado, bond, etiquetas y sobres (60 - 230g/m2 )Dúplex: Normal, fino y reciclado (60 - 105g/m2)ADF: Normal y reciclado (60 - 105g/m2)
+    - Tamaños Bandeja estándar: A4, Letter, A5, A5(lado largo), A6, Executive. Ranura manual: Ancho (76,2mm a 215,9mm) x Largo (127mm a 355,6mm) Sobres (COM-10, DL, C5, Monarca). Dúplex: A4. ADF: Ancho (105 a 215,9mm) / Largo (147,3 a 355,6 mm)
+- Red
+    - Configuración WiFi soportada Sí
+    - Wi-Fi Direct? Sí
+    - Red cableada Ethernet 10Base-T/100Base-TX
+    - Seguridad de red cableada SMTP-AUTH, SSL/TLS (SMTP,HTTP,IPP), SNMP v3
+    - Aplicaciones WiFi Sí
+    - Red WiFi WiFi IEEE 802.11b/g/n
+    - Seguridad de red WiFi WEP 64/128 bit, WPA-PSK (TKIP/AES), WPA2-PSK (TKIP/ AES), SMTP-AUTH, SNMP v3,SSL/TLS(SMTP,HTTP,IPP)
+- Manejo de papel
+    - Entrada de papel Bandeja de 250 hojas. Ranura manual de 1 hoja
+    - Salida de papel Cara abajo - 120 hojas. Cara arriba (salida directa del papel) - 1 hoja
+    - Capacidad de papel de la bandeja estándar 250 hojas
+- Impresión
+    - Impresión automática a doble cara Sí
+    - Tiempo de impresión 1ª página Menos de 8.5 segundos
+    - Resolución 600x600ppp / 1.200x 1.200 ppp/ HQ1200 (2.400 x 600 ppp)
+    - Velocidad de impresión monocromo a doble cara A4 Hasta 7.5 páginas por minuto
+    - Velocidad de impresión monocromo A4 30 páginas por minuto
+    - Volumen mensual recomendado Hasta 2.000 impresiones mensuales
+- Escaneado
+    - Tipo de escáner CIS
+    - Escaneado a doble cara automático No
+    - Resolución Desde el cristal - hasta 1.200 x 1.200ppp. Desde el ADF - hasta 600 x 600ppp
+    - Escanea a E-mail, OCR, imagen, archivo y SharePoint
+    - Velocidad 22,5/7,5 ipm A4 (mono(color)
+    - Funciones de seguridad
+    - Filtro de IP Sí
+- Bloqueo de configuración Sí
+    - Consumibles y accesorios
+    - Tóner de larga duración Tóner negro (TN2420) - 3.000 páginas
+    - Tóner incluido Tóner negro - 700 páginas
+    - Tóner estándar Tóner negro (TN2410) - 1.200 páginas
+    - Consumibles Tambor (DR-2400): Aprox. 12.000 páginas
 
 ![](https://img.pccomponentes.com/articles/14/148437/mfcl2710dw-main.jpg)
 
