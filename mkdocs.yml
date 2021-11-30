@@ -17,11 +17,11 @@ theme:
 nav:
     - Introducción: index.md
     - Plan de seguridad:
-        - 'Análisis de la empresa': 'analisis-empresa.md'
-        - 'Inventario de Hardware': 'inventario-hardware.md'
-        - 'Inventario de Software': 'inventario-software.md'
-        - 'Inventario de Comunicaciones': 'inventario-comunicaciones.md'
-        - 'Datos': 'datos-proteger.md'
+        - '1. Análisis de la empresa': 'analisis-empresa.md'
+        - '2. Inventario de Hardware': 'inventario-hardware.md'
+        - '3. Inventario de Software': 'inventario-software.md'
+        - '4. Inventario de Comunicaciones': 'inventario-comunicaciones.md'
+        - '5. Datos': 'datos-proteger.md'
         - 'Identificación de amenazas': 'identificacion-amenazas.md'
         - 'Valoración de amenazas': 'valoracion-amenazas.md'
         - 'Protección contra amenazas': 'proteccion-amenazas.md'
