@@ -1,38 +1,37 @@
-# ANÁLISIS DE VULNERABILIDADES
+# Análisis de vulnerabilidades
 
-## Vulnerabilidades relacionadas con desastres naturales
+## Desastres naturales
 
 - Falta de pararrayos en el edificio.
-- Construcción no adaptada contra terremotos/tifones
+- Construcción no adaptada contra terremotos/tifones.
 
+## Estructurales
 
-## Vulnerabilidades relacionadas con amenazas estructurales
+- Hay un sistema de tuberías por encima del CPD, en caso de rotura podría haber fugas de agua.
+- Falta redundancia de los extractores de aire caliente.
+- Dependencia exclusiva de un único proveedor de comunicaciones (telefónica)
 
-- Hay un sistema de tuberías por encima del CPD, en caso de rotura podría haber fugas de agua
-- Falta redundancia de los extractores de aire caliente
-- Dependencia exclusiva de un único proveedor de comunicaciones (Telefónica)
+## Hardware
 
-## Vulnerabilidades relacionadas con el Hardware
+- Falta contratar un mayorista de componentes
 
-- Nos falta contratar un mayorista de componentes
-
-## Vulnerabilidades relacionadas con el Software
+## Software
 
 - Falta contratar soporte técnico
 
-##  Vulnerabilidades relacionadas con las redes de comunicación
+##  Redes de comunicaciones
 
-- Dependencia exclusiva de un único proveedor de comunicaciones (Telefónica)
+- Dependencia exclusiva de un único proveedor de comunicaciones (telefónica)
 
-## Vulnerabilidades relacionadas con la información
+## Información
 
 - No existen políticas de cifrado en la sala de servidores
 
-## Vulnerabilidades relacionadas con el personal
+## Personal
 
-- Imprudencia del personal
+- Imprudencias del personal
 - Trabajo en remoto
 
-## Vulnerabilidades relacionadas con la legislación
+## Legislación
 
 - No hay nadie especializado en protección de datos

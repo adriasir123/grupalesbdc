@@ -22,8 +22,8 @@ nav:
         - '3. Inventario de Software': 'inventario-software.md'
         - '4. Inventario de Comunicaciones': 'inventario-comunicaciones.md'
         - '5. Datos': 'datos-proteger.md'
-        - 'Identificación de amenazas': 'identificacion-amenazas.md'
-        - 'Valoración de amenazas': 'valoracion-amenazas.md'
+        - '6. Análisis de riesgos': 'analisis-riesgos.md'
+        - '7. Análisis de vulnerabilidades': 'analisis-vulnerabilidades.md'
         - 'Protección contra amenazas': 'proteccion-amenazas.md'
     - Plan de contingencias: plan-contingencias.md
     - Controles periódicos: controles-periodicos.md

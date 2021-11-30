@@ -2,10 +2,7 @@
 
 ## Conexión a Internet
 
-2 proveedores:
-
 - Telefónica *(fibra 1 Gb)*
-- Orange *(fibra 1 Gb, tarifa Love Empresa 1)*
 
 ## Dispositivos de red
 
