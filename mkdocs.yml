@@ -24,7 +24,7 @@ nav:
         - '5. Datos': 'datos-proteger.md'
         - '6. Análisis de riesgos': 'analisis-riesgos.md'
         - '7. Análisis de vulnerabilidades': 'analisis-vulnerabilidades.md'
-        - 'Protección contra amenazas': 'proteccion-amenazas.md'
+        - '8. Medidas preventivas': 'medidas-preventivas.md'
     - Plan de contingencias: plan-contingencias.md
     - Controles periódicos: controles-periodicos.md
     - Bibliografía: bibliografia.md
