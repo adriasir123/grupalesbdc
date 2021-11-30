@@ -1,22 +1,26 @@
 # Datos a proteger
 
-## En portátiles
+## Servidor bastión
 
-- Credenciales (SSH privada)
-- Documentos privados (informes)
+Reglas nftables, porque:
 
-
-
-## Servidores de oficina
-
-- Documentos privados (informes)
-
-
-
+- Perderlas causaría que no hubiera conectividad de red
+- Si son robadas, se podría averiguar la infraestructura de red
 
 ## Servidores CPD
 
-- Credenciales (autenticaciones apache, correo)
+- Volúmenes e imágenes en Openstack
+- Definición de zonas y ficheros de zona en bind9
+- Correos
 - Bases de datos
-- Correos de los clientes
-- Openstack (volúmenes, imágenes)
+- Configuraciones de Nginx
+- Credenciales
+
+## Servidor de oficina
+
+Documentos privados *(ejemplo: informes)*.
+
+## Portátiles
+
+- Credenciales *(claves SSH privadas)*
+- Documentos privados
