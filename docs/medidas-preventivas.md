@@ -2,32 +2,22 @@
 
 ## Incendios
 
-- Detectores y alarmas de humo.
+- Detectores y alarmas de humo.(**Coste medio**)
 
-- Sistema de gases inertes que tiene dos formas de actuar para suprimir dos tercios del triángulo de fuego (combustible, comburente y energía de activación):
+- Sistema de gases inertes que tiene dos formas de actuar para suprimir dos tercios del triángulo de fuego (combustible, comburente y energía de activación)(**Coste medio**):
 
     - Ante una detección de subida de temperatura, que se considere peligrosa, libera halocarbonos que contribuyen a disipar el calor afectando a la energía de activación, en este caso, que es una alta temperatura.
 
     - Cuando los detectores de humo se activen, este sistema libera un gas inerte como el Árgon y este desplaza el oxígeno elimando el comburente de dicho triángulo. ![](https://i.postimg.cc/d1fmvWpW/gas-inerte.jpg)
 
-    - Un ejemplo de la distribución de este sistema:  
-  ![](https://www.siex2001.com/sites/default/files/imagecache/foto-info-sistemas/sistemas/imagenes/salainertes.jpg)
-
- - Activación de scripts de resguardo de información.
-
-    - Cuando los detectores de humo se activen, este sistema libera un gas inerte como el Árgon y este desplaza el oxígeno elimando el comburente de dicho triángulo.
-    ![](https://i.postimg.cc/d1fmvWpW/gas-inerte.jpg)
-
-        - Un ejemplo de la distribución de este sistema:
-      ![Sistema](https://www.siex2001.com/sites/default/files/imagecache/foto-info-sistemas/sistemas/imagenes/salainertes.jpg)
+    - Un ejemplo de la distribución de este sistema: 
+        ![](https://www.siex2001.com/sites/default/files/imagecache/foto-info-sistemas/sistemas/imagenes/salainertes.jpg)
 
 - Activación de scripts de resguardo de información. (**Coste bajo**)
 
 - Revisiones periódicas de toda la instalación eléctrica, así como el sistema de extinción y detección de incendios. (**Coste bajo**)
 
 - Control de todas las obras y trabajos que puedan realizarse en el entorno de la empresa para evitar posibles accidentes por manejo de materiales inflamables o uso de herramientas que puedan generar chispas. (**Coste bajo**)
-
-![Imagen de ejemplo](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.yxvwoprNGes-TtYsAp8OawHaHa%26pid%3DApi&f=1)
 
 - Un sistema de alarma que sirva tanto para los momentos de ausencia del personal, así como una activa por si intentan acceder posibles intrusos y den una respuesta rápida a las autoridades. A tener en cuenta el refuerzo de potenciales puntos de acceso como puertas y ventanas. (**Coste bajo**)
 
@@ -134,7 +124,7 @@
 
 - ACLs para controlar el flujo de tráfico en las subredes en caso de ataques internos. (**Coste bajo**)
 
-- Usar redes CDN (cloudflare). (**Coste bajo¿?**)
+- Usar redes CDN (cloudflare). (**Coste bajo**)
 
 - Aumentar el ancho de banda en caso de que los filtros previos no retengan la totalidad de los ataques, un plan de escalado. (**Coste medio**)
 
