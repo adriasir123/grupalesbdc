@@ -7,7 +7,7 @@ Este trabajo ha sido realizado por:
 - Adrián Jaramillo Rodríguez (alumno 1 capitán)
 - José Juan Hervás Carrasco (alumno 2 secretario)
 - Arantxa Fernández Morató (alumna 3 facilitador)
-- Antonio (alumno 4 portavoz)
+- Antonio Marchán Posada (alumno 4 portavoz)
 
 Puedes empezar a navegar por la documentación utilizando el navbar a tu izquierda.
 
