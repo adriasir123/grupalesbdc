@@ -1,4 +1,4 @@
-site_name: Plan de Seguridad para Comviviendo
+site_name: Instalación de Servidores y Clientes
 theme:
   name: 'material'
   palette:
@@ -16,15 +16,14 @@ theme:
         name: Switch to light mode
 nav:
     - Introducción: index.md
-    - Plan de seguridad:
-        - '1. Análisis de la empresa': 'analisis-empresa.md'
-        - '2. Inventario de Hardware': 'inventario-hardware.md'
-        - '3. Inventario de Software': 'inventario-software.md'
-        - '4. Inventario de Comunicaciones': 'inventario-comunicaciones.md'
-        - '5. Datos': 'datos-proteger.md'
-        - '6. Análisis de riesgos': 'analisis-riesgos.md'
-        - '7. Análisis de vulnerabilidades': 'analisis-vulnerabilidades.md'
-        - '8. Medidas preventivas': 'medidas-preventivas.md'
-    - Plan de contingencias: plan-contingencias.md
-    - Controles periódicos: controles-periodicos.md
-    - Bibliografía: bibliografia.md
+    - Responsabilidad individual:
+        - 'Alumno 1': 'ri/alumno1.md'
+        - 'Alumno 2': 'ri/alumno2.md'
+        - 'Alumno 3': 'ri/alumno3.md'
+        - 'Alumno 4': 'ri/alumno4.md'
+    - Responsabilidad grupal:
+        - 'SQL Developer': 'rg/sql-developer.md'
+        - 'Herramienta web PostgreSQL': 'rg/herramienta-postgresql.md'
+        - 'Herramienta web MariaDB': 'rg/herramienta-mariadb.md'
+        - 'Herramienta web MongoDB': 'rg/herramienta-mongodb.md'
+        - 'Oracle Enterprise Manager': 'rg/oracle-enterprise-manager.md'
