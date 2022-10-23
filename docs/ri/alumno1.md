@@ -907,6 +907,46 @@ bibliofilos> db.getUsers()
 
 ### 4.7
 
+> Crear usuario administrador
+
+```sql
+use admin
+db.createUser(
+  {
+    user: "admin",
+    pwd: "1234",
+    roles: [
+      { role: "userAdminAnyDatabase", db: "admin" },
+      { role: "readWriteAnyDatabase", db: "admin" }
+    ]
+  }
+)
+```
+
+Compruebo que se ha creado:
+
+```shell
+admin> db.getUsers()
+{
+  users: [
+    {
+      _id: 'admin.admin',
+      userId: new UUID("022fafb9-953b-4e5e-985f-6634d0ed954c"),
+      user: 'admin',
+      db: 'admin',
+      roles: [
+        { role: 'userAdminAnyDatabase', db: 'admin' },
+        { role: 'readWriteAnyDatabase', db: 'admin' }
+      ],
+      mechanisms: [ 'SCRAM-SHA-1', 'SCRAM-SHA-256' ]
+    }
+  ],
+  ok: 1
+}
+```
+
+### 4.8
+
 > Permitir el acceso remoto
 
 Modifico la siguiente línea en `/etc/mongod.conf`:
@@ -935,7 +975,7 @@ vagrant@servidormongodb:~$ netstat -ant | grep 27017
 tcp        0      0 0.0.0.0:27017           0.0.0.0:*               LISTEN
 ```
 
-### 4.8
+### 4.9
 
 > Instalar el cliente de MongoDB en `clientemongodb`
 
@@ -966,7 +1006,7 @@ Instalo:
 sudo apt install mongodb-org-shell mongodb-mongosh
 ```
 
-### 4.9
+### 4.10
 
 > Probar el acceso remoto
 
@@ -1055,38 +1095,6 @@ bibliofilos=> select * from bibliotecas;
 (2 rows)
 ```
 
+## 6 App Flask con MongoDB
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## Parte 6
-
-> Realización de una aplicación web en cualquier lenguaje que conecte con el servidor MongoDB desde un cliente remoto tras autenticarse y muestre alguna información almacenada en el mismo.
-
-
-Se aportará el código de las aplicaciones realizadas y prueba de funcionamiento de las mismas.
-
-
-
-
-
-
+En [este repositorio](https://github.com/adriasir123/flask-mongo) se encuentran tanto el código de la aplicación como su guía de uso y pruebas de funcionamiento.
