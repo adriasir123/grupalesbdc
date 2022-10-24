@@ -1,1 +1,9 @@
-# Herramienta web MariaDB
+# phpMyAdmin
+
+prueba dominio ga
+
+
+
+
+
+
