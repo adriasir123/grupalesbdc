@@ -26,8 +26,6 @@ postgres@debian:/home/usuario$ createdb dark-souls
 postgres@debian:/home/usuario$ psql
 ```
 
-![postgres](/img/alumno4/postgres-instalacion-3.png)
-
 
 con \c dark-souls ingresamos en la base de datos
 Ahora procedemos a ingresar las tablas, he escogido las de mi proyecto del año pasado ya que le dediqué mucho tiempo con lo cual le tengo un especial cariño.
