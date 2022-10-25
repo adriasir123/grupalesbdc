@@ -30,7 +30,7 @@ Procedemmos a instalar el paquete descargado.
 
 Nos aparecerá una ventana que nos muestra la versión de MySQL que se instalará, nos informa de que las herramientas y conectores están activados y la opción de software de prueba está desactivada. Presionamos *Aceptar* para continuar.
 
-![instalacion-mysql](/docs/img/capturas-arantxa/1.png)
+![instalacion-mysql](/img/capturas-arantxa/1.png)
 
 Volvemos a actualizar los repositorios.
 
@@ -42,21 +42,21 @@ Ya podremos instalar MySQL server en Debian 11.
 
 Durante la instalación nos preguntará la contraseña del usuario administrador root.
 
-![instalacion-mysql2](/docs/img/capturas-arantxa/2.png)
+![instalacion-mysql2](/img/capturas-arantxa/2.png)
 
 Nos aparece un menje de disponibilidad de un nuevo plugin de autenticación. Presionamos *Acepta*.
 
-![instalacion-mysql3](/docs/img/capturas-arantxa/3.png)
+![instalacion-mysql3](/img/capturas-arantxa/3.png)
 
 Dejamos seleccionado el plugin de autenticación recomendado.
 
-![instalacion-mysql4](/docs/img/capturas-arantxa/4.png)
+![instalacion-mysql4](/img/capturas-arantxa/4.png)
 
 Terminada la instalación pasaremos a entrar con el usuario root.
 
 `mysql -u root -p`
 
-![entrando-mysql](/docs/img/capturas-arantxa/5.png)
+![entrando-mysql](/img/capturas-arantxa/5.png)
 
 
 ### 1.2 Creación usuario
@@ -123,7 +123,7 @@ fi
 update-rc.d oracle-xe defaults 80 01
 ```
 
-![script](/docs/img/capturas-arantxa/6.png)
+![script](/img/capturas-arantxa/6.png)
 
 Damos los permisos al fichero creado.
 
@@ -141,7 +141,7 @@ kernel.sem=250 32000 100 128
 kernel.shmmax=536870912
 ```
 
-![conf](/docs/img/capturas-arantxa/7.png)
+![conf](/img/capturas-arantxa/7.png)
 
 Cargamos los parámetros sin tener que reiniciar el sistema.
 
@@ -152,7 +152,7 @@ Y ya podremos instalar Oracle 19c.
 
 `sudo dpkg -i oracle-database-ee-19c_1.0-2_amd64.deb`
 
-![instalacion-oracle](/docs/img/capturas-arantxa/8.png)
+![instalacion-oracle](/img/capturas-arantxa/8.png)
 
 
 
@@ -170,21 +170,21 @@ _**ERROR 1. Fallo en la comprobación de la memoria**_
 
 A mi me aparece el siguiente error.
 
-![error-oracle](/docs/img/capturas-arantxa/11.png)
+![error-oracle](/img/capturas-arantxa/11.png)
 
 Para solucionarlo configuramos el fichero **/etc/init.d/oracledb_ORCLCDB-19c**. Donde pone **configure_perform** añadimos lo siguiente a la línea **$SU**, como se ve en la captura.
 
 `-J-Doracle.assistants.dbca.validate.ConfigurationParams=false`
 
-![conf-oracle](/docs/img/capturas-arantxa/9.png)
+![conf-oracle](/img/capturas-arantxa/9.png)
 
-![conf-oracle](/docs/img/capturas-arantxa/10.png)
+![conf-oracle](/img/capturas-arantxa/10.png)
 
 _**ERROR 2. Fallo en la configuración de la red**_
 
 También me apareció el siguiente problema.
 
-![error-oracle2](/docs/img/capturas-arantxa/12.png)
+![error-oracle2](/img/capturas-arantxa/12.png)
 
 Para solucionarlo hay que instalar las net-tools.
 
@@ -199,11 +199,11 @@ Y para terminar añadir a **/etc/hosts** nuestra ip, en mi caso **192.168.122.98
 192.168.122.98 debian-oracle
 ```
 
-![conf-ip](/docs/img/capturas-arantxa/13.png)
+![conf-ip](/img/capturas-arantxa/13.png)
 
 Ya deberíamos poder realizar la configuración.
 
-![configuracion-proceso](/docs/img/capturas-arantxa/14.png)
+![configuracion-proceso](/img/capturas-arantxa/14.png)
 
 
 ### 3.3 Terminar configuración
@@ -222,7 +222,7 @@ export LD_LIBRARY_PATH=$ORACLE_HOME/lib:$LD_LIBRARY_PATH
 export PATH=$ORACLE_HOME/bin:$PATH
 ```
 
-![variables-entorno](/docs/img/capturas-arantxa/15.png)
+![variables-entorno](/img/capturas-arantxa/15.png)
 
 Iniciamos las variables de entorno.
 
@@ -236,7 +236,7 @@ Si no conocemos el nombre exacto del servicio buscarlo con:
 
 `sudo systemctl list-unit-files --type service | grep oracle`
 
-![servicio-oracle-activo](/docs/img/capturas-arantxa/16.png)
+![servicio-oracle-activo](/img/capturas-arantxa/16.png)
 
 Podremos entrar a Oracle usando el siguiente comando:
 
@@ -246,16 +246,16 @@ Pero nuestro usuario local deberá estar en el grupo **dba**.
 
 `sudo nano /etc/group`
 
-![grupo-dba](/docs/img/capturas-arantxa/17.png)
+![grupo-dba](/img/capturas-arantxa/17.png)
 
-![acceso-usuario](/docs/img/capturas-arantxa/18.png)
+![acceso-usuario](/img/capturas-arantxa/18.png)
 
 
 ### 3.4 Iniciar la base de datos
 
 Si al inicializar la base de datos aparece el siguiente error es porque no le hemos dado el nombre correcto a la base de datos.
 
-![error-bd-init.ora](/docs/img/capturas-arantxa/20.png)
+![error-bd-init.ora](/img/capturas-arantxa/20.png)
 
 Cambiamos el nombre ORACLE_SID, al nombre de nuestra base de datos, en este caso ORCLCDB.
 
@@ -279,4 +279,4 @@ Además si nos aparece error de que no encuentra los directorios deberemos crear
 
 Entramos de nuevo como *"sqlplus / as sysdba"* e iniciamos la base de datos con **startup**.
 
-![bd-montada](/docs/img/capturas-arantxa/21.png)
+![bd-montada](/img/capturas-arantxa/21.png)
