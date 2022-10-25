@@ -187,7 +187,7 @@ Podemos ver también todos los registros que tiene cada tabla:
 
 ![trabajadores](https://i.imgur.com/gqGZj94.png)
 
-Y como es lógico, a partir de ahora podríamos hacer todas las operaciones de administración sobre MariaDB que quisieramos.
+Y como es lógico, a partir de ahora podríamos hacer todas las operaciones de administración sobre MariaDB que quisiéramos.
 
 ## Prueba desde `clientemariadb`
 
