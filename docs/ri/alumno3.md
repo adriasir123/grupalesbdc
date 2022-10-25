@@ -10,9 +10,9 @@ Se aportará el código de las aplicaciones realizadas y prueba de funcionamient
     • Prueba desde un cliente remoto de SQL*Plus.
     • Realización de una aplicación web en cualquier lenguaje que conecte con el servidor Postgres tras autenticarse y muestre alguna información almacenada en el mismo.
 
-## MySQL
+## 1. MySQL
 
-### Instalación
+### 1.1 Instalación
 
 En el servidor actualizamos los repositorios e instalamos **gnupg** y **wget**, si no estuvieran ya instalados.
 
@@ -59,7 +59,7 @@ Terminada la instalación pasaremos a entrar con el usuario root.
 ![entrando-mysql](/docs/img/capturas-arantxa/5.png)
 
 
-### Creación usuario
+### 1.2 Creación usuario
 
 Creamos un usuario y contraseña para el administrador.
 
@@ -74,9 +74,9 @@ Le damos todos los privilegios.
 
 
 
-## PostgreSQL
+## 2. PostgreSQL
 
-### Instalación
+### 2.1 Instalación
 
 Instalamos PostgreSQL en Debian 11 directamente con **apt**.
 
@@ -85,7 +85,9 @@ Instalamos PostgreSQL en Debian 11 directamente con **apt**.
 
 
 
-## Oracle
+## 3. Oracle
+
+### 3.1 Instalación
 
 Descargamos Oracle 19c desde su página oficial. Si se hac con wget nos dará error a la hora de pasarlo a formato deb con alien. Vamos a su página y lo descargamos.
 
@@ -155,7 +157,7 @@ Y ya podremos instalar Oracle 19c.
 
 
 
-### Configuración
+### 3.2 Configuración
 
 Creación de la base de datos y configuración de la contraseña del administrador.
 
@@ -204,7 +206,7 @@ Ya deberíamos poder realizar la configuración.
 ![configuracion-proceso](/docs/img/capturas-arantxa/14.png)
 
 
-### Terminar configuración
+### 3.3 Terminar configuración
 
 Añadimos las variables de entorno bash.
 
@@ -249,7 +251,7 @@ Pero nuestro usuario local deberá estar en el grupo **dba**.
 ![acceso-usuario](/docs/img/capturas-arantxa/18.png)
 
 
-### Iniciar la base de datos
+### 3.4 Iniciar la base de datos
 
 Si al inicializar la base de datos aparece el siguiente error es porque no le hemos dado el nombre correcto a la base de datos.
 
