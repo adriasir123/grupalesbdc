@@ -1,9 +1,0 @@
-# phpMyAdmin
-
-prueba dominio ga
-
-
-
-
-
-

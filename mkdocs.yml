@@ -24,6 +24,6 @@ nav:
     - Responsabilidad grupal:
         - 'SQL Developer': 'rg/sql-developer.md'
         - 'Herramienta web PostgreSQL': 'rg/herramienta-postgresql.md'
-        - 'Herramienta web MariaDB': 'rg/herramienta-mariadb.md'
+        - 'phpMyAdmin': 'rg/phpmyadmin.md'
         - 'Herramienta web MongoDB': 'rg/herramienta-mongodb.md'
         - 'Oracle Enterprise Manager': 'rg/oracle-enterprise-manager.md'
