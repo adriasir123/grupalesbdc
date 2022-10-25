@@ -13,4 +13,4 @@ Puedes empezar a navegar por la documentación utilizando el navbar a tu izquier
 
 Esperamos que esta documentación sea clara, y de utilidad.
 
-![databases](https://wallpapercave.com/wp/wp2347547.jpg)
+![databases](https://i.postimg.cc/0QzzjFCN/wordcloud-p1-bd.png)
