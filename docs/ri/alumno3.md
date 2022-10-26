@@ -95,6 +95,8 @@ https://www.oracle.com/database/technologies/oracle19c-linux-downloads.html
 
 Vemos que está en formato rpm, así que utilizaremos la herramienta **alien** para pasarlo a formato deb.
 
+>¡OJO! Si ya tienes Oracle pasado a .deb debes instalar los paquetes **libaio1** y **unixodbc**, que son librerías para Oracle. Si no lo instalas dará error cuando hagas **configure**.
+
 `sudo apt install alien libaio1 unixodbc`
 
 Usamos alien para convertir el paquete a deb. Este proceso puede ser un poco lento.
