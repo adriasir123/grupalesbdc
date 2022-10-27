@@ -269,6 +269,8 @@ BANNER
 Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
 ```
 
+Cuando en futuras ocasiones al conectarnos a Oracle nos aparezca el mensaje `Connected to an idle instance`, tenemos que ejecutar en `sqlplus` el comando `startup`.
+
 ### 1.4 Creación de usuario
 
 ```shell
@@ -295,67 +297,66 @@ Version 19.3.0.0.0
 SQL>
 ```
 
-
-test iconos
+Pruebo que los privilegios se han aplicado correctamente con la siguiente consulta:
 
 ```shell
-.r--r--r-- atlas atlas 115 KB Thu Oct 27 10:03:00 2022  .zcompdump-olympus-5.8.zwc
-.rw-r--r-- atlas atlas  74 KB Tue Oct 25 19:22:16 2022  .png
-.rw------- atlas atlas  66 KB Wed Oct 19 12:28:16 2022  .bash_history
-.rw-r--r-- atlas atlas  50 KB Thu Oct 27 10:03:00 2022  .zcompdump-olympus-5.8
-.rw-r--r-- atlas atlas  48 KB Wed Oct 19 12:35:11 2022  .zcompdump
-.rw-r--r-- root  root   40 KB Sat Oct 22 00:24:49 2022  photorec.se2
-.rw------- atlas atlas  39 KB Thu Oct 27 14:32:20 2022  .xsession-errors.old
-.rw------- atlas atlas  23 KB Thu Oct 27 16:33:16 2022  .zsh_history
-.rw------- atlas atlas  11 KB Thu Oct 27 16:30:58 2022  .xsession-errors
-drwxr-xr-x atlas atlas 4.0 KB Thu Oct 27 09:58:24 2022  Downloads
-drwxr-xr-x atlas atlas 4.0 KB Thu Oct 27 10:49:50 2022  nerd-fonts
-drwx------ atlas atlas 4.0 KB Thu Oct 27 11:57:06 2022  .config
-drwxr-xr-x atlas atlas 4.0 KB Mon Oct 24 01:11:49 2022  .cache
-drwxr-xr-x atlas atlas 4.0 KB Wed Oct 19 12:37:03 2022  .oh-my-zsh
-drwxr-xr-x atlas atlas 4.0 KB Mon Sep 26 10:46:31 2022  .themes
-drwxr-xr-x atlas atlas 4.0 KB Mon Sep 19 15:38:53 2022  rtl8821ce
-drwxr-xr-x atlas atlas 4.0 KB Thu Oct 27 16:33:16 2022  .
-.rw-r--r-- atlas atlas 3.8 KB Wed Oct 19 12:43:48 2022  .zshrc
-.rw-r--r-- atlas atlas 3.7 KB Sat Oct 22 00:21:29 2022  testdisk.log
-.rw-r--r-- atlas atlas 3.5 KB Thu Oct 27 16:33:13 2022  .bashrc
-.rw-r--r-- atlas atlas 807 B  Sun Sep 18 18:53:14 2022  .profile
-.rw-r--r-- atlas atlas 641 B  Wed Sep 21 10:02:30 2022  microsoft.gpg
-.rw-r--r-- atlas atlas 317 B  Wed Oct 19 12:35:11 2022  .zshrc.pre-oh-my-zsh
-.rw-r--r-- atlas atlas 251 B  Thu Sep 22 13:17:29 2022  .wget-hsts
-.rw-r--r-- atlas atlas 220 B  Sun Sep 18 18:53:14 2022  .bash_logout
-drwxr-xr-x atlas atlas 209 B  Wed Oct 12 11:37:18 2022  isos
-drwxr-xr-x atlas atlas 187 B  Sat Oct  8 15:46:59 2022  bd-ciudadjardin
-drwxr-xr-x atlas atlas 175 B  Mon Oct 24 01:28:09 2022  Videos
-drwx------ atlas atlas 141 B  Thu Oct 27 12:35:48 2022  .ssh
-drwxr-xr-x atlas atlas 139 B  Thu Oct 27 13:58:31 2022  .vagrant.d
-drwxr-xr-x atlas atlas 134 B  Thu Oct 27 11:57:06 2022  Pictures
-.rw------- atlas atlas 118 B  Wed Oct 19 12:39:33 2022  .histfile
-drwxr-xr-x atlas atlas  97 B  Tue Oct 18 10:57:34 2022  vagrant
-drwxr-xr-x atlas atlas  95 B  Mon Oct 17 19:02:25 2022  conocimiento-en-bits
-drwxr-xr-x atlas atlas  95 B  Mon Oct 17 21:36:49 2022  p1-bd-servidores-clientes
-drwxr-xr-x atlas atlas  80 B  Mon Oct  3 20:40:50 2022  preseed
-drwx------ atlas atlas  66 B  Sun Sep 18 18:56:28 2022  .mozilla
-.rw-r--r-- atlas atlas  66 B  Sat Oct  8 23:29:14 2022  .selected_editor
-.rw-r--r-- atlas atlas  52 B  Thu Sep 22 09:04:16 2022  .gitconfig
-.rw------- atlas atlas  52 B  Thu Oct 27 15:52:34 2022  .Xauthority
-drwxr-xr-x atlas atlas  43 B  Sat Sep 24 11:46:48 2022  VirtualBox VMs
-drwxr-xr-x atlas atlas  41 B  Wed Sep 21 10:21:49 2022  .vscode
-.rw-r--r-- atlas atlas  35 B  Sun Sep 18 19:36:01 2022  .dmrc
-drwxr-xr-x atlas atlas  34 B  Mon Sep 19 14:37:43 2022  .elementary
-drwx------ atlas atlas  31 B  Sun Sep 18 18:55:14 2022  .gnupg
-drwxr-xr-x atlas atlas  27 B  Fri Sep 23 20:52:03 2022  .icons
-drwxr-xr-x atlas atlas  20 B  Mon Sep 19 16:03:34 2022  .thumbnails
-drwxr-xr-x atlas atlas  19 B  Thu Sep 22 09:52:40 2022  .local
-drwx------ atlas atlas  19 B  Wed Sep 21 10:21:49 2022  .pki
-drwxr-xr-x root  root   19 B  Sun Sep 18 18:53:14 2022  ..
-drwxr-xr-x atlas atlas   6 B  Mon Oct 17 15:52:43 2022  cp
-drwxr-xr-x atlas atlas   6 B  Sun Sep 18 18:55:14 2022  Music
-drwxr-xr-x atlas atlas   6 B  Sun Sep 18 18:55:14 2022  Documents
-drwxr-xr-x atlas atlas   6 B  Sun Sep 18 18:55:14 2022  Public
-drwxr-xr-x atlas atlas   6 B  Sun Sep 18 18:55:14 2022  Templates
-drwxr-xr-x atlas atlas   6 B  Sun Sep 18 18:55:14 2022  Desktop
-.rw------- atlas atlas   0 B  Sun Sep 18 18:55:14 2022  .ICEauthority
+select * from dba_sys_privs where grantee = 'BIBLIOFILOS_ADMIN';
+```
+
+El output de esta consulta es demasiado largo, así que [entra en este gist](https://gist.github.com/adriasir123/5cd2ec8d56974b6ae0d283243f6d5f41) para verlo.
+
+### 1.5 Creación de tablas
+
+```sql
+CREATE TABLE bibliotecas (
+  id NUMBER(10) NOT NULL,
+  ciudad VARCHAR2(50) NOT NULL,
+  calle VARCHAR2(50) NOT NULL,
+  CONSTRAINT bibliotecas_pk PRIMARY KEY (id)
+);
+
+CREATE TABLE libros (
+  id NUMBER(10) NOT NULL,
+  id_biblioteca NUMBER(10) NOT NULL,
+  n_paginas NUMBER(10) NOT NULL,
+  autor VARCHAR2(50) NOT NULL,
+  CONSTRAINT libros_pk PRIMARY KEY (id),
+  CONSTRAINT id_biblioteca_fk_libros FOREIGN KEY (id_biblioteca)
+    REFERENCES bibliotecas (id)
+);
+
+CREATE TABLE trabajadores (
+  id NUMBER(10) NOT NULL,
+  id_biblioteca NUMBER(10) NOT NULL,
+  nombre VARCHAR2(50) NOT NULL,
+  apellido VARCHAR2(50) NOT NULL,
+  CONSTRAINT trabajadores_pk PRIMARY KEY (id),
+  CONSTRAINT id_biblioteca_fk_trabajadores FOREIGN KEY (id_biblioteca)
+    REFERENCES bibliotecas (id)
+);
+```
+
+Compruebo que se han creado con la siguiente consulta:
+
+```sql
+SELECT
+  table_name, owner
+FROM
+  all_tables
+WHERE
+  owner='BIBLIOFILOS_ADMIN'
+ORDER BY
+  owner, table_name;
+```
+
+Devuelve lo siguiente:
+
+```shell
+TABLE_NAME								                                                                                                                 OWNER
+-------------------------------------------------------------------------------------------------------------------------------- --------------------------------------------------------------------------------------------------------------------------------
+BIBLIOTECAS								                                                                                                                 BIBLIOFILOS_ADMIN
+LIBROS								                                                                                                                         BIBLIOFILOS_ADMIN
+TRABAJADORES								                                                                                                                 BIBLIOFILOS_ADMIN
 ```
 
 
@@ -366,12 +367,6 @@ drwxr-xr-x atlas atlas   6 B  Sun Sep 18 18:55:14 2022  Desktop
 
 
 
-CREATE TABLE test(
-    person_id NUMBER,
-    first_name VARCHAR2(50) NOT NULL,
-    last_name VARCHAR2(50) NOT NULL,
-    PRIMARY KEY(person_id)
-);
 
 
 INSERT INTO test (person_id, first_name, last_name) VALUES (1, 'Jose', 'Joselito');
@@ -384,6 +379,17 @@ INSERT INTO test (person_id, first_name, last_name) VALUES (1, 'Jose', 'Joselito
 
 
 
+mejoras de sqlplus
+
+linesize 32000
+pagesize 400
+sqlplus no detecta flechas?
+
+sudo apt install rlwrap
+
+rlwrap sqlplus / as sysdba
+
+alias rl_sqlplus='rlwrap sqlplus'
 
 
 
@@ -391,26 +397,12 @@ INSERT INTO test (person_id, first_name, last_name) VALUES (1, 'Jose', 'Joselito
 
 
 
-Instalo unzip:
-
-```shell
-sudo apt install unzip
-```
 
 
 
 
 
 
-DIRECTORIOS
-
-sudo mkdir -p /opt/oracle/product/19.3.0
-sudo mkdir -p /opt/oraInventory
-sudo chown -R oracle:dba /opt/oracle/
-sudo chown -R oracle:dba /opt/oraInventory
-
-
-sudo apt install build-essential gcc-multilib lib32z1 libaio1 libstdc++5 rpm xauth unzip build-essential binutils libcap-dev gcc g++ libc6-dev ksh libaio-dev make libxi-dev libxtst-dev libxau-dev libxcb1-dev sysstat rpm xauth unzip
 
 
 
@@ -465,7 +457,6 @@ sudo apt install build-essential binutils libcap-dev gcc g++ libc6-dev ksh libai
 
 
 
-./runInstaller
 
 
 
@@ -478,7 +469,6 @@ sudo apt install build-essential binutils libcap-dev gcc g++ libc6-dev ksh libai
 
 
 
-FORMA RPM 
 
 
 
