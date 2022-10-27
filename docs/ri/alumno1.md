@@ -6,9 +6,534 @@
 
 ```
 
-## Parte 1
+## 1. Oracle 19c
 
-> Instalación de un servidor Oracle 19c sobre Debian y configuración para permitir el acceso remoto desde la red local
+### 1.1 Redimensión de disco
+
+> Tenemos que tener suficiente espacio para instalar Oracle
+
+Paro la VM:
+
+```shell
+vagrant halt servidororacle
+```
+
+Redimensiono el fichero de disco:
+
+```shell
+virsh -c qemu:///system vol-resize p1-bd-alumno1_servidororacle.img 50G --pool default
+```
+
+Dentro de la VM redimensiono la partición y el sistema de ficheros:
+
+```shell
+echo ", +" | sudo sfdisk -N 1 /dev/vda --no-reread
+sudo apt update
+sudo apt install parted
+sudo partprobe
+sudo resize2fs /dev/vda1
+```
+
+### 1.2 Instalación del servidor
+
+#### 1.2.1
+
+Descargo el rpm en mi host desde la página oficial de Oracle:
+
+![descargarpm](https://i.imgur.com/b7LjTs5.png)
+
+#### 1.2.2
+
+Lo paso a la VM `servidororacle`:
+
+```shell
+scp Downloads/oracle-database-ee-19c-1.0-1.x86_64.rpm vagrant@192.168.121.159:/home/vagrant
+```
+
+#### 1.2.3
+
+Instalo los paquetes requeridos:
+
+```shell
+sudo apt install alien libaio1 unixodbc net-tools
+```
+
+#### 1.2.4
+
+Convierto el rpm a deb:
+
+```shell
+sudo alien --scripts -d oracle-database-ee-19c-1.0-1.x86_64.rpm
+```
+
+Como resultado tendremos el paquete `oracle-database-ee-19c_1.0-2_amd64.deb`
+
+#### 1.2.5
+
+Creo el siguiente script:
+
+```shell
+sudo pico /sbin/chkconfig
+```
+
+Con el siguiente contenido:
+
+```shell
+#!/bin/bash
+# Oracle 19c installer chkconfig hack
+file=/etc/init.d/oracle-19c
+if [[ ! `tail -n1 $file | grep INIT` ]]; then
+echo >> $file
+echo '### BEGIN INIT INFO' >> $file
+echo '# Provides: Oracle 19c' >> $file
+echo '# Required-Start: $remote_fs $syslog' >> $file
+echo '# Required-Stop: $remote_fs $syslog' >> $file
+echo '# Default-Start: 2 3 4 5' >> $file
+echo '# Default-Stop: 0 1 6' >> $file
+echo '# Short-Description: Oracle 19c' >> $file
+echo '### END INIT INFO' >> $file
+fi
+update-rc.d oracle-19c defaults 80 01
+```
+
+Le doy permisos:
+
+```shell
+sudo chmod 777 /sbin/chkconfig  
+```
+
+#### 1.2.6
+
+Creo el siguiente fichero para los parámetros de Kernel de Oracle:
+
+```shell
+sudo touch /etc/sysctl.d/60-oracle.conf
+```
+
+Con el siguiente contenido:
+
+```shell
+# Oracle 19c kernel parameters
+fs.file-max=6815744
+net.ipv4.ip_local_port_range=9000 65000
+kernel.sem=250 32000 100 128
+kernel.shmmax=536870912
+```
+
+#### 1.2.7
+
+Arranco el siguiente servicio:
+
+```shell
+sudo systemctl start procps
+```
+
+#### 1.2.8
+
+Creo el siguiente fichero para configurar el punto de montaje `/dev/shm` de Oracle:
+
+```shell
+sudo touch /etc/rc2.d/S01shm_load
+```
+
+Con el siguiente contenido:
+
+```shell
+#!/bin/sh
+case "$1" in
+start) mkdir /var/lock/subsys 2>/dev/null
+       touch /var/lock/subsys/listener
+       rm /dev/shm 2>/dev/null
+       mkdir /dev/shm 2>/dev/null
+       mount -t tmpfs shmfs -o size=2048m /dev/shm ;;
+*) echo error
+   exit 1 ;;
+esac
+```
+
+Le doy permisos:
+
+```shell
+sudo chmod 777 /etc/rc2.d/S01shm_load
+```
+
+Hago un reinicio:
+
+```shell
+sudo reboot
+```
+
+#### 1.2.9
+
+Instalo el paquete:
+
+```shell
+sudo dpkg --install oracle-database-ee-19c_1.0-2_amd64.deb
+```
+
+#### 1.2.10
+
+Añado el parámetro `-J-Doracle.assistants.dbca.validate.ConfigurationParams=false` al final de la siguiente línea en `/etc/init.d/oracledb_ORCLCDB-19c`:
+
+![parametroañadido](https://i.postimg.cc/GpqQmxHm/parametroracle.png)
+
+Quedaría de la siguiente manera la línea al modificarla:
+
+```shell
+$SU -s /bin/bash  $ORACLE_OWNER -c "$DBCA -silent -createDatabase -gdbName $ORACLE_SID -templateName $TEMPLATE_NAME -characterSet $CHARSET -createAsContainerDatabase $CREATE_AS_CDB -numberOfPDBs $NUMBER_OF_PDBS -pdbName $PDB_NAME -createListener $LISTENER_NAME:$LISTENER_PORT -datafileDestination $ORACLE_DATA_LOCATION -sid $ORACLE_SID -autoGeneratePasswords -emConfiguration DBEXPRESS -emExpressPort $EM_EXPRESS_PORT -J-Doracle.assistants.dbca.validate.ConfigurationParams=false"
+```
+
+#### 1.2.11
+
+Añado la siguiente línea a `/etc/hosts`:
+
+```shell
+192.168.121.159 servidororacle servidororacle
+```
+
+#### 1.2.12
+
+Ejecuto el script de configuración de Oracle:
+
+```shell
+sudo /etc/init.d/oracledb_ORCLCDB-19c configure
+```
+
+#### 1.2.13
+
+Edito el siguiente fichero:
+
+```shell
+pico ~/.bashrc
+```
+
+Añado las siguientes variables de entorno al final del fichero:
+
+```shell
+# Oracle environment variables
+export ORACLE_HOME=/opt/oracle/product/19c/dbhome_1
+export ORACLE_SID=ORCLCDB
+export NLS_LANG=`$ORACLE_HOME/bin/nls_lang.sh`
+export ORACLE_BASE=/opt/oracle
+export LD_LIBRARY_PATH=$ORACLE_HOME/lib:$LD_LIBRARY_PATH
+export PATH=$ORACLE_HOME/bin:$PATH
+```
+
+Aplico los cambios:
+
+```shell
+. ~/.profile
+```
+
+Hago un reinicio:
+
+```shell
+sudo reboot
+```
+
+#### 1.2.14
+
+Inicio el servicio de Oracle:
+
+```shell
+sudo systemctl start oracledb_ORCLCDB-19c
+```
+
+#### 1.2.15
+
+Añado mi usuario al grupo `dba`:
+
+```shell
+sudo usermod -a -G dba vagrant
+```
+
+### 1.3 Acceso local privilegiado
+
+```shell
+vagrant@servidororacle:~$ sqlplus / as sysdba
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Thu Oct 27 12:13:47 2022
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL> SELECT banner FROM v$version;
+
+BANNER
+--------------------------------------------------------------------------------
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+```
+
+### 1.4 Creación de usuario
+
+```shell
+alter session set "_ORACLE_SCRIPT"=true;
+create user bibliofilos_admin identified by 1234;
+grant all privileges to bibliofilos_admin;
+```
+
+Pruebo que funciona el acceso:
+
+```shell
+vagrant@servidororacle:~$ sqlplus bibliofilos_admin/1234
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Thu Oct 27 12:28:38 2022
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL>
+```
+
+
+test iconos
+
+```shell
+.r--r--r-- atlas atlas 115 KB Thu Oct 27 10:03:00 2022  .zcompdump-olympus-5.8.zwc
+.rw-r--r-- atlas atlas  74 KB Tue Oct 25 19:22:16 2022  .png
+.rw------- atlas atlas  66 KB Wed Oct 19 12:28:16 2022  .bash_history
+.rw-r--r-- atlas atlas  50 KB Thu Oct 27 10:03:00 2022  .zcompdump-olympus-5.8
+.rw-r--r-- atlas atlas  48 KB Wed Oct 19 12:35:11 2022  .zcompdump
+.rw-r--r-- root  root   40 KB Sat Oct 22 00:24:49 2022  photorec.se2
+.rw------- atlas atlas  39 KB Thu Oct 27 14:32:20 2022  .xsession-errors.old
+.rw------- atlas atlas  23 KB Thu Oct 27 16:33:16 2022  .zsh_history
+.rw------- atlas atlas  11 KB Thu Oct 27 16:30:58 2022  .xsession-errors
+drwxr-xr-x atlas atlas 4.0 KB Thu Oct 27 09:58:24 2022  Downloads
+drwxr-xr-x atlas atlas 4.0 KB Thu Oct 27 10:49:50 2022  nerd-fonts
+drwx------ atlas atlas 4.0 KB Thu Oct 27 11:57:06 2022  .config
+drwxr-xr-x atlas atlas 4.0 KB Mon Oct 24 01:11:49 2022  .cache
+drwxr-xr-x atlas atlas 4.0 KB Wed Oct 19 12:37:03 2022  .oh-my-zsh
+drwxr-xr-x atlas atlas 4.0 KB Mon Sep 26 10:46:31 2022  .themes
+drwxr-xr-x atlas atlas 4.0 KB Mon Sep 19 15:38:53 2022  rtl8821ce
+drwxr-xr-x atlas atlas 4.0 KB Thu Oct 27 16:33:16 2022  .
+.rw-r--r-- atlas atlas 3.8 KB Wed Oct 19 12:43:48 2022  .zshrc
+.rw-r--r-- atlas atlas 3.7 KB Sat Oct 22 00:21:29 2022  testdisk.log
+.rw-r--r-- atlas atlas 3.5 KB Thu Oct 27 16:33:13 2022  .bashrc
+.rw-r--r-- atlas atlas 807 B  Sun Sep 18 18:53:14 2022  .profile
+.rw-r--r-- atlas atlas 641 B  Wed Sep 21 10:02:30 2022  microsoft.gpg
+.rw-r--r-- atlas atlas 317 B  Wed Oct 19 12:35:11 2022  .zshrc.pre-oh-my-zsh
+.rw-r--r-- atlas atlas 251 B  Thu Sep 22 13:17:29 2022  .wget-hsts
+.rw-r--r-- atlas atlas 220 B  Sun Sep 18 18:53:14 2022  .bash_logout
+drwxr-xr-x atlas atlas 209 B  Wed Oct 12 11:37:18 2022  isos
+drwxr-xr-x atlas atlas 187 B  Sat Oct  8 15:46:59 2022  bd-ciudadjardin
+drwxr-xr-x atlas atlas 175 B  Mon Oct 24 01:28:09 2022  Videos
+drwx------ atlas atlas 141 B  Thu Oct 27 12:35:48 2022  .ssh
+drwxr-xr-x atlas atlas 139 B  Thu Oct 27 13:58:31 2022  .vagrant.d
+drwxr-xr-x atlas atlas 134 B  Thu Oct 27 11:57:06 2022  Pictures
+.rw------- atlas atlas 118 B  Wed Oct 19 12:39:33 2022  .histfile
+drwxr-xr-x atlas atlas  97 B  Tue Oct 18 10:57:34 2022  vagrant
+drwxr-xr-x atlas atlas  95 B  Mon Oct 17 19:02:25 2022  conocimiento-en-bits
+drwxr-xr-x atlas atlas  95 B  Mon Oct 17 21:36:49 2022  p1-bd-servidores-clientes
+drwxr-xr-x atlas atlas  80 B  Mon Oct  3 20:40:50 2022  preseed
+drwx------ atlas atlas  66 B  Sun Sep 18 18:56:28 2022  .mozilla
+.rw-r--r-- atlas atlas  66 B  Sat Oct  8 23:29:14 2022  .selected_editor
+.rw-r--r-- atlas atlas  52 B  Thu Sep 22 09:04:16 2022  .gitconfig
+.rw------- atlas atlas  52 B  Thu Oct 27 15:52:34 2022  .Xauthority
+drwxr-xr-x atlas atlas  43 B  Sat Sep 24 11:46:48 2022  VirtualBox VMs
+drwxr-xr-x atlas atlas  41 B  Wed Sep 21 10:21:49 2022  .vscode
+.rw-r--r-- atlas atlas  35 B  Sun Sep 18 19:36:01 2022  .dmrc
+drwxr-xr-x atlas atlas  34 B  Mon Sep 19 14:37:43 2022  .elementary
+drwx------ atlas atlas  31 B  Sun Sep 18 18:55:14 2022  .gnupg
+drwxr-xr-x atlas atlas  27 B  Fri Sep 23 20:52:03 2022  .icons
+drwxr-xr-x atlas atlas  20 B  Mon Sep 19 16:03:34 2022  .thumbnails
+drwxr-xr-x atlas atlas  19 B  Thu Sep 22 09:52:40 2022  .local
+drwx------ atlas atlas  19 B  Wed Sep 21 10:21:49 2022  .pki
+drwxr-xr-x root  root   19 B  Sun Sep 18 18:53:14 2022  ..
+drwxr-xr-x atlas atlas   6 B  Mon Oct 17 15:52:43 2022  cp
+drwxr-xr-x atlas atlas   6 B  Sun Sep 18 18:55:14 2022  Music
+drwxr-xr-x atlas atlas   6 B  Sun Sep 18 18:55:14 2022  Documents
+drwxr-xr-x atlas atlas   6 B  Sun Sep 18 18:55:14 2022  Public
+drwxr-xr-x atlas atlas   6 B  Sun Sep 18 18:55:14 2022  Templates
+drwxr-xr-x atlas atlas   6 B  Sun Sep 18 18:55:14 2022  Desktop
+.rw------- atlas atlas   0 B  Sun Sep 18 18:55:14 2022  .ICEauthority
+```
+
+
+
+
+
+
+
+
+
+CREATE TABLE test(
+    person_id NUMBER,
+    first_name VARCHAR2(50) NOT NULL,
+    last_name VARCHAR2(50) NOT NULL,
+    PRIMARY KEY(person_id)
+);
+
+
+INSERT INTO test (person_id, first_name, last_name) VALUES (1, 'Jose', 'Joselito');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Instalo unzip:
+
+```shell
+sudo apt install unzip
+```
+
+
+
+
+
+
+DIRECTORIOS
+
+sudo mkdir -p /opt/oracle/product/19.3.0
+sudo mkdir -p /opt/oraInventory
+sudo chown -R oracle:dba /opt/oracle/
+sudo chown -R oracle:dba /opt/oraInventory
+
+
+sudo apt install build-essential gcc-multilib lib32z1 libaio1 libstdc++5 rpm xauth unzip build-essential binutils libcap-dev gcc g++ libc6-dev ksh libaio-dev make libxi-dev libxtst-dev libxau-dev libxcb1-dev sysstat rpm xauth unzip
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+PRUEBA DE X11 FORWARDING
+
+en la vm
+
+sudo apt install xauth
+sudo apt install x11-apps
+
+en el host
+
+Vagrantfile (después del vm name):
+
+config.ssh.forward_agent = true
+config.ssh.forward_x11 = true
+
+
+xeyes
+
+
+sudo apt install default-jre default-jdk make libaio-dev libxi-dev libxtst-dev libcap-dev ksh unixodbc
+
+sudo apt install build-essential binutils libcap-dev gcc g++ libc6-dev ksh libaio-dev make libxi-dev libxtst-dev libxau-dev libxcb1-dev sysstat rpm xauth unzip
+
+
+
+
+
+
+./runInstaller
+
+
+
+
+
+
+
+
+
+
+
+
+FORMA RPM 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1042,7 +1567,7 @@ bibliofilos> db.bibliotecas.find()
 ]
 ```
 
-## 5 Cliente remoto PostgreSQL
+## 5. Cliente remoto PostgreSQL
 
 ### 5.1
 
@@ -1095,6 +1620,6 @@ bibliofilos=> select * from bibliotecas;
 (2 rows)
 ```
 
-## 6 App Flask con MongoDB
+## 6. App Flask con MongoDB
 
 En [este repositorio](https://github.com/adriasir123/flask-mongo) se encuentran tanto el código de la aplicación como su guía de uso y pruebas de funcionamiento.
