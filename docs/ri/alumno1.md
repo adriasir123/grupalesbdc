@@ -1226,9 +1226,7 @@ bibliofilos=> select * from bibliotecas;
 
 ## 3. MariaDB
 
-### 3.1
-
-> Instalar el servidor
+### 3.1 Instalación del servidor
 
 ```shell
 sudo apt update
@@ -1269,9 +1267,7 @@ Oct 19 11:01:36 servidormariadb /etc/mysql/debian-start[2189]: Checking for inse
 Oct 19 11:01:36 servidormariadb /etc/mysql/debian-start[2193]: Triggering myisam-recover for all MyISAM tables and aria-recover for all Aria tables
 ```
 
-### 3.2
-
-> Acceder con el usuario administrador localmente
+### 3.2 Acceso local privilegiado
 
 ```shell
 vagrant@servidormariadb:~$ sudo mysql
@@ -1286,9 +1282,7 @@ Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 MariaDB [(none)]>
 ```
 
-### 3.3
-
-> Crear la bd
+### 3.3 Creación de la base de datos
 
 ```sql
 create database bibliofilos;
@@ -1317,9 +1311,7 @@ Database changed
 MariaDB [bibliofilos]>
 ```
 
-### 3.4
-
-> Crear tablas
+### 3.4 Creación de tablas
 
 ```sql
 create table bibliotecas(
@@ -1364,9 +1356,7 @@ MariaDB [bibliofilos]> show tables;
 3 rows in set (0.001 sec)
 ```
 
-### 3.5
-
-> Introducir registros
+### 3.5 Inserción de registros
 
 ```sql
 INSERT INTO bibliotecas (ciudad, calle) VALUES ('Utrera', 'Alvarez Quintero');
@@ -1410,16 +1400,14 @@ MariaDB [bibliofilos]> select * from trabajadores;
 2 rows in set (0.001 sec)
 ```
 
-### 3.6
-
-> Crear usuario con todos los privilegios sobre la base de datos anterior
+### 3.6 Creación de usuarios
 
 ```sql
 CREATE USER 'bibliofilos_admin'@'localhost' IDENTIFIED BY '1234';
 CREATE USER 'bibliofilos_admin'@'%' IDENTIFIED BY '1234';
 ```
 
-Compruebo que se ha creado:
+Compruebo que se han creado:
 
 ```shell
 MariaDB [(none)]> SELECT user, host FROM mysql.user;
@@ -1435,7 +1423,7 @@ MariaDB [(none)]> SELECT user, host FROM mysql.user;
 5 rows in set (0.002 sec)
 ```
 
-Le doy privilegios:
+Les doy privilegios:
 
 ```sql
 GRANT ALL ON bibliofilos.* TO 'bibliofilos_admin'@'localhost';
@@ -1465,9 +1453,7 @@ MariaDB [(none)]> SHOW GRANTS FOR 'bibliofilos_admin'@'localhost';
 2 rows in set (0.000 sec)
 ```
 
-### 3.7
-
-> Permitir el acceso remoto
+### 3.7 Configuración del acceso remoto
 
 Modifico la siguiente línea en `/etc/mysql/mariadb.conf.d/50-server.cnf`:
 
@@ -1488,18 +1474,16 @@ vagrant@servidormariadb:~$ netstat -ant | grep 3306
 tcp        0      0 0.0.0.0:3306            0.0.0.0:*               LISTEN
 ```
 
-### 3.8
+### 3.8 Instalación del cliente
 
-> Instalar el cliente de MariaDB en `clientemariadb`
+Se hará sobre `clientemariadb`.
 
 ```shell
 sudo apt update
 sudo apt install mariadb-client
 ```
 
-### 3.9
-
-> Probar el acceso remoto
+### 3.9 Prueba de acceso remoto
 
 ```shell
 vagrant@clientemariadb:~$ mariadb -u bibliofilos_admin -h 10.0.2.2 -p bibliofilos
