@@ -30,5 +30,11 @@ nav:
 markdown_extensions:
   - attr_list
   - md_in_html
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
 plugins:
   - glightbox
+repo_url: https://github.com/adriasir123/p1-bd-servidores-clientes
