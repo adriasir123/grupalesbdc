@@ -3,7 +3,108 @@
 ## Escenario
 
 ```shell
+Vagrant.configure("2") do |config|
 
+config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  config.vm.provider :libvirt do |libvirt|
+    libvirt.cpus = 2
+    libvirt.memory = 1024
+  end
+
+  config.vm.define :servidororacle do |servidororacle|
+    servidororacle.vm.box = "debian/bullseye64"
+    servidororacle.vm.provider :libvirt do |servidororacle|
+      servidororacle.memory = 4096
+      servidororacle.cpus = 6
+    end
+    servidororacle.vm.hostname = "servidororacle"
+    servidororacle.vm.network :private_network,
+      :libvirt__network_name => "red-oracle",
+      :libvirt__dhcp_enabled => false,
+      :ip => "10.0.0.2",
+      :libvirt__netmask => '255.255.255.0',
+      :libvirt__forward_mode => "veryisolated"
+  end
+
+  config.vm.define :clienteoracle do |clienteoracle|
+    clienteoracle.vm.box = "debian/bullseye64"
+    clienteoracle.vm.hostname = "clienteoracle"
+    clienteoracle.vm.network :private_network,
+      :libvirt__network_name => "red-oracle",
+      :libvirt__dhcp_enabled => false,
+      :ip => "10.0.0.3",
+      :libvirt__netmask => '255.255.255.0',
+      :libvirt__forward_mode => "veryisolated"
+  end
+
+  config.vm.define :servidorpostgresql do |servidorpostgresql|
+    servidorpostgresql.vm.box = "debian/bullseye64"
+    servidorpostgresql.vm.hostname = "servidorpostgresql"
+    servidorpostgresql.vm.network :private_network,
+      :libvirt__network_name => "red-postgresql",
+      :libvirt__dhcp_enabled => false,
+      :ip => "10.0.1.2",
+      :libvirt__netmask => '255.255.255.0',
+      :libvirt__forward_mode => "veryisolated"
+  end
+
+  config.vm.define :clientepostgresql do |clientepostgresql|
+    clientepostgresql.vm.box = "debian/bullseye64"
+    clientepostgresql.vm.hostname = "clientepostgresql"
+    clientepostgresql.vm.network :private_network,
+      :libvirt__network_name => "red-postgresql",
+      :libvirt__dhcp_enabled => false,
+      :ip => "10.0.1.3",
+      :libvirt__netmask => '255.255.255.0',
+      :libvirt__forward_mode => "veryisolated"
+  end
+
+  config.vm.define :servidormariadb do |servidormariadb|
+    servidormariadb.vm.box = "debian/bullseye64"
+    servidormariadb.vm.hostname = "servidormariadb"
+    servidormariadb.vm.network :private_network,
+      :libvirt__network_name => "red-mariadb",
+      :libvirt__dhcp_enabled => false,
+      :ip => "10.0.2.2",
+      :libvirt__netmask => '255.255.255.0',
+      :libvirt__forward_mode => "veryisolated"
+  end
+
+  config.vm.define :clientemariadb do |clientemariadb|
+    clientemariadb.vm.box = "debian/bullseye64"
+    clientemariadb.vm.hostname = "clientemariadb"
+    clientemariadb.vm.network :private_network,
+      :libvirt__network_name => "red-mariadb",
+      :libvirt__dhcp_enabled => false,
+      :ip => "10.0.2.3",
+      :libvirt__netmask => '255.255.255.0',
+      :libvirt__forward_mode => "veryisolated"
+  end
+
+  config.vm.define :servidormongodb do |servidormongodb|
+    servidormongodb.vm.box = "debian/bullseye64"
+    servidormongodb.vm.hostname = "servidormongodb"
+    servidormongodb.vm.network :private_network,
+      :libvirt__network_name => "red-mongodb",
+      :libvirt__dhcp_enabled => false,
+      :ip => "10.0.3.2",
+      :libvirt__netmask => '255.255.255.0',
+      :libvirt__forward_mode => "veryisolated"
+  end
+
+  config.vm.define :clientemongodb do |clientemongodb|
+    clientemongodb.vm.box = "debian/bullseye64"
+    clientemongodb.vm.hostname = "clientemongodb"
+    clientemongodb.vm.network :private_network,
+      :libvirt__network_name => "red-mongodb",
+      :libvirt__dhcp_enabled => false,
+      :ip => "10.0.3.3",
+      :libvirt__netmask => '255.255.255.0',
+      :libvirt__forward_mode => "veryisolated"
+  end
+
+end
 ```
 
 ## 1. Oracle 19c
@@ -241,15 +342,7 @@ sudo systemctl start oracledb_ORCLCDB-19c
 
 #### 1.2.15
 
-Añado el usuario `vagrant` al grupo `dba` por si en algún momento quiero acceder a sqlplus de manera rápida:
-
-```shell
-sudo usermod -a -G dba vagrant
-```
-
-Paso a configurar el usuario `oracle`, que es el que de verdad tendremos que usar.
-
-Le añado la contraseña `oracle` al usuario `oracle`:
+Añado la contraseña `oracle` al usuario `oracle`:
 
 ```shell
 sudo passwd oracle
@@ -273,10 +366,10 @@ Cambio los propietarios:
 sudo chown -R oracle:oinstall /home/oracle
 ```
 
-Le añado el siguiente fichero:
+Añado el siguiente fichero:
 
 ```shell
-touch .profile
+touch ~/.profile
 ```
 
 Con el siguiente contenido:
@@ -341,12 +434,20 @@ sudo usermod -aG sudo oracle
 
 A partir de ahora, para controlar Oracle correctamente, tendremos que estar logeados siempre con este usuario.
 
+#### 1.2.16
+
+Añado el usuario `vagrant` al grupo `dba` por si en algún momento quiero acceder a sqlplus de manera rápida:
+
+```shell
+sudo usermod -a -G dba vagrant
+```
+
 ### 1.3 Acceso local privilegiado
 
 ```shell
-vagrant@servidororacle:~$ sqlplus / as sysdba
+oracle@servidororacle:~$ sqlplus / as sysdba
 
-SQL*Plus: Release 19.0.0.0.0 - Production on Thu Oct 27 12:13:47 2022
+SQL*Plus: Release 19.0.0.0.0 - Production on Fri Oct 28 14:13:53 2022
 Version 19.3.0.0.0
 
 Copyright (c) 1982, 2019, Oracle.  All rights reserved.
@@ -356,7 +457,7 @@ Connected to:
 Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
 Version 19.3.0.0.0
 
-SQL> SELECT banner FROM v$version;
+SELECT banner FROM v$version;
 
 BANNER
 --------------------------------------------------------------------------------
@@ -376,13 +477,14 @@ grant all privileges to bibliofilos_admin;
 Pruebo que funciona el acceso:
 
 ```shell
-vagrant@servidororacle:~$ sqlplus bibliofilos_admin/1234
+oracle@servidororacle:~$ sqlplus bibliofilos_admin/1234
 
-SQL*Plus: Release 19.0.0.0.0 - Production on Thu Oct 27 12:28:38 2022
+SQL*Plus: Release 19.0.0.0.0 - Production on Fri Oct 28 14:18:26 2022
 Version 19.3.0.0.0
 
 Copyright (c) 1982, 2019, Oracle.  All rights reserved.
 
+Last Successful login time: Fri Oct 28 2022 13:52:49 +00:00
 
 Connected to:
 Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
@@ -491,11 +593,9 @@ select * from trabajadores;
 	 2	       2 Jose			                                            Joselito
 ```
 
-### 1.7 Acceso remoto
+### 1.7 Configuración acceso remoto
 
-/opt/oracle/product/19c/dbhome_1/network/admin
-
-Modifico `/opt/oracle/product/19c/dbhome_1/network/admin/listener.ora` de la siguiente manera:
+Dejo `/opt/oracle/product/19c/dbhome_1/network/admin/listener.ora` de la siguiente manera:
 
 ```shell
 # listener.ora Network Configuration File: /opt/oracle/product/19c/dbhome_1/network/admin/listener.ora
@@ -508,30 +608,121 @@ LISTENER =
       (ADDRESS = (PROTOCOL = IPC)(KEY = EXTPROC1521))
     )
   )
+
+SID_LIST_LISTENER =
+  (SID_LIST =
+    (SID_DESC =
+      (GLOBAL_DBNAME = ORCLCDB)
+      (ORACLE_HOME = /opt/oracle/product/19c/dbhome_1)
+      (SID_NAME = ORCLCDB)
+    )
+  )
 ```
 
-sqlplus bibliofilos_admin/1234@ORCLCDB
+Dejo `/opt/oracle/product/19c/dbhome_1/network/admin/tnsnames.ora` de la siguiente manera:
 
+```shell
+# tnsnames.ora Network Configuration File: /opt/oracle/product/19c/dbhome_1/network/admin/tnsnames.ora
+# Generated by Oracle configuration tools.
 
+ORCLCDB=
+  (DESCRIPTION =
+    (ADDRESS_LIST =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = servidororacle)(PORT = 1521))
+    )
+    (CONNECT_DATA =
+      (SERVICE_NAME = ORCLCDB)
+    )
+  )
 
- export PATH=/opt/oracle/product/19c/dbhome_1/bin:$PATH
+LISTENER_ORCLCDB =
+  (ADDRESS = (PROTOCOL = TCP)(HOST = servidororacle)(PORT = 1521))
+```
 
+Muestro el estado del listener:
 
+```shell
+oracle@servidororacle:~$ lsnrctl status
 
+LSNRCTL for Linux: Version 19.0.0.0.0 - Production on 28-OCT-2022 13:43:38
 
+Copyright (c) 1991, 2019, Oracle.  All rights reserved.
 
+Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=0.0.0.0)(PORT=1521)))
+TNS-12541: TNS:no listener
+ TNS-12560: TNS:protocol adapter error
+  TNS-00511: No listener
+   Linux Error: 111: Connection refused
+Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=IPC)(KEY=EXTPROC1521)))
+TNS-12541: TNS:no listener
+ TNS-12560: TNS:protocol adapter error
+  TNS-00511: No listener
+   Linux Error: 2: No such file or directory
+```
 
+Estos errores significan que está parado, y además podemos comprobar que efectivamente no tenemos procesos esperando peticiones en el puerto 1521:
 
+```shell
+oracle@servidororacle:~$ sudo ss -tulpn
+Netid      State        Recv-Q       Send-Q             Local Address:Port              Peer Address:Port      Process
+udp        UNCONN       0            0                        0.0.0.0:68                     0.0.0.0:*          users:(("dhclient",pid=314,fd=9))
+udp        UNCONN       0            0                      127.0.0.1:323                    0.0.0.0:*          users:(("chronyd",pid=413,fd=5))
+udp        UNCONN       0            0                          [::1]:21455                     [::]:*          users:(("ora_lreg_orclcd",pid=774,fd=10))
+udp        UNCONN       0            0                          [::1]:48386                     [::]:*          users:(("ora_d000_orclcd",pid=786,fd=7))
+udp        UNCONN       0            0                          [::1]:323                       [::]:*          users:(("chronyd",pid=413,fd=6))
+udp        UNCONN       0            0                          [::1]:51821                     [::]:*          users:(("ora_s000_orclcd",pid=788,fd=7))
+tcp        LISTEN       0            128                      0.0.0.0:22                     0.0.0.0:*          users:(("sshd",pid=411,fd=3))
+tcp        LISTEN       0            128                            *:19393                        *:*          users:(("ora_d000_orclcd",pid=786,fd=8))
+tcp        LISTEN       0            128                         [::]:22                        [::]:*          users:(("sshd",pid=411,fd=4))
+```
 
+Inicio el listener:
 
+```shell
+oracle@servidororacle:~$ lsnrctl start
 
+LSNRCTL for Linux: Version 19.0.0.0.0 - Production on 28-OCT-2022 13:48:46
 
+Copyright (c) 1991, 2019, Oracle.  All rights reserved.
 
+Starting /opt/oracle/product/19c/dbhome_1/bin/tnslsnr: please wait...
 
+TNSLSNR for Linux: Version 19.0.0.0.0 - Production
+System parameter file is /opt/oracle/product/19c/dbhome_1/network/admin/listener.ora
+Log messages written to /opt/oracle/diag/tnslsnr/servidororacle/listener/alert/log.xml
+Listening on: (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=0.0.0.0)(PORT=1521)))
+Listening on: (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC1521)))
 
+Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=0.0.0.0)(PORT=1521)))
+STATUS of the LISTENER
+------------------------
+Alias                     LISTENER
+Version                   TNSLSNR for Linux: Version 19.0.0.0.0 - Production
+Start Date                28-OCT-2022 13:48:46
+Uptime                    0 days 0 hr. 0 min. 0 sec
+Trace Level               off
+Security                  ON: Local OS Authentication
+SNMP                      OFF
+Listener Parameter File   /opt/oracle/product/19c/dbhome_1/network/admin/listener.ora
+Listener Log File         /opt/oracle/diag/tnslsnr/servidororacle/listener/alert/log.xml
+Listening Endpoints Summary...
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=0.0.0.0)(PORT=1521)))
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC1521)))
+Services Summary...
+Service "ORCLCDB" has 1 instance(s).
+  Instance "ORCLCDB", status UNKNOWN, has 1 handler(s) for this service...
+The command completed successfully
+```
 
+Muestro que ahora sí tenemos un proceso esperando peticiones en el puerto 1521:
 
+![listenerfunciona](https://i.imgur.com/bhzCQGe.png)
 
+Pruebo a hacer un acceso usando tnsnames localmente para comprobar que funciona:
+
+![tnsnameslocal](https://i.imgur.com/7CJIL08.png)
+
+Cuando usamos el @ estamos forzando las conexiones por tnsnames aunque sean locales.
 
 ### 1.8 Instalación del cliente
 
