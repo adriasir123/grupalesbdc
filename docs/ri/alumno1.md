@@ -1884,59 +1884,6 @@ bibliofilos> db.bibliotecas.find()
 ]
 ```
 
-## 5. Cliente remoto PostgreSQL
-
-### 5.1
-
-> Instalar el cliente de PostgreSQL en `clientepostgresql`
-
-```shell
-sudo apt update
-sudo apt install postgresql-client
-```
-
-### 5.2
-
-> Probar el acceso remoto
-
-```shell
-vagrant@clientepostgresql:~$ psql -U bibliofilos_admin -h 10.0.1.2 -p 5432 bibliofilos
-Password for user bibliofilos_admin:
-psql (13.8 (Debian 13.8-0+deb11u1))
-SSL connection (protocol: TLSv1.3, cipher: TLS_AES_256_GCM_SHA384, bits: 256, compression: off)
-Type "help" for help.
-
-bibliofilos=> \l
-                                   List of databases
-    Name     |  Owner   | Encoding | Collate |  Ctype  |       Access privileges
--------------+----------+----------+---------+---------+--------------------------------
- bibliofilos | postgres | UTF8     | C.UTF-8 | C.UTF-8 | =Tc/postgres                  +
-             |          |          |         |         | postgres=CTc/postgres         +
-             |          |          |         |         | bibliofilos_admin=CTc/postgres
- postgres    | postgres | UTF8     | C.UTF-8 | C.UTF-8 |
- template0   | postgres | UTF8     | C.UTF-8 | C.UTF-8 | =c/postgres                   +
-             |          |          |         |         | postgres=CTc/postgres
- template1   | postgres | UTF8     | C.UTF-8 | C.UTF-8 | =c/postgres                   +
-             |          |          |         |         | postgres=CTc/postgres
-(4 rows)
-
-bibliofilos=> \dt
-            List of relations
- Schema |     Name     | Type  |  Owner
---------+--------------+-------+----------
- public | bibliotecas  | table | postgres
- public | libros       | table | postgres
- public | trabajadores | table | postgres
-(3 rows)
-
-bibliofilos=> select * from bibliotecas;
- id |    ciudad    |         calle
-----+--------------+-----------------------
-  1 | Utrera       | Alvarez Quintero
-  2 | Dos Hermanas | Plaza Huerta Palacios
-(2 rows)
-```
-
-## 6. App Flask con MongoDB
+## 5. App Flask con MongoDB
 
 En [este repositorio](https://github.com/adriasir123/flask-mongo) se encuentran tanto el código de la aplicación como su guía de uso y pruebas de funcionamiento.
