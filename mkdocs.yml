@@ -1,6 +1,8 @@
 site_name: Instalación de Servidores y Clientes
 theme:
   name: 'material'
+  icon:
+    repo: fontawesome/brands/github-alt
   palette:
     - scheme: default
       primary: grey
@@ -38,3 +40,4 @@ markdown_extensions:
 plugins:
   - glightbox
 repo_url: https://github.com/adriasir123/p1-bd-servidores-clientes
+repo_name: p1-bd-servidores-clientes
