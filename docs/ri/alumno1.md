@@ -1671,7 +1671,7 @@ db.libros.insertMany( [
 
 db.trabajadores.insertMany( [
   { nombre: "Pepe", apellido: "Pepito" },
-  { nombre: "Jose", apellido: "Joselito" },
+  { nombre: "Jose", apellido: "Joselito" }
 ] )
 ```
 
