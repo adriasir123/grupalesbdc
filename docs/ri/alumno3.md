@@ -280,11 +280,11 @@ Para verificar la conexión remota accedemos desde otra máquina al servidor de 
 
 ### 2.1 Instalación
 
-Instalamos PostgreSQL en Debian 11 directamente con **apt**.
+Instalamos PostgreSQL en Debian 11 directamente con *apt*.
 
 `sudo apt install postgresql`
 
-Para entrar con el usuario **postgres**.
+Para entrar con el usuario *postgres*.
 
 `sudo su postgres`
 
@@ -299,17 +299,21 @@ También se puede usar:
 
 Se puede hacer de dos formas:
 
-- Hacemos **sudo su postgres** y seguidamente creamos el nuevo usuario con **createuser**.
+#### Opción 1:
 
- `createuser admin`
+Hacemos **'sudo su postgres'** y seguidamente creamos el nuevo usuario con **createuser**.
 
- Entramos en **psql** y se le asigna una contraseña cifrada.
+`createuser admin`
 
- `alter user admin with encrypted password 'admin';`
+Entramos en **psql** y se le asigna una contraseña cifrada.
 
-- Entramos directamente a psql y usamos el siguiente comando:
+`alter user admin with encrypted password 'admin';`
 
- `create user admin with encrypted password 'admin';`
+#### Opción 2: 
+
+Entramos directamente a psql y usamos el siguiente comando:
+
+`create user admin with encrypted password 'admin';`
 
 Para borrar un usuario:
 
@@ -324,15 +328,19 @@ En psql con **\du** podemos ver los usuarios creados.
 
 Para crear la base de datos también se puede hacer de dos formas:
 
-- Desde el usuario postgres:
+#### Opción 1:
 
- `sudo su postgres`
+Desde el usuario postgres:
 
- `createdb maravilla`
+`sudo su postgres`
 
-- Directamente desde psql:
+`createdb maravilla`
 
- `create database maravilla;`
+#### Opción 2:
+
+Directamente desde psql:
+
+`create database maravilla;`
 
 Podemos ver las bases de datos creadas con:
 
