@@ -1530,9 +1530,7 @@ MariaDB [bibliofilos]> select * from bibliotecas;
 
 ## 4. MongoDB
 
-### 4.1
-
-> Instalar el servidor
+### 4.1 Instalación del servidor
 
 Añado el repositorio:
 
@@ -1584,9 +1582,7 @@ vagrant@servidormongodb:~$ sudo systemctl status mongod
 Oct 20 08:20:59 servidormongodb systemd[1]: Started MongoDB Database Server.
 ```
 
-### 4.2
-
-> Probar el acceso
+### 4.2 Acceso local privilegiado
 
 ```shell
 vagrant@servidormongodb:~$ mongosh
@@ -1620,9 +1616,7 @@ Warning: Found ~/.mongorc.js, but not ~/.mongoshrc.js. ~/.mongorc.js will not be
 test>
 ```
 
-### 4.3
-
-> Crear la bd
+### 4.3 Creación de la base de datos
 
 Si no existe la bd con el nombre que le digamos, la creará:
 
@@ -1643,9 +1637,7 @@ local    40.00 KiB
 
 La bd no aparece listada por ahora porque necesita contener datos para aparecer.
 
-### 4.4
-
-> Crear colecciones
+### 4.4 Creación de colecciones
 
 ```sql
 db.createCollection("bibliotecas")
@@ -1664,9 +1656,7 @@ libros
 trabajadores
 ```
 
-### 4.5
-
-> Insertar documentos
+### 4.5 Inserción de documentos
 
 ```sql
 db.bibliotecas.insertMany( [
@@ -1729,9 +1719,9 @@ bibliofilos> db.trabajadores.find()
 ]
 ```
 
-### 4.6
+### 4.6 Creación de usuarios
 
-> Crear usuario con todos los privilegios sobre la base de datos anterior
+Usuario con permisos sobre `bibliofilos`:
 
 ```sql
 use bibliofilos
@@ -1763,9 +1753,7 @@ bibliofilos> db.getUsers()
 }
 ```
 
-### 4.7
-
-> Crear usuario administrador
+Usuario administrador:
 
 ```sql
 use admin
@@ -1803,9 +1791,7 @@ admin> db.getUsers()
 }
 ```
 
-### 4.8
-
-> Permitir el acceso remoto
+### 4.7 Configuración del acceso remoto
 
 Modifico la siguiente línea en `/etc/mongod.conf`:
 
@@ -1833,9 +1819,9 @@ vagrant@servidormongodb:~$ netstat -ant | grep 27017
 tcp        0      0 0.0.0.0:27017           0.0.0.0:*               LISTEN
 ```
 
-### 4.9
+### 4.8 Instalación del cliente
 
-> Instalar el cliente de MongoDB en `clientemongodb`
+Se hará sobre `clientemongodb`.
 
 Añado el repositorio:
 
@@ -1864,9 +1850,7 @@ Instalo:
 sudo apt install mongodb-org-shell mongodb-mongosh
 ```
 
-### 4.10
-
-> Probar el acceso remoto
+### 4.9 Prueba de acceso remoto
 
 ```shell
 vagrant@clientemongodb:~$ mongosh -u bibliofilos_admin -p 1234 10.0.3.2/bibliofilos
