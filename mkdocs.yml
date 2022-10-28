@@ -8,14 +8,14 @@ theme:
       primary: grey
       accent: deep orange
       toggle:
-        icon: material/toggle-switch-off-outline
-        name: Switch to dark mode
+        icon: material/brightness-4
+        name: Cambiar a tema oscuro
     - scheme: slate
       primary: grey
       accent: deep orange
       toggle:
-        icon: material/toggle-switch
-        name: Switch to light mode
+        icon: material/brightness-7
+        name: Cambiar a tema normal
 nav:
     - Introducción: index.md
     - Responsabilidad individual:
