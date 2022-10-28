@@ -17,10 +17,10 @@ theme:
 nav:
     - Introducción: index.md
     - Responsabilidad individual:
-        - 'Alumno 1': 'ri/alumno1.md'
-        - 'Alumno 2': 'ri/alumno2.md'
-        - 'Alumno 3': 'ri/alumno3.md'
-        - 'Alumno 4': 'ri/alumno4.md'
+        - 'Alumno 1: Adrián': 'ri/alumno1.md'
+        - 'Alumno 2: José Juan': 'ri/alumno2.md'
+        - 'Alumno 3: Arantxa': 'ri/alumno3.md'
+        - 'Alumno 4: Antonio': 'ri/alumno4.md'
     - Responsabilidad grupal:
         - 'SQL Developer': 'rg/sql-developer.md'
         - 'Herramienta web PostgreSQL': 'rg/herramienta-postgresql.md'
