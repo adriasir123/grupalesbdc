@@ -1270,9 +1270,9 @@ Oct 19 11:01:36 servidormariadb /etc/mysql/debian-start[2193]: Triggering myisam
 ### 3.2 Acceso local privilegiado
 
 ```shell
-vagrant@servidormariadb:~$ sudo mysql
+vagrant@servidormariadb:~$ sudo mariadb
 Welcome to the MariaDB monitor.  Commands end with ; or \g.
-Your MariaDB connection id is 34
+Your MariaDB connection id is 31
 Server version: 10.5.15-MariaDB-0+deb11u1 Debian 11
 
 Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
