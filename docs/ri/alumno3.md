@@ -528,7 +528,7 @@ Modificamos el fichero de configuración de PostgreSQL que se encuentra en la ru
 
 ![remoto-postgres](/img/capturas-arantxa/32.png)
 
-A continuación modificamos el fichero **pg_hba.conf**, en el mismo directorio de la anterior. Buscamos la línea que pone **# IPv4 local connections**, y donde pone *127.0.0.1/32* lo modificamos por *all*.
+A continuación modificamos el fichero **pg_hba.conf**, en el mismo directorio de la anterior. Buscamos la línea que pone **"# IPv4 local connections"**, y donde pone *"127.0.0.1/32"* lo modificamos por *"all"*.
 
 ![remoto-postgres2](/img/capturas-arantxa/33.png)
 
@@ -747,9 +747,217 @@ Entramos de nuevo como *"sqlplus / as sysdba"* e iniciamos la base de datos con 
 
 ![bd-montada](/img/capturas-arantxa/21.png)
 
+#### ERROR 1. ORA-65096 nombre de usuario o rol comun no valido
+
+Al entrar a sqlplus e intentar hacer cualquier cosa nos aparece el siguiente error.
+
+![error-ora](/img/capturas-arantxa/35.png)
+
+Para solucionarlo tenemos que utilizar el siguiente comando:
+
+`alter session set "_ORACLE_SCRIPT"=true;`
+
+#### ERROR 2. Teclas de flechas no funcionan
+
+Otro error común es que al intentar recuperar un comando con la flecha arriba en sqlplus no te reconoce la tecla. Así como cuando le das a flecha izquierda no funciona para volver atrás y corregir errores, tienes que borrar toda la línea. 
+Esto se soluciona instalando **rlwrap** e iniciando sqlplus con éste.
+
+`sudo apt install rlwrap`
+
+`rlwrap sqlplus / as sysdba`
+
+![error-flechas](/img/capturas-arantxa/37.png)
 
 
-### 3.5 
+### 3.5 Creación usuario
+
+Creamos un usuario llamado *admin* y le damos todos los privilegios.
+
+`create user admin identified by admin;`
+
+`grant all privileges to admin;`
+
+Nos conectamos con el usuario *admin*.
+
+`conn admin`
+
+![user-oracle](/img/capturas-arantxa/36.png)
+
+
+
+
+### 3.6 Creación tablas e inserción de datos
+
+Creo las tablas:
+
+```
+create table actor
+(
+codigo varchar2 (5),
+nombre varchar2 (15),
+apellido varchar2 (15),
+fechanac date,
+constraint pk_actor primary key (codigo),
+constraint nombreactor_notnull check(nombre is not null),
+constraint apellidoactor_notnull check(apellido is not null),
+constraint nombreactor_mayus check(nombre=initcap(nombre)),
+constraint apellidoactor_mayus check(apellido=initcap(apellido))
+);
+
+create table pelicula
+(
+codigo varchar2 (5),
+titulo varchar2 (30),
+fecha_estreno date,
+puntuacion number (3,1),
+lengua_original varchar2 (3) default 'EN',
+constraint pk_pelicula primary key (codigo),
+constraint puntuacion_ck check (puntuacion between 0 and 10),
+constraint fecha_ck check(fecha_estreno>to_date('01/01/2000', 'DD/MM/YYYY')),
+constraint titulo_unico unique(titulo),
+constraint cod_exp check(regexp_like (codigo, '^MA[0-9]{3}$'))
+);
+
+create table pelicula_actor
+(
+codigo_actor varchar2 (5),
+codigo_pelicula varchar2 (5),
+tipo_personaje varchar2 (15),
+constraint pk_pelicula_actor primary key (codigo_actor,codigo_pelicula),
+constraint fk_codigo_actor foreign key (codigo_actor) references actor (codigo),
+constraint fk_codigo_pelicula foreign key (codigo_pelicula) references pelicula (codigo),
+constraint tipo_ck check (tipo_personaje in ('Principal','Secundario'))
+);
+```
+
+Hago los inserts.
+
+```
+insert into pelicula values ('MA001', 'Iron Man', to_date('2008-05-02', 'YYYY-MM-DD'), 7.9, 'EN');
+insert into pelicula values ('MA002', 'Thor', to_date('2011-05-06', 'YYYY-MM-DD'), 7.0, 'EN');
+insert into pelicula values ('MA003', 'Captain America: first avenger', to_date('2011-07-22', 'YYYY-MM-DD'), 6.9, 'EN');
+insert into pelicula values ('MA004', 'The Avengers', to_date('2012-05-04', 'YYYY-MM-DD'), 8, 'EN');
+insert into pelicula values ('MA005', 'Guardians of the Galaxy', to_date('2014-08-01', 'YYYY-MM-DD'), 8, 'EN');
+insert into pelicula values ('MA006', 'Avengers: Age of Ultron', to_date('2015-05-01', 'YYYY-MM-DD'), 7.3, 'EN');
+insert into pelicula values ('MA007', 'Doctor Strange', to_date('2016-11-04', ‘YYYY-MM-DD’), 7.5, 'EN');
+insert into pelicula values ('MA008', 'Spider-Man: Homecoming', to_date('2017-07-07', 'YYYY-MM-DD'), 7.4, 'EN');
+insert into pelicula values ('MA009', 'Black Panther', to_date('2018-02-16', 'YYYY-MM-DD'), 7.3, 'EN');
+insert into pelicula values ('MA010', 'Avengers: Infinity War', to_date('2018-04-27', 'YYYY-MM-DD'), 8.4, 'EN');
+insert into pelicula values ('MA011', 'Avengers: Endgame', to_date('2019-04-26', 'YYYY-MM-DD'), 8.4, 'EN');
+
+insert into actor values ('001','Robert', 'Downey', to_date('1965-04-04', 'YYYY-MM-DD'));
+insert into actor values ('002','Jon', 'Favreau', to_date('1966-10-19', 'YYYY-MM-DD'));
+insert into actor values ('003','Chris', 'Hemsworth', to_date('1983-08-11', 'YYYY-MM-DD'));
+insert into actor values ('004','Tom', 'Hiddleston', to_date('1981-02-09', 'YYYY-MM-DD'));
+insert into actor values ('005','Natalie', 'Portman', to_date('1981-06-09', 'YYYY-MM-DD'));
+insert into actor values ('006','Chris', 'Evans', to_date('1981-06-13', 'YYYY-MM-DD'));
+insert into actor values ('007','Sebastian', 'Stan', to_date('1982-08-13', 'YYYY-MM-DD'));
+insert into actor values ('008','Jeremy', 'Renner', to_date('1971-01-07', 'YYYY-MM-DD'));
+insert into actor values ('009','Scarlett', 'Johansson', to_date('1984-11-22', 'YYYY-MM-DD'));
+insert into actor values ('010','Mark', 'Ruffalo', to_date('1967-11-22', 'YYYY-MM-DD'));
+insert into actor values ('011','Clark', 'Gregg', to_date('1962-04-02', 'YYYY-MM-DD'));
+insert into actor values ('012','Samuel L.', 'Jackson', to_date('1948-12-21', 'YYYY-MM-DD'));
+insert into actor values ('013','Chris', 'Pratt', to_date('1979-06-21', 'YYYY-MM-DD'));
+insert into actor values ('014','Zoe', 'Saldana', to_date('1978-06-19', 'YYYY-MM-DD'));
+insert into actor values ('015','Dave', 'Bautista', to_date('1969-01-18', 'YYYY-MM-DD'));
+insert into actor values ('016','Vin', 'Diesel', to_date('1967-07-18', 'YYYY-MM-DD'));
+insert into actor values ('017','Bradley', 'Cooper', to_date('1975-01-05', 'YYYY-MM-DD'));
+insert into actor values ('018','Michael', 'Rooker', to_date('1955-04-06', 'YYYY-MM-DD'));
+insert into actor values ('019','Elisabeth', 'Olsen', to_date('1989-02-16', 'YYYY-MM-DD'));
+insert into actor values ('020','Paul', 'Bettany', to_date('1971-05-27', 'YYYY-MM-DD'));
+insert into actor values ('021','Anthony', 'Mackie', to_date('1978-09-23', 'YYYY-MM-DD'));
+insert into actor values ('022','Bennedict', 'Cumberbatch', to_date('1976-07-19', 'YYYY-MM-DD'));
+insert into actor values ('023','Rachel', 'Mcadams', to_date('1978-11-17', 'YYYY-MM-DD'));
+insert into actor values ('024','Tom', 'Holland', to_date('1996-06-01', 'YYYY-MM-DD'));
+insert into actor values ('025','Zendaya', 'Coleman', to_date('1996-09-01', 'YYYY-MM-DD'));
+insert into actor values ('026','Chadwick', 'Boseman', to_date('1976-11-29', 'YYYY-MM-DD'));
+insert into actor values ('027','Josh', 'Brolin', to_date('1968-02-12', 'YYYY-MM-DD'));
+insert into actor values ('028','Brie', 'Larson', to_date('1989-10-01', 'YYYY-MM-DD'));
+
+insert into pelicula_actor values ('001', 'MA001', 'Principal');
+insert into pelicula_actor values ('002', 'MA001', 'Secundario');
+insert into pelicula_actor values ('003', 'MA002', 'Principal');
+insert into pelicula_actor values ('004', 'MA002', 'Principal');
+insert into pelicula_actor values ('005', 'MA002', 'Principal');
+insert into pelicula_actor values ('006', 'MA003', 'Principal');
+insert into pelicula_actor values ('007', 'MA003', 'Secundario');
+insert into pelicula_actor values ('001', 'MA004', 'Principal');
+insert into pelicula_actor values ('002', 'MA004', 'Secundario');
+insert into pelicula_actor values ('003', 'MA004', 'Principal');
+insert into pelicula_actor values ('004', 'MA004', 'Principal');
+insert into pelicula_actor values ('006', 'MA004', 'Principal');
+insert into pelicula_actor values ('008', 'MA004', 'Principal');
+insert into pelicula_actor values ('009', 'MA004', 'Principal');
+insert into pelicula_actor values ('010', 'MA004', 'Principal');
+insert into pelicula_actor values ('011', 'MA004', 'Secundario');
+insert into pelicula_actor values ('012', 'MA004', 'Principal');
+insert into pelicula_actor values ('013', 'MA005', 'Principal');
+insert into pelicula_actor values ('014', 'MA005', 'Principal');
+insert into pelicula_actor values ('015', 'MA005', 'Principal');
+insert into pelicula_actor values ('016', 'MA005', 'Principal');
+insert into pelicula_actor values ('017', 'MA005', 'Principal');
+insert into pelicula_actor values ('018', 'MA005', 'Secundario');
+insert into pelicula_actor values ('001', 'MA006', 'Principal');
+insert into pelicula_actor values ('003', 'MA006', 'Principal');
+insert into pelicula_actor values ('006', 'MA006', 'Principal');
+insert into pelicula_actor values ('008', 'MA006', 'Principal');
+insert into pelicula_actor values ('009', 'MA006', 'Principal');
+insert into pelicula_actor values ('010', 'MA006', 'Principal');
+insert into pelicula_actor values ('019', 'MA006', 'Principal');
+insert into pelicula_actor values ('020', 'MA006', 'Principal');
+insert into pelicula_actor values ('022', 'MA007', 'Principal');
+insert into pelicula_actor values ('024', 'MA008', 'Principal');
+insert into pelicula_actor values ('025', 'MA008', 'Principal');
+insert into pelicula_actor values ('001', 'MA008', 'Secundario');
+insert into pelicula_actor values ('002', 'MA008', 'Secundario');
+insert into pelicula_actor values ('026', 'MA009', 'Principal');
+insert into pelicula_actor values ('027', 'MA010', 'Principal');
+insert into pelicula_actor values ('001', 'MA010', 'Principal');
+insert into pelicula_actor values ('003', 'MA010', 'Principal');
+insert into pelicula_actor values ('004', 'MA010', 'Secundario');
+insert into pelicula_actor values ('006', 'MA010', 'Principal');
+insert into pelicula_actor values ('007', 'MA010', 'Secundario');
+insert into pelicula_actor values ('009', 'MA010', 'Principal');
+insert into pelicula_actor values ('010', 'MA010', 'Principal');
+insert into pelicula_actor values ('012', 'MA010', 'Secundario');
+insert into pelicula_actor values ('013', 'MA010', 'Principal');
+insert into pelicula_actor values ('014', 'MA010', 'Principal');
+insert into pelicula_actor values ('015', 'MA010', 'Principal');
+insert into pelicula_actor values ('016', 'MA010', 'Principal');
+insert into pelicula_actor values ('017', 'MA010', 'Principal');
+insert into pelicula_actor values ('019', 'MA010', 'Principal');
+insert into pelicula_actor values ('020', 'MA010', 'Principal');
+insert into pelicula_actor values ('021', 'MA010', 'Secundario');
+insert into pelicula_actor values ('022', 'MA010', 'Principal');
+insert into pelicula_actor values ('024', 'MA010', 'Principal');
+insert into pelicula_actor values ('026', 'MA010', 'Principal');
+insert into pelicula_actor values ('001', 'MA011', 'Principal');
+insert into pelicula_actor values ('003', 'MA011', 'Principal');
+insert into pelicula_actor values ('006', 'MA011', 'Principal');
+insert into pelicula_actor values ('008', 'MA011', 'Principal');
+insert into pelicula_actor values ('009', 'MA011', 'Principal');
+insert into pelicula_actor values ('010', 'MA011', 'Principal');
+insert into pelicula_actor values ('027', 'MA011', 'Principal');
+insert into pelicula_actor values ('007', 'MA011', 'Secundario');
+insert into pelicula_actor values ('013', 'MA011', 'Secundario');
+insert into pelicula_actor values ('014', 'MA011', 'Secundario');
+insert into pelicula_actor values ('015', 'MA011', 'Secundario');
+insert into pelicula_actor values ('016', 'MA011', 'Secundario');
+insert into pelicula_actor values ('017', 'MA011', 'Secundario');
+insert into pelicula_actor values ('019', 'MA011', 'Secundario');
+insert into pelicula_actor values ('021', 'MA011', 'Secundario');
+insert into pelicula_actor values ('022', 'MA011', 'Secundario');
+insert into pelicula_actor values ('024', 'MA011', 'Secundario');
+insert into pelicula_actor values ('026', 'MA011', 'Secundario');
+insert into pelicula_actor values ('028', 'MA011', 'Secundario');
+```
+
+![datos-oracle](/img/capturas-arantxa/38.png)
+
+![datos2-oracle](/img/capturas-arantxa/39.png)
+
+
+### 3.7 Acceso remoto
 
 
 
