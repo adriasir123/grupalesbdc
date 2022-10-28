@@ -630,9 +630,9 @@ Creación de la base de datos y configuración de la contraseña del administrad
 `sudo /etc/init.d/oracledb_ORCLCDB-19c configure`
 
 
-##### Posibles errores al hacer configure
+#### 3.2.1 Posibles errores al hacer configure
 
-_**ERROR 1. Fallo en la comprobación de la memoria**_
+##### ERROR 1. Fallo en la comprobación de la memoria
 
 A mi me aparece el siguiente error.
 
@@ -646,7 +646,7 @@ Para solucionarlo configuramos el fichero **/etc/init.d/oracledb_ORCLCDB-19c**. 
 
 ![conf-oracle](/img/capturas-arantxa/10.png)
 
-_**ERROR 2. Fallo en la configuración de la red**_
+##### ERROR 2. Fallo en la configuración de la red
 
 También me apareció el siguiente problema.
 
