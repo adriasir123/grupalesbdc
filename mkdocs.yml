@@ -27,3 +27,8 @@ nav:
         - 'phpMyAdmin': 'rg/phpmyadmin.md'
         - 'Herramienta web MongoDB': 'rg/herramienta-mongodb.md'
         - 'Oracle Enterprise Manager': 'rg/oracle-enterprise-manager.md'
+markdown_extensions:
+  - attr_list
+  - md_in_html
+plugins:
+  - glightbox
