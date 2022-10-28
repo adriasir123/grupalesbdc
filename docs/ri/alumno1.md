@@ -593,7 +593,7 @@ select * from trabajadores;
 	 2	       2 Jose			                                            Joselito
 ```
 
-### 1.7 Configuración acceso remoto
+### 1.7 Configuración del acceso remoto
 
 Dejo `/opt/oracle/product/19c/dbhome_1/network/admin/listener.ora` de la siguiente manera:
 
@@ -916,9 +916,7 @@ Muestro el funcionamiento correcto:
 
 ## 2. PostgreSQL
 
-### 2.1
-
-> Instalar el servidor
+### 2.1 Instalación del servidor
 
 ```shell
 sudo apt update
@@ -942,9 +940,7 @@ Oct 18 10:12:46 servidorpostgresql systemd[1]: Starting PostgreSQL RDBMS...
 Oct 18 10:12:46 servidorpostgresql systemd[1]: Finished PostgreSQL RDBMS.
 ```
 
-### 2.2
-
-> Acceder con el usuario administrador localmente
+### 2.2 Acceso local privilegiado
 
 Añado la contraseña `1234` a `postgres` para habilitarlo:
 
@@ -964,9 +960,7 @@ Type "help" for help.
 postgres=#
 ```
 
-### 2.3
-
-> Crear la bd
+### 2.3 Creación de la base de datos
 
 ```sql
 CREATE DATABASE bibliofilos;
@@ -996,9 +990,7 @@ You are now connected to database "bibliofilos" as user "postgres".
 bibliofilos=#
 ```
 
-### 2.4
-
-> Crear tablas
+### 2.4 Creación de tablas
 
 ```shell
 CREATE TABLE bibliotecas (
@@ -1039,9 +1031,7 @@ bibliofilos=# \dt
 (3 rows)
 ```
 
-### 2.5
-
-> Introducir registros
+### 2.5 Inserción de registros
 
 ```sql
 INSERT INTO bibliotecas (ciudad, calle) VALUES('Utrera', 'Alvarez Quintero');
@@ -1079,9 +1069,7 @@ bibliofilos=# select * from trabajadores;
 (2 rows)
 ```
 
-### 2.6
-
-> Crear usuario con todos los privilegios sobre la base de datos anterior
+### 2.6 Creación de usuarios
 
 En debian:
 
@@ -1166,9 +1154,7 @@ bibliofilos=# SELECT * from information_schema.table_privileges WHERE grantee = 
 (21 rows)
 ```
 
-### 2.7
-
-> Permitir el acceso remoto
+### 2.7 Configuración del acceso remoto
 
 Modifico la siguiente línea en `/etc/postgresql/13/main/postgresql.conf`:
 
@@ -1189,18 +1175,16 @@ Reinicio:
 sudo systemctl restart postgresql 
 ```
 
-### 2.8
+### 2.8 Instalación del cliente
 
-> Instalar el cliente de PostgreSQL en `clientepostgresql`
+Se hará sobre `clientepostgresql`.
 
 ```shell
 sudo apt update
 sudo apt install postgresql-client
 ```
 
-### 2.9
-
-> Probar el acceso remoto
+### 2.9 Prueba de acceso remoto
 
 ```shell
 vagrant@clientepostgresql:~$ psql -U bibliofilos_admin -h 10.0.1.2 -p 5432 bibliofilos
