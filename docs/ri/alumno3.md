@@ -1,17 +1,5 @@
 # Alumno 3. Arantxa Fernández Morató
 
-Tras la instalación de cada servidor, debe crearse una base de datos con al menos tres tablas o colecciones y poblarse de datos adecuadamente. Debe crearse un usuario y dotarlo de los privilegios necesarios para acceder remotamente a los datos.
-Los clientes deben estar siempre en máquinas diferentes de los respectivos servidores a los que acceden.
-Se documentará todo el proceso de configuración de los servidores.
-Se aportarán pruebas del funcionamiento remoto de cada uno de los clientes.
-Se aportará el código de las aplicaciones realizadas y prueba de funcionamiento de las mismas.
-
-```s
-    • Instalación de un servidor Oracle 19c sobre Debian, otro Postgres, otro MySQL y otro de MongoDB y configuración para permitir el acceso remoto desde la red local.
-    • Prueba desde un cliente remoto de SQL*Plus.
-    • Realización de una aplicación web en cualquier lenguaje que conecte con el servidor Postgres tras autenticarse y muestre alguna información almacenada en el mismo.
-```
-
 ## 1. MySQL
 
 ### 1.1 Instalación
@@ -959,6 +947,79 @@ insert into pelicula_actor values ('028', 'MA011', 'Secundario');
 
 ### 3.7 Acceso remoto
 
+Vamos a la ruta *"/opt/oracle/product/19c/dbhome_1/network/admin/"*. Aquí configuraremos los ficheros de configuración **listener.ora** y **tnsnames.ora**.
+
+En *listener.ora* cambiamos **"GLOBAL_DBNAME"** y **"SID_NAME"** por **"ORCLCDB"**. Y en **"HOST"** ponemos **"0.0.0.0"**.
+
+![listener.ora](/img/capturas-arantxa/40.png)
+
+En *tnsnames.ora* no he tenido que cambiar nada. Se quedaría como se ve en la captura.
+
+![tnsnames.ora](/img/capturas-arantxa/41.png)
+
+Entramos con el usuario **oracle**.
+
+`su oracle`
+
+Comprobamos el status de listener.
+
+`lsnrctl status`
+
+![listener-status](/img/capturas-arantxa/42.png)
+
+Vemos que no está funcionando, así que lo iniciamos.
+
+`lsnrctl start`
+
+![listener.start](/img/capturas-arantxa/43.png)
+
+
+### 3.8 Configuración cliente
+
+En un cliente Debian11 descargo Sql*Plus InstantClient desde la página oficial de Oracle con wget.
+
+```
+wget https://download.oracle.com/otn_software/linux/instantclient/218000/instantclient-basic-linux.x64-21.8.0.0.0dbru.zip
+wget https://download.oracle.com/otn_software/linux/instantclient/218000/instantclient-sqlplus-linux.x64-21.8.0.0.0dbru.zip
+```
+
+Descomprimo con **unzip**.
+
+```
+sudo unzip -d /opt/oracle instantclient-basic-linux.x64-21.8.0.0.0dbru.zip
+sudo unzip -d /opt/oracle instantclient-sqlplus-linux.x64-21.8.0.0.0dbru.zip
+```
+
+Añadimos las variables de entorno y aplicamos los cambios.
+
+```
+export LD_LIBRARY_PATH=/opt/oracle/instantclient_21_8:$LD_LIBRARY_PATH
+export PATH=$LD_LIBRARY_PATH:$PATH
+. ~/.bashrc
+```
+
+En **"/opt/oracle/instantclient_21_8/network/admin/"** creamos el fichero tnsnames.ora con el siguiente contenido.
+
+```
+ORCLCDB=
+  (DESCRIPTION =
+    (ADDRESS_LIST =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.122.98)(PORT = 1521))
+    )
+    (CONNECT_DATA =
+      (SERVICE_NAME = ORCLCDB)
+    )
+  )
+```
+
+#### 3.8.1 Prueba de conexión
+
+`sqlplus admin/admin@ORCLCDB`
+
+![conexion-remota](/img/capturas-arantxa/44.png)
+
+> Podemos instalar e iniciar sqlplus con **rlwrap** para poder hacer un mejor manejo de la base de datos con las teclas de las flechas.
+
 
 
 
@@ -966,16 +1027,172 @@ insert into pelicula_actor values ('028', 'MA011', 'Secundario');
 
 ### 4.1 Instalación
 
-### 4.2 Creación usuario
+Por defecto los paquetes de MongoDB no están incluidos en los repositorios de Debian, por lo que necesitaremos añadirlos antes de instalarlo.
+
+`sudo apt install curl apt-transport-https software-properties-common gnupg2`
+
+`wget -qO - https://www.mongodb.org/static/pgp/server-5.0.asc | sudo apt-key add -`
+
+`echo "deb http://repo.mongodb.org/apt/debian buster/mongodb-org/5.0 main" | sudo tee /etc/apt/sources.list.d/mongodb-org-5.0.list`
+
+Actualizamos los repositorios e instalamos MongoDB:
+
+`sudo apt update`
+
+`sudo apt install mongodb-org`
+
+
+Activamos el servicio **mongod**.
+
+`sudo systemctl start mongod`
 
 
 
-### 4.3 Creación base de datos
+
+### 4.2 Creación base de datos y usuario
+
+Entramos a MongoDB:
+
+`mongosh`
+
+Creamos la base de datos *maravilla*.
+
+`use maravilla`
+
+Y creamos un usuario llamado *admin* con permisos sobre la base de datos.
+
+```
+db.createUser(
+   {
+     user: "admin", 
+     pwd: "admin", 
+     roles: [ { role: "dbOwner", db: "maravilla" } ]
+   }
+ )
+ ```
 
 
 
-### 4.4 Creación tablas e inserción de datos
 
+
+Creamos un usuario administrador:
+
+`use admin`
+
+```
+db.createUser(
+  {
+    user: "admin",
+    pwd: "admin",
+    roles: [
+      { role: "userAdminAnyDatabase", db: "admin" },
+      { role: "readWriteAnyDatabase", db: "admin" }
+    ]
+  }
+)
+```
+
+
+
+
+
+### 4.4 Creación de colecciones e inserción de datos
+
+Creo las colecciones.
+
+`db.createCollection("pelicula")`
+
+`db.createCollection("actor")`
+
+`db.createCollection("pelicula_actor")`
+
+Comprobamos con **"show collections"**.
+
+![colecciones](/img/capturas-arantxa/47.png)
+
+Inserto los datos en cada colección.
+
+```
+db.pelicula.insertMany ([
+    {titulo: "Iron Man", fecha_estreno: 2008-05-02, puntuacion: 7.9},
+    {titulo: "Thor", fecha_estreno: 2011-05-06, puntuacion: 7},
+    {titulo: "The avengers", fecha_estreno: 2012-05-04, puntuacion: 8},
+    {titulo: "Guarian pf the Galaxy", fecha_estreno: 2014-08-01, puntuacion: 8},
+    {titulo: "Avengers: Age of Ultron", fecha_estreno: 2015-05-01, puntuacion: 7.3},
+    {titulo: "Doctor Strange", fecha_estreno: 2016-11-04, puntuacion: 7.4},
+    {titulo: "Avengers: Infinity War", fecha_estreno: 2018-02-16, puntuacion: 8.4}
+])
+```
+
+```
+db.actor.insertMany ([
+    {nombre: "Robert", apellido: "Downey", fechanac: 1965-04-04},
+    {nombre: "Chris", apellido: "Hemsworth", fechanac: 1983-08-11},
+    {nombre: "Chris", apellido: "Evans", fechanac: 1981-06-13},
+    {nombre: "Chris", apellido: "Pratt", fechanac: 1979-06-21},
+    {nombre: "Bennedict", apellido: "Cumberbatch", fechanac: 1976-07-19},
+    {nombre: "Scarlett", apellido: "Johansson", fechanac: 1984-11-22},
+    {nombre: "Zoe", apellido: "Saldana", fechanac: 1978-06-19},
+    {nombre: "Elisabeth", apellido: "Olsen", fechanac: 1989-02-16}
+])
+```
+
+```
+db.genero.insertMany ([
+    {tipo: "drama"},
+    {tipo: "accion"},
+    {tipo: "aventura"},
+    {tipo: "superheroes"}
+])
+```
+
+Comprobamos con **find**.
+
+`db.pelicula.find()`
+
+`db.actor.find()`
+
+`db.genero.find()`
+
+![datos](/img/capturas-arantxa/48.png)
+
+![datos2](/img/capturas-arantxa/49.png)
+
+![datos3](/img/capturas-arantxa/50.png)
 
 
 ### 4.5 Acceso remoto
+
+Para poder acceder remotamente habrá que configurar **"mongod.conf"** que se encuentra en */etc/*. Los siguientes valores deben quedar de la siguiente manera:
+
+```
+bindIp: 0.0.0.0
+security:
+  authorization: enabled
+```
+
+![mongo-conf](/img/capturas-arantxa/51.png)
+
+Reiniciar el servicio.
+
+`sudo systemctl restart mongod`
+
+En la máquina cliente añadimos los repositorios de MongoDB como se explicó arriba e instalamos.
+
+`sudo apt install mongodb-org-shell mongodb-mongosh`
+
+Probamos el acceso remoto con el siguiente comando. Se especifica el nombre de usuario, la contraseña, la ip del servidor y la base de datos a la que nos conectaremos.
+
+`mongosh -u admin -p admin 192.168.122.98/maravilla`
+
+![mongo-remoto](/img/capturas-arantxa/52.png)
+
+
+
+## 5. Aplicación 
+
+
+
+
+
+• Realización de una aplicación web en cualquier lenguaje que conecte con el servidor Postgres tras autenticarse y muestre alguna información almacenada en el mismo.
