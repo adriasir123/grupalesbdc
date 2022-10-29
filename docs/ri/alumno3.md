@@ -1,5 +1,7 @@
 # Alumno 3. Arantxa Fernández Morató
 
+Antes de empezar comentar que la máquina servidor de todas las bases de datos será siempre la misma, una máquina con Debian 11 llamada **"debian-oracle"**. Y la  maquina cliente se llama **"debianprueba"**. Durante las conexiones remotas se puede apreciar en las capturas el nombre de las máquinas. 
+
 ## 1. MySQL
 
 ### 1.1 Instalación
