@@ -111,3 +111,75 @@ sudo apt install mariadb-client
 ```
 ![mariadb](/img/alumno4/mariadb-instalacion-2.png)
 
+##Instalación de un servidor Mongodb y su posterior acceso
+
+
+Comenzaremos ejecutando el siguiente comando:
+
+`sudo apt-get install gnupg -y`
+
+`wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc | apt-key add -`
+
+`echo "deb http://repo.mongodb.org/apt/debian buster/mongodb-org/4.4 main" | tee /etc/apt/sources.list.d/mongodb-org.list`
+
+apt-get install mongodb-org -y
+
+
+```systemctl start mongod
+systemctl enable mongod
+```
+
+mongo
+
+use admin
+
+```
+> db.createUser(
+...   {
+...     user: "AMP",
+...     pwd: "AMP",
+...     roles: [ { role: "userAdminAnyDatabase", db: "admin" }, "readWriteAnyDatabase" ]
+...   }
+... )
+
+```
+
+Ahora vamos a entrar en /etc/mongod.conf y especificaremos lo siguiente:
+
+```security:
+  authorization: enabled
+  ```
+![mongo](/img/alumno4/mongo-instalacion-2.png)
+
+
+Ahora procedemos a importar nuestra base de datos guardada en JSON, ya que es el sistema de ficheros con el que trabaja Mongo, así podremos transformarlo en colecciones dentro de la base de datos SOULS que se especifica en el siguiente comando:
+
+```
+usuario@debian:~$ mongoimport --db SOULS --collection SOULSWEAPONS --file DarkSoulsWeapons.json --jsonArray --authenticationDatabase admin -u AMP -p AMP
+2022-10-29T15:55:57.757+0200	connected to: mongodb://localhost/
+2022-10-29T15:55:57.813+0200	140 document(s) imported successfully. 0 document(s) failed to import.
+```
+
+Creamos la base de datos SOULS, la colección SOULSWAPONS y dentro los documentos que habrá en la colección.
+
+mongo -u AMP -p
+
+use SOULS
+
+![mongo](/img/alumno4/mongo-instalacion-4.png)
+
+Ahora salimos y volvemos a entrar en el archivo de configuración de mongo /etc/mongod.conf
+
+net:
+  port: 27017
+  bindIp: 0.0.0.0
+
+
+  systemctl restart mongod
+
+
+  Ahora procedemos a instalar mongo en el cliente y una vez hecho ese paso procedemos a conectarnos especificando el usuario y la ip del host:
+
+ ` mongo --host 192.168.122.168 -u AMP`
+
+ ![mongo](/img/alumno4/mongo-instalacion-5.png)
