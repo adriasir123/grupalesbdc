@@ -1069,32 +1069,7 @@ db.createUser(
      roles: [ { role: "dbOwner", db: "maravilla" } ]
    }
  )
- ```
-
-
-
-
-
-Creamos un usuario administrador:
-
-`use admin`
-
 ```
-db.createUser(
-  {
-    user: "admin",
-    pwd: "admin",
-    roles: [
-      { role: "userAdminAnyDatabase", db: "admin" },
-      { role: "readWriteAnyDatabase", db: "admin" }
-    ]
-  }
-)
-```
-
-
-
-
 
 ### 4.4 Creación de colecciones e inserción de datos
 
@@ -1122,9 +1097,7 @@ db.pelicula.insertMany ([
     {titulo: "Doctor Strange", fecha_estreno: 2016-11-04, puntuacion: 7.4},
     {titulo: "Avengers: Infinity War", fecha_estreno: 2018-02-16, puntuacion: 8.4}
 ])
-```
 
-```
 db.actor.insertMany ([
     {nombre: "Robert", apellido: "Downey", fechanac: 1965-04-04},
     {nombre: "Chris", apellido: "Hemsworth", fechanac: 1983-08-11},
@@ -1135,9 +1108,7 @@ db.actor.insertMany ([
     {nombre: "Zoe", apellido: "Saldana", fechanac: 1978-06-19},
     {nombre: "Elisabeth", apellido: "Olsen", fechanac: 1989-02-16}
 ])
-```
 
-```
 db.genero.insertMany ([
     {tipo: "drama"},
     {tipo: "accion"},
