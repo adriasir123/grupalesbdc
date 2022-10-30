@@ -1162,10 +1162,59 @@ Probamos el acceso remoto con el siguiente comando. Se especifica el nombre de u
 
 
 
-## 5. Aplicación 
+## 5. Aplicación PostgreSQL
+
+El repositorio en el que he trabajado es este: <https://github.com/afermor8/app-postgresql>
+
+He utilizado como base un proyecto anterior que creé en flask. Copio el contenido de este proyecto en un nuevo repositorio y clono el repositorio en la máquina que trabajaré.
+
+`git clone git@github.com:afermor8/app-postgresql.git`
+
+Instalamos y creamos un entorno virtual.
+
+`sudo apt install python3-venv`
+
+`python3 -m venv entorno_prueba`
+
+Entramos en el entorno creado.
+
+`source entorno_prueba/bin/activate`
+
+Entramos en el repositorio.
+
+`cd app-postgresql`
+
+En el entorno de prueba voy a instalar los paquetes necesarios que se pueden ver en el fichero requirements.txt del repositorio clonado. Usamos el comando `pip install -r requirements.txt`.
+
+En el repositorio app-postgresql encontramos la carpeta static, templates y la aplicación app.py.
+
+- Static: donde está el contenido estático (css, imágenes, js).
+- Templates: donde están las plantillas html5.
+- app.py: la aplicación creada en python con flask.
+
+Lanzamos la aplicación para ver lo que hay actualmente y los cambios que tendremos que realizar.
+
+`python3 app.py`
+
+![app.py](/img/capturas-arantxa/75.png)
+
+Tenemos que instalar además psycopg2.
+
+`pip install psycopg2-binary`
+
+> He actualizado requirements.txt en el repositorio.
+
+Los cambios realizados en en la aplicación se puede ver a través de los commits del repositorio app-postgresql.
+
+<https://github.com/afermor8/app-postgresql>
 
 
+A continuación muestro algunas capturas del funcionamiento de la aplicación.
 
+![app-postgres](/img/capturas-arantxa/76.png)
 
+![app-postgres](/img/capturas-arantxa/77.png)
 
-• Realización de una aplicación web en cualquier lenguaje que conecte con el servidor Postgres tras autenticarse y muestre alguna información almacenada en el mismo.
+![app-postgres](/img/capturas-arantxa/78.png)
+
+![app-postgres](/img/capturas-arantxa/79.png)
