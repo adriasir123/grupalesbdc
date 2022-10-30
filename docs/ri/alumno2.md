@@ -530,7 +530,7 @@ Reiniciamos el servicio y en el apartado de prueba conexion servidor postgres co
 
 ## MongoDB
 
-## Instalación
+### Instalación
 
 - En primer lugar instalamos las dependencias necesarias:
 
@@ -738,7 +738,7 @@ sudo apt update && sudo apt install mongosh
 mongosh --host 192.168.1.42 -u joseju
 ```
 
-![acceso](../img/alumno2/accedo-mongo.png)
+![acceso](../img/alumno2/conexion-mongosh.png)
 
 ---
 
@@ -760,3 +760,16 @@ pip install flask flask-login flask-mysqldb flask-WTF
 
 - Después, de haber instalado los paquetes, escribimos el código que dejare en este repsoritorio de git:
 
+https://github.com/joseju10/app-bbdd
+
+- Iniciamos el servicio mediante el siguiente comando:
+
+```bash
+python3 app.py
+```
+
+- Accedemos a la página e iniciamos sesión con el usuario y la contraseña que añadimos en la base de datos mariadb:
+
+![acceso](../img/alumno2/acceso-flask.png)
+
+![acceso](../img/alumno2/acceso-web.png)
