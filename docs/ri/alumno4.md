@@ -29,7 +29,7 @@ postgres@debian:/home/usuario$ psql
 
 con \c dark-souls ingresamos en la base de datos
 Ahora procedemos a ingresar las tablas, he escogido las de mi proyecto del año pasado ya que le dediqué mucho tiempo con lo cual le tengo un especial cariño.
-https://github.com/Evanticks/BBDD/blob/main/Proyecto_Tercer_Trimestre/Dark_Souls_Postgres.sql
+<https://github.com/Evanticks/BBDD/blob/main/Proyecto_Tercer_Trimestre/Dark_Souls_Postgres.sql>
 
 
 
@@ -90,10 +90,12 @@ sudo nano /etc/mysql/mariadb.conf.d/50-server.cnf
 procedemos a comentar la línea que nos bloquea el uso al exterior del loopback.
 
 `#bind-address            = 192.168.122.0`
+
 ```
 sudo service mariadb restart
 sudo mysql -u root -p
 ```
+Le otorgamos al siguiente usuario los privilegios sobre la base de datos:
 
 ```
 create database souls;
@@ -103,7 +105,7 @@ use souls;
 
 Insertamos las tablas y los insert que se hayan en mi github:
 
-https://github.com/Evanticks/BBDD/blob/main/Proyecto_Tercer_Trimestre/Dark_Souls_Mariadb.sql
+<https://github.com/Evanticks/BBDD/blob/main/Proyecto_Tercer_Trimestre/Dark_Souls_Mariadb.sql>
 
 Ahora procedemos a instalar el cliente en nuestra máquina:
 ```
@@ -120,35 +122,44 @@ Comenzaremos ejecutando el siguiente comando:
 
 `wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc | apt-key add -`
 
+Estos pasos debemos realizarlo para poder tener en el repositorio la base de datos que se irá actualizando, además de poder instalar mongo por apt.
+
 `echo "deb http://repo.mongodb.org/apt/debian buster/mongodb-org/4.4 main" | tee /etc/apt/sources.list.d/mongodb-org.list`
 
-apt-get install mongodb-org -y
+
+Tras hacer un update, procedemos a instalarlo:
+
+`apt-get install mongodb-org -y`
 
 
-```systemctl start mongod
+```
+systemctl start mongod
 systemctl enable mongod
 ```
 
-mongo
+Para entrar en la base de datos de mongo:
+`mongo`
 
-use admin
+Accederemos al administrador que tiene los privilegios:
+`use admin`
 
 ```
-> db.createUser(
+db.createUser(
 ...   {
 ...     user: "AMP",
 ...     pwd: "AMP",
 ...     roles: [ { role: "userAdminAnyDatabase", db: "admin" }, "readWriteAnyDatabase" ]
 ...   }
 ... )
-
 ```
+
 
 Ahora vamos a entrar en /etc/mongod.conf y especificaremos lo siguiente:
 
-```security:
-  authorization: enabled
-  ```
+```
+security:
+authorization: enabled
+```
 ![mongo](/img/alumno4/mongo-instalacion-2.png)
 
 
@@ -162,24 +173,82 @@ usuario@debian:~$ mongoimport --db SOULS --collection SOULSWEAPONS --file DarkSo
 
 Creamos la base de datos SOULS, la colección SOULSWAPONS y dentro los documentos que habrá en la colección.
 
-mongo -u AMP -p
+`mongo -u AMP -p`
 
-use SOULS
+Accederemos a la base de datos creada anteriormente con el siguiente comando:
+
+`use SOULS`
 
 ![mongo](/img/alumno4/mongo-instalacion-4.png)
 
 Ahora salimos y volvemos a entrar en el archivo de configuración de mongo /etc/mongod.conf
 
+```
 net:
   port: 27017
   bindIp: 0.0.0.0
+```
 
 
-  systemctl restart mongod
+  `systemctl restart mongod`
 
 
   Ahora procedemos a instalar mongo en el cliente y una vez hecho ese paso procedemos a conectarnos especificando el usuario y la ip del host:
 
  ` mongo --host 192.168.122.168 -u AMP`
 
- ![mongo](/img/alumno4/mongo-instalacion-5.png)
+
+![mongo](/img/alumno4/mongo-instalacion-5.png)
+
+
+##Conexión de aplicación web a través de Oracle, Pyhton3 y Flask
+
+En los documentos que se hayan en el siguiente repositorio:
+<https://github.com/Evanticks/Oracle_cx>
+
+Podremos acceder a crear la aplicación web a través de python y flask, para realizar esto creamos un entorno de trabajo llamado /env, luego dentro de este podremo instalar con pip los siguientes paquetes:
+```
+pip install flask
+pip install cx_Oracle
+```
+
+Tras esto podemos aplicar el siguiente código que realizará lo siguiente:
+
+```
+@app.route('/login',methods=["GET","POST"])
+def login():
+    if request.method=="POST":
+        texto=request.form.get("user")
+        print ('texto=',texto)
+        texto2=request.form.get("pass")
+        print ('texto2=',texto2)
+        if texto=='antonio' and texto2=='antonio':
+            connection=cx_Oracle.connect(
+	        user='antonio',
+	        password='antonio',
+	        dsn='192.168.122.20:1521/ORCLCDB',
+	        encoding='UTF-8')
+            cursor = connection.cursor()
+            cursor.execute("select * from personaje")
+            resultado = cursor.fetchall()
+            cursor.execute("select nombre from armas")
+            resultado2 = cursor.fetchall()
+            cursor.execute("select nombre from tesoro")
+        else:
+            return redirect(url_for('login'))
+    else:
+        return render_template("login.html")
+```
+
+Con esto entraremos en la pantalla de login, si ingresamos nuestro usuario y contraseña de Oracle el cual será antonio, accederemos a la base de datos y mostrárá dos select, uno para listar los datos de la tabla personaje y otro para listar los nombres de las armas, en el html podremos ingresar el resultado generado de la consulta a través de Jinja2.
+
+Ejecutaremos python3 app.py para arrancar el servidor flask que nos dará el acceso a la web
+
+IMPORTANTE: Para realizar esto debemos previamente activar el listener y hacer un startup para levantar la base de datos, podemos comprobarlo antes accediendo desde un cliente remoto por consola.
+
+ ![oracle](/img/alumno4/oracle-web1.png)
+
+
+Aquí podemos ver que al entrar a través del login, podemos ver las tablas de la base de datos.
+
+ ![oracle](/img/alumno4/oracle-web2.png)
