@@ -120,19 +120,25 @@ Comenzaremos ejecutando el siguiente comando:
 
 `wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc | apt-key add -`
 
+Estos pasos debemos realizarlo para poder tener en el repositorio la base de datos que se irá actualizando, además de poder instalar mongo por apt.
+
 `echo "deb http://repo.mongodb.org/apt/debian buster/mongodb-org/4.4 main" | tee /etc/apt/sources.list.d/mongodb-org.list`
 
-apt-get install mongodb-org -y
+
+Tras hacer un update, procedemos a instalarlo:
+
+`apt-get install mongodb-org -y`
 
 
 ```systemctl start mongod
 systemctl enable mongod
 ```
+Para entrar en la base de datos de mongo:
+`mongo`
 
-mongo
-
-use admin
-
+Accederemos al administrador que tiene los privilegios:
+`use admin
+`
 ```
 > db.createUser(
 ...   {
@@ -146,9 +152,10 @@ use admin
 
 Ahora vamos a entrar en /etc/mongod.conf y especificaremos lo siguiente:
 
-```security:
-  authorization: enabled
-  ```
+```
+security:
+authorization: enabled
+```
 ![mongo](/img/alumno4/mongo-instalacion-2.png)
 
 
@@ -164,7 +171,9 @@ Creamos la base de datos SOULS, la colección SOULSWAPONS y dentro los documento
 
 mongo -u AMP -p
 
-use SOULS
+Accederemos a la base de datos creada anteriormente con el siguiente comando:
+
+`use SOULS`
 
 ![mongo](/img/alumno4/mongo-instalacion-4.png)
 
@@ -182,10 +191,11 @@ net:
 
  ` mongo --host 192.168.122.168 -u AMP`
 
- ![mongo](/img/alumno4/mongo-instalacion-5.png)
+
+![mongo](/img/alumno4/mongo-instalacion-5.png)
 
 
-#Conexión de aplicación web a través de Oracle, Pyhton3 y Flask
+##Conexión de aplicación web a través de Oracle, Pyhton3 y Flask
 
 En los documentos que se hayan en el siguiente repositorio:
 https://github.com/Evanticks/Oracle_cx
@@ -197,6 +207,7 @@ pip install cx_Oracle
 ```
 
 Tras esto podemos aplicar el siguiente código que realizará lo siguiente:
+
 ```
 @app.route('/login',methods=["GET","POST"])
 def login():
@@ -225,6 +236,9 @@ def login():
 
 Con esto entraremos en la pantalla de login, si ingresamos nuestro usuario y contraseña de Oracle el cual será antonio, accederemos a la base de datos y mostrárá dos select, uno para listar los datos de la tabla personaje y otro para listar los nombres de las armas, en el html podremos ingresar el resultado generado de la consulta a través de Jinja2.
 
+Ejecutaremos python3 app.py para arrancar el servidor flask que nos dará el acceso a la web
+
+IMPORTANTE: Para realizar esto debemos previamente activar el listener y hacer un startup para levantar la base de datos, podemos comprobarlo antes accediendo desde un cliente remoto por consola.
 
  ![oracle](/img/alumno4/oracle-web1.png)
 
