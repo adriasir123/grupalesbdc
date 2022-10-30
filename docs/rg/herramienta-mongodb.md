@@ -2,7 +2,7 @@
 
 ## MongoDB-PHP-GUI
 
-https://github.com/SamuelTallet/MongoDB-PHP-GUI
+<https://github.com/SamuelTallet/MongoDB-PHP-GUI>
 
 ### 1. Configuración previa
 
@@ -61,7 +61,7 @@ Tenemos opciones para insertar, borrar, contar o buscar por filtro, y las opcion
 
 ![mongo-gui5](/img/capturas-arantxa/69.png)
 
-También tenemos arriba pestañas con diferentes opciones, entre ellas para administrar los usuarios.
+También tenemos arriba pestañas con diferentes opciones. Entre ellas, tenemos la posibilidad de administrar los usuarios de las bases de datos.
 
 ![mongo-gui6](/img/capturas-arantxa/70.png)
 
@@ -81,7 +81,7 @@ Copiamos la dirección en el navegador.
 
 ![mongo-gui-remoto3](/img/capturas-arantxa/73.png)
 
-Hacemos "Login" y ya abremos entrado de forma remota al servidor MongoDB.
+Hacemos "Login" y ya habremos entrado de forma remota al servidor MongoDB.
 
 ![mongo-gui-remoto4](/img/capturas-arantxa/74.png)
 
