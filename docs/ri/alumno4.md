@@ -132,9 +132,11 @@ Tras hacer un update, procedemos a instalarlo:
 `apt-get install mongodb-org -y`
 
 
-```systemctl start mongod
+```
+systemctl start mongod
 systemctl enable mongod
 ```
+
 Para entrar en la base de datos de mongo:
 `mongo`
 
@@ -142,15 +144,15 @@ Accederemos al administrador que tiene los privilegios:
 `use admin`
 
 ```
-> db.createUser(
+db.createUser(
 ...   {
 ...     user: "AMP",
 ...     pwd: "AMP",
 ...     roles: [ { role: "userAdminAnyDatabase", db: "admin" }, "readWriteAnyDatabase" ]
 ...   }
 ... )
-
 ```
+
 
 Ahora vamos a entrar en /etc/mongod.conf y especificaremos lo siguiente:
 
