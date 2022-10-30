@@ -183,3 +183,52 @@ net:
  ` mongo --host 192.168.122.168 -u AMP`
 
  ![mongo](/img/alumno4/mongo-instalacion-5.png)
+
+
+#Conexión de aplicación web a través de Oracle, Pyhton3 y Flask
+
+En los documentos que se hayan en el siguiente repositorio:
+https://github.com/Evanticks/Oracle_cx
+
+Podremos acceder a crear la aplicación web a través de python y flask, para realizar esto creamos un entorno de trabajo llamado /env, luego dentro de este podremo instalar con pip los siguientes paquetes:
+```
+pip install flask
+pip install cx_Oracle
+```
+
+Tras esto podemos aplicar el siguiente código que realizará lo siguiente:
+```
+@app.route('/login',methods=["GET","POST"])
+def login():
+    if request.method=="POST":
+        texto=request.form.get("user")
+        print ('texto=',texto)
+        texto2=request.form.get("pass")
+        print ('texto2=',texto2)
+        if texto=='antonio' and texto2=='antonio':
+            connection=cx_Oracle.connect(
+	        user='antonio',
+	        password='antonio',
+	        dsn='192.168.122.20:1521/ORCLCDB',
+	        encoding='UTF-8')
+            cursor = connection.cursor()
+            cursor.execute("select * from personaje")
+            resultado = cursor.fetchall()
+            cursor.execute("select nombre from armas")
+            resultado2 = cursor.fetchall()
+            cursor.execute("select nombre from tesoro")
+        else:
+            return redirect(url_for('login'))
+    else:
+        return render_template("login.html")
+```
+
+Con esto entraremos en la pantalla de login, si ingresamos nuestro usuario y contraseña de Oracle el cual será antonio, accederemos a la base de datos y mostrárá dos select, uno para listar los datos de la tabla personaje y otro para listar los nombres de las armas, en el html podremos ingresar el resultado generado de la consulta a través de Jinja2.
+
+
+ ![oracle](/img/alumno4/oracle-web1.png)
+
+
+Aquí podemos ver que al entrar a través del login, podemos ver las tablas de la base de datos.
+
+ ![oracle](/img/alumno4/oracle-web2.png)
