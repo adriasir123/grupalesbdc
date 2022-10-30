@@ -1139,7 +1139,7 @@ Comprobamos con **find**.
 Para poder acceder remotamente habrá que configurar **"mongod.conf"** que se encuentra en */etc/*. Los siguientes valores deben quedar de la siguiente manera:
 
 ```
-bindIp: 0.0.0.0
+bindIp: 127.0.0.1,192.168.122.98
 security:
   authorization: enabled
 ```
