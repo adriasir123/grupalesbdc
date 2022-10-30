@@ -10,6 +10,22 @@
 
 ## Instalación MariaDB en Debian 11
 
+- Primero actualizamos el sistema:
+
+```bash
+sudo apt update -y && sudo apt upgrade -y
+```
+
+- Instalamos el paquete mariadb-server:
+
+```bash
+sudo apt install -y mariadb-server
+```
+
+- Comprobamos el estado del servicio postgres para comprobar que funciona:
+
+![status](../img/alumno2/status-mariadb.png)
+
 ## Configuración MariaDB en Debian 11
 
 ---
@@ -49,6 +65,63 @@ sudo -u postgres createuser joseju --interactive -P
 - Ahora creamos una base de datos llamada libreria:
 
 ![crear](../img/alumno2/crear-base.png)
+
+- Cambiamos a la base de datos recien creada:
+
+```sql
+joseju=# \c libreria
+You are now connected to database "libreria" as user "joseju".
+```
+
+- A continuación crearemos las tablas de esta base de datos:
+
+```sql
+libreria=# CREATE TABLE usuarios (
+   ID SERIAL PRIMARY KEY,
+   NOMBRE varchar(20),
+   PASSWORD char(102),
+   FULLNAME varchar(50)
+);
+CREATE TABLE
+
+libreria=# CREATE TABLE autor (
+   id SERIAL PRIMARY KEY,
+   nombre varchar(20),
+   apellidos varchar(20)
+);
+CREATE TABLE
+
+libreria=# CREATE TABLE libros (
+   id SERIAL PRIMARY KEY,
+   idautor SERIAL,
+   nombre varchar(20),
+   constraint FK_autor foreign key (idautor) references autor(id)
+);
+CREATE TABLE
+
+libreria=# CREATE TABLE compralibro (
+   idcliente SERIAL,
+   idlibro SERIAL,
+   primary key(idcliente,idlibro),
+   constraint FK_cliente foreign key (idcliente) references usuarios(id),
+   constraint FK_libro foreign key (idlibro) references libros(id)
+);
+CREATE TABLE
+```
+
+- Mostramos las tablas que acabamos de crear:
+
+```sql
+libreria=# \dt
+           List of relations
+ Schema |    Name     | Type  | Owner  
+--------+-------------+-------+--------
+ public | autor       | table | joseju
+ public | compralibro | table | joseju
+ public | libros      | table | joseju
+ public | usuarios    | table | joseju
+(4 rows)
+```
 
 ### Activar uso de contraseña
 
@@ -222,6 +295,40 @@ autname: "Cervantes",
 nombre: "Miguel",
 apellidos: "Cervantes Saavedra"}
 ] )
+```
+
+Compruebo que se ha añadido todo correctamente:
+
+```bash
+> db.usuarios.find()
+[
+  {
+    _id: ObjectId("635e7fe5024ab00ff3a1377c"),
+    id: 1,
+    usuario: 'joseju',
+    password: 'pbkdf2:sha256:260000$FHhIsLue8dRwFAIM$ef37e5b262fb3d687112e232cd47abf1ec83f4c653b7bcbf95fa3993298fb5df',
+    fullname: 'Jose Juan'
+  }
+]
+> db.libros.find()
+[
+  {
+    _id: ObjectId("635e838d024ab00ff3a1377d"),
+    id: 100,
+    nombre: 'El Quijote',
+    autor: 'Cervantes'
+  }
+]
+> db.autores.find()
+[
+  {
+    _id: ObjectId("635e8399024ab00ff3a1377e"),
+    id: 1000,
+    autname: 'Cervantes',
+    nombre: 'Miguel',
+    apellidos: 'Cervantes Saavedra'
+  }
+]
 ```
 
 ### Configuración Acceso remoto
