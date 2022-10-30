@@ -173,7 +173,7 @@ usuario@debian:~$ mongoimport --db SOULS --collection SOULSWEAPONS --file DarkSo
 
 Creamos la base de datos SOULS, la colección SOULSWAPONS y dentro los documentos que habrá en la colección.
 
-mongo -u AMP -p
+`mongo -u AMP -p`
 
 Accederemos a la base de datos creada anteriormente con el siguiente comando:
 
@@ -183,12 +183,14 @@ Accederemos a la base de datos creada anteriormente con el siguiente comando:
 
 Ahora salimos y volvemos a entrar en el archivo de configuración de mongo /etc/mongod.conf
 
+```
 net:
   port: 27017
   bindIp: 0.0.0.0
+```
 
 
-  systemctl restart mongod
+  `systemctl restart mongod`
 
 
   Ahora procedemos a instalar mongo en el cliente y una vez hecho ese paso procedemos a conectarnos especificando el usuario y la ip del host:
