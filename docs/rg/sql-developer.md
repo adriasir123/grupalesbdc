@@ -4,7 +4,7 @@
 
 En mi máquina Windows 10 descargo SQL Developer de la página oficial de Oracle.
 
-https://www.oracle.com/database/sqldeveloper/technologies/download/
+<https://www.oracle.com/database/sqldeveloper/technologies/download/>
 
 Una vez descargado, se descomprime el .zip y en la carpeta creada hacemos click en **sqldeveloper**.
 
