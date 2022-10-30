@@ -90,10 +90,12 @@ sudo nano /etc/mysql/mariadb.conf.d/50-server.cnf
 procedemos a comentar la línea que nos bloquea el uso al exterior del loopback.
 
 `#bind-address            = 192.168.122.0`
+
 ```
 sudo service mariadb restart
 sudo mysql -u root -p
 ```
+Le otorgamos al siguiente usuario los privilegios sobre la base de datos:
 
 ```
 create database souls;
@@ -137,8 +139,8 @@ Para entrar en la base de datos de mongo:
 `mongo`
 
 Accederemos al administrador que tiene los privilegios:
-`use admin
-`
+`use admin`
+
 ```
 > db.createUser(
 ...   {

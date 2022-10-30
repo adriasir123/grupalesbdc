@@ -1,6 +1,6 @@
 # Oracle Enterprise Manager
 
-Primero comenzaremos mirando el puerto por el cual podremos acceder a Oracle Enterprise:
+Primero comenzaremos mirando el puerto por el cual podremos acceder a Oracle Enterprise, para ello tenemos que conectarnos a través de sys:
 
 ![oracle-ee](/img/alumno4/oracle-express-1.png)
 
@@ -19,3 +19,5 @@ Ahora especificando la ip y el puerto https://192.168.122.20:5500/em, podemos ac
 ![oracle-ee](/img/alumno4/oracle-express-3.png)
 
 Tenemos acceso a Oracle Enterprise y podremos ver todos los recursos que se están utilizando en el sistema.
+
+El enlace es en la red local con lo cual podemos acceder a Oracle enterprise desde cualquier web de nuestr área local.
