@@ -29,7 +29,7 @@ postgres@debian:/home/usuario$ psql
 
 con \c dark-souls ingresamos en la base de datos
 Ahora procedemos a ingresar las tablas, he escogido las de mi proyecto del año pasado ya que le dediqué mucho tiempo con lo cual le tengo un especial cariño.
-https://github.com/Evanticks/BBDD/blob/main/Proyecto_Tercer_Trimestre/Dark_Souls_Postgres.sql
+<https://github.com/Evanticks/BBDD/blob/main/Proyecto_Tercer_Trimestre/Dark_Souls_Postgres.sql>
 
 
 
@@ -105,7 +105,7 @@ use souls;
 
 Insertamos las tablas y los insert que se hayan en mi github:
 
-https://github.com/Evanticks/BBDD/blob/main/Proyecto_Tercer_Trimestre/Dark_Souls_Mariadb.sql
+<https://github.com/Evanticks/BBDD/blob/main/Proyecto_Tercer_Trimestre/Dark_Souls_Mariadb.sql>
 
 Ahora procedemos a instalar el cliente en nuestra máquina:
 ```
@@ -204,7 +204,7 @@ net:
 ##Conexión de aplicación web a través de Oracle, Pyhton3 y Flask
 
 En los documentos que se hayan en el siguiente repositorio:
-https://github.com/Evanticks/Oracle_cx
+<https://github.com/Evanticks/Oracle_cx>
 
 Podremos acceder a crear la aplicación web a través de python y flask, para realizar esto creamos un entorno de trabajo llamado /env, luego dentro de este podremo instalar con pip los siguientes paquetes:
 ```
