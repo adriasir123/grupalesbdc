@@ -6,11 +6,267 @@
 
 ### Instalación
 
+Lo primero que debemos hacer es descargarnos desde la página oficial de oracle el paquete .rpm y subirlo por scp a nuestro servidor, y una vez hecho eso, haremos lo siguiente:
+
+- Instalamos alien y paquetes necesarios:
+
+```bash
+apt install alien libaio1 unixodbc
+```
+
+- Ahora con alien, reconvertimos el fichero .rpm a dpkg, esto tardará un buen rato, depende del rendimiento que tengas en el sistema:
+
+```bash
+alien --scripts -d oracle-database-ee-19c-1.0-1.x86_64.rpm
+```
+
+- Una vez ha terminado la reconversión, dentro del fichero /sbin/chkconfig, añadimos lo siguiente:
+
+```bash
+#!/bin/bash
+# Oracle 19c installer chkconfig hack
+file=/etc/init.d/oracle-19c
+if [[ ! `tail -n1 $file | grep INIT` ]]; then
+echo >> $file
+echo '### BEGIN INIT INFO' >> $file
+echo '# Provides: Oracle 19c' >> $file
+echo '# Required-Start: $remote_fs $syslog' >> $file
+echo '# Required-Stop: $remote_fs $syslog' >> $file
+echo '# Default-Start: 2 3 4 5' >> $file
+echo '# Default-Stop: 0 1 6' >> $file
+echo '# Short-Description: Oracle 19c' >> $file
+echo '### END INIT INFO' >> $file
+fi
+update-rc.d oracle-19c defaults 80 01
+```
+
+- Ahora le damos permisos al fichero:
+
+```bash
+chmod 777 /sbin/chkconfig 
+```
+
+- Añadimos lo siguiente al fichero /etc/sysctl.d/60-oracle.conf para configurar los parámetros del kernel:
+
+```bash
+# Oracle 19c kernel parameters
+fs.file-max=6815744
+net.ipv4.ip_local_port_range=9000 65000
+kernel.sem=250 32000 100 128
+kernel.shmmax=536870912
+```
+
+- Arrancamos el servicio procps:
+
+```bash
+systemctl start procps
+```
+
+- Añadimos el siguiente contenido al fichero /etc/rc2.d/S01shm_load: 
+
+```bash
+#!/bin/sh
+case "$1" in
+start) mkdir /var/lock/subsys 2>/dev/null
+       touch /var/lock/subsys/listener
+       rm /dev/shm 2>/dev/null
+       mkdir /dev/shm 2>/dev/null
+       mount -t tmpfs shmfs -o size=2048m /dev/shm ;;
+*) echo error
+   exit 1 ;;
+esac
+```
+
+- Le damos permisos:
+
+```bash
+chmod 777 /etc/rc2.d/S01shm_load
+```
+
+- Reiniciamos el sistema:
+
+```bash
+reboot
+```
+
+- Instalamos el paquete .deb que reconvertimos anteriormente:
+
+```bash
+dpkg --install oracle-database-ee-19c_1.0-2_amd64.deb
+```
+
+- Una vez instalado, añadimos el parámetro -J-Doracle.assistants.dbca.validate.ConfigurationParams=false dentro de /etc/init.d/oracledb_ORCLCDB-19c:
+
+![status](../img/alumno2/conf-init-orac.png)
+
+- Ahora, ejecutamos el siguiente comando para configurar oracle:
+
+```bash
+root@escenario:~# /etc/init.d/oracledb_ORCLCDB-19c configure
+```
+
+![status](../img/alumno2/oracle-instalado.png)
+
+- Dentro de bashrc añado las siguientes variables de entorno:
+
+```bash
+# Oracle environment variables
+export ORACLE_HOME=/opt/oracle/product/19c/dbhome_1
+export ORACLE_SID=ORCLCDB
+export NLS_LANG=`$ORACLE_HOME/bin/nls_lang.sh`
+export ORACLE_BASE=/opt/oracle
+export LD_LIBRARY_PATH=$ORACLE_HOME/lib:$LD_LIBRARY_PATH
+export PATH=$ORACLE_HOME/bin:$PATH
+```
+
+- Reinciamos la máquina:
+
+```bash
+reboot
+```
+
+- Iniciamos el servicio de oracle:
+
+```bash
+sudo systemctl start oracledb_ORCLCDB-19c
+```
+
+- Finalmente accedemos a oracle:
+
+```sql
+oracle@oracle:~$ sqlplus / as sysdba
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Sun Oct 30 19:26:55 2022
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+
+Conectado a:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL> 
+```
+
 ### Creación de usuarios
+
+Para crear un usuario hacemos lo siguiente:
+
+- Creamos el usuario con contraseña y le damos permisos:
+
+```sql
+SQL> create user joseju identified by lolazo25;
+
+Usuario creado.
+
+SQL> grant all privileges to joseju;
+
+Concesion terminada correctamente.
+```
+
+- Accedemos a oracle con el usuario que hemos creado para comprobar que todo funciona correctamente:
+
+```sql
+oracle@oracle:~$ sqlplus joseju
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Sun Oct 30 19:32:38 2022
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+Enter password: 
+
+Conectado a:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL> 
+```
 
 ### Creación Base de datos
 
+Creamos las siguientes tablas:
+
+```sql
+SQL> CREATE TABLE usuarios (
+  id NUMBER(3) NOT NULL,
+  nombre VARCHAR2(20) NOT NULL,
+  password char(102) NOT NULL,
+  fullname VARCHAR2(50),
+  CONSTRAINT usuarios_pk PRIMARY KEY (id)
+);
+
+Tabla creada.
+
+SQL> CREATE TABLE autores (
+  id NUMBER(3) NOT NULL,
+  nombre VARCHAR2(20) NOT NULL,
+  apellidos VARCHAR2(50) NOT NULL,
+  CONSTRAINT autor_pk PRIMARY KEY (id)
+);  
+
+Tabla creada.
+
+SQL> CREATE TABLE libros (
+  id NUMBER(3) NOT NULL,
+  id_autor NUMBER(3) NOT NULL,
+  nombre VARCHAR2(20) NOT NULL,
+  CONSTRAINT libros_pk PRIMARY KEY (id),
+  CONSTRAINT id_autor_fk FOREIGN KEY (id_autor)
+    REFERENCES autores (id)
+);
+
+Tabla creada.
+
+SQL> CREATE TABLE compralibro (
+  id_usuario NUMBER(3) NOT NULL,
+  id_libro NUMBER(3) NOT NULL,
+  CONSTRAINT libro_usuario_pk PRIMARY KEY (id_usuario,id_libro),
+  CONSTRAINT id_usuario_fk FOREIGN KEY (id_usuario)
+    REFERENCES usuarios (id),
+  CONSTRAINT id_libro_fk FOREIGN KEY (id_libro)
+    REFERENCES libros (id)
+);
+
+Tabla creada.
+```
+
+Mostramos las tablas que acabamos de crear:
+
+```sql
+SQL> select table_name from user_tables order by table_name;
+
+TABLE_NAME
+--------------------------------------------------------------------------------
+AUTORES
+COMPRALIBRO
+LIBROS
+USUARIOS
+
+```
+
 ### Configuracion Acceso remoto
+
+Para configurar el acceso remoto haremos lo siguiente:
+
+- Modifico el fichero de configuración /opt/oracle/product/19c/dbhome_1/network/admin/listener.ora y lo dejamos asi:
+
+![status](../img/alumno2/remoto-oracle.png)
+
+- Iniciamos lsnrctl:
+
+```sql
+oracle@oracle:~$ lsnrctl start
+
+LSNRCTL for Linux: Version 19.0.0.0.0 - Production on 30-OCT-2022 19:49:06
+
+Copyright (c) 1991, 2019, Oracle.  All rights reserved.
+
+TNS-01106: Listener using listener name LISTENER has already been started
+```
+
+Reiniciamos el servicio y en el apartado de prueba conexion servidor oracle comprobamos que funciona.
 
 ---
 
@@ -274,7 +530,7 @@ Reiniciamos el servicio y en el apartado de prueba conexion servidor postgres co
 
 ## MongoDB
 
-## Instalación
+### Instalación
 
 - En primer lugar instalamos las dependencias necesarias:
 
@@ -482,8 +738,38 @@ sudo apt update && sudo apt install mongosh
 mongosh --host 192.168.1.42 -u joseju
 ```
 
-![acceso](../img/alumno2/accedo-mongo.png)
+![acceso](../img/alumno2/conexion-mongosh.png)
 
 ---
 
 ## Realización de Aplicacion Web
+
+Realizaremos una aplicación web escrita en python donde accederemos a la página a través de un usuario y una contraseña almacenados en la base de datos que creamos anteriormente en mysql. Para ello vamos a hacer lo siguiente.
+
+- Primero, creamos un entorno virtual donde realizaremos nuestra aplicación web:
+
+```bash
+python3 -m venv mysql
+```
+
+- Luego instalamos todos los paquetes necesarios para que la aplicación funcione:
+
+```bash
+pip install flask flask-login flask-mysqldb flask-WTF
+```
+
+- Después, de haber instalado los paquetes, escribimos el código que dejare en este repsoritorio de git:
+
+https://github.com/joseju10/app-bbdd
+
+- Iniciamos el servicio mediante el siguiente comando:
+
+```bash
+python3 app.py
+```
+
+- Accedemos a la página e iniciamos sesión con el usuario y la contraseña que añadimos en la base de datos mariadb:
+
+![acceso](../img/alumno2/acceso-flask.png)
+
+![acceso](../img/alumno2/acceso-web.png)
