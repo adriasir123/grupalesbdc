@@ -2,13 +2,21 @@
 
 ---
 
-## Instalación Oracle 19c en Debian 11
+## Oracle 19c 
 
-## Configuración Oracle 19c en Debian 11
+### Instalación
+
+### Creación de usuarios
+
+### Creación Base de datos
+
+### Configuracion Acceso remoto
 
 ---
 
-## Instalación MariaDB en Debian 11
+## MariaDB
+
+### Instalación
 
 - Primero actualizamos el sistema:
 
@@ -26,11 +34,17 @@ sudo apt install -y mariadb-server
 
 ![status](../img/alumno2/status-mariadb.png)
 
-## Configuración MariaDB en Debian 11
+### Creación de usuarios
+
+### Creación Base de datos
+
+### Configuracion Acceso remoto
 
 ---
 
-## Instalación Postgres en Debian 11
+## Postgres
+
+### Instalación
 
 - Primero actualizamos el sistema:
 
@@ -48,9 +62,7 @@ sudo apt install -y postgresql-13
 
 ![status](../img/alumno2/status-postgres.png)
 
-## Configuración Postgres en Debian 11
-
-### Creación y configuración de usuarios
+### Creación de usuarios
 
 - Con el siguiente comando creamos al usuario joseju como un superusuario:
 
@@ -60,7 +72,24 @@ sudo -u postgres createuser joseju --interactive -P
 
 ![crear](../img/alumno2/crear-usuario-postgres.png)
 
-### Creación de una base de datos
+Una vez hemos creado el usuario, habilitaremos el uso de contraseña para poder acceder a mongo con autenticación:
+
+- Para activar el uso de contraseña, cambiamos dentro del fichero de configuración pg_hba.conf la siguiente directiva y cambiamos la palabra peer por md5:
+
+![activar](../img/alumno2/activar-contrasena.png)
+
+- Una vez modificado, reiniciamos el servicio:
+
+```bash
+systemctl reload postgresql
+```
+
+- Iniciamos postgres para ver si nos pide la contraseña:
+
+![activar](../img/alumno2/pedir-contrasena.png)
+
+
+### Creación Base de datos
 
 - Ahora creamos una base de datos llamada libreria:
 
@@ -123,23 +152,7 @@ libreria=# \dt
 (4 rows)
 ```
 
-### Activar uso de contraseña
-
-- Para activar el uso de contraseña, cambiamos dentro del fichero de configuración pg_hba.conf la siguiente directiva y cambiamos la palabra peer por md5:
-
-![activar](../img/alumno2/activar-contrasena.png)
-
-- Una vez modificado, reiniciamos el servicio:
-
-```bash
-systemctl reload postgresql
-```
-
-- Iniciamos postgres para ver si nos pide la contraseña:
-
-![activar](../img/alumno2/pedir-contrasena.png)
-
-### Configurar Acceso remoto
+### Configuración Acceso remoto
 
 Para configurar el acceso remoto, debemos modificar dos ficheros, postgresql.conf y pg_hba.conf y modificar las siguientes líneas:
 
@@ -155,7 +168,9 @@ Reiniciamos el servicio y en el apartado de prueba conexion servidor postgres co
 
 ---
 
-## Instalación MongoDB en Debian 11
+## MongoDB
+
+## Instalación
 
 - En primer lugar instalamos las dependencias necesarias:
 
@@ -193,9 +208,7 @@ mongod --version
 
 ![version](../img/alumno2/mongo-version.png)
 
-## Configuración MongoDB en Debian 11
-
-### Habilitar la autenticación en mongodb
+### Creación de usuarios
 
 Por defecto, la autenticación en mongodb no esta habilitada, así que por razones de seguridad, habilitaremos la autentiación. Para ello haremos lo siguiente:
 
@@ -205,7 +218,7 @@ Por defecto, la autenticación en mongodb no esta habilitada, así que por razon
 mongo
 ```
 
-- Seguidamente creamos una base de datos llamada admin:
+- Seguidamente modificamos una base de datos llamada admin:
 
 ```sql
 use admin
@@ -233,7 +246,7 @@ roles: [ { role: "root", db: "admin" } ]
 
 ![añadir](../img/alumno2/accedo-mongo.png)
 
-### Crear base de datos
+### Creación Base de datos
 
 Procederemos a crear una base de datos llamada libreria con tres colecciones y con información variada, las colecciones que crearemos serán:
 
