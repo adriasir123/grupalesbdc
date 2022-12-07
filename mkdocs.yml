@@ -10,14 +10,14 @@ theme:
     repo: fontawesome/brands/github-alt
   palette:
     - scheme: default
-      primary: grey
-      accent: deep orange
+      primary: red
+      accent: red
       toggle:
         icon: material/brightness-4
         name: Cambiar a tema oscuro
     - scheme: slate
-      primary: grey
-      accent: deep orange
+      primary: red
+      accent: red
       toggle:
         icon: material/brightness-7
         name: Cambiar a tema normal
