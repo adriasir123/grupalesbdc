@@ -7,7 +7,7 @@ theme:
     - navigation.sections
   icon:
     logo: material/database
-    repo: fontawesome/brands/github-alt
+    repo: simple/git
   palette:
     - scheme: default
       primary: red
@@ -36,6 +36,16 @@ nav:
             - 'phpMyAdmin': 'p1-servidores-clientes/rg/phpmyadmin.md'
             - 'MongoDB-PHP-GUI': 'p1-servidores-clientes/rg/herramienta-mongodb.md'
             - 'Oracle Enterprise Manager': 'p1-servidores-clientes/rg/oracle-enterprise-manager.md'
+    - Práctica 4 grupal de PL/SQL:
+        - 'Introducción': 'p4-grupal-plsql/intro.md'
+        - 'Ejercicio 1': 'p4-grupal-plsql/ejercicio1.md'
+        - 'Ejercicio 2': 'p4-grupal-plsql/ejercicio2.md'
+        - 'Ejercicio 3': 'p4-grupal-plsql/ejercicio3.md'
+        - 'Ejercicio 4': 'p4-grupal-plsql/ejercicio4.md'
+        - 'Ejercicio 5': 'p4-grupal-plsql/ejercicio5.md'
+        - 'Ejercicio 6': 'p4-grupal-plsql/ejercicio6.md'
+        - 'Ejercicio 7': 'p4-grupal-plsql/ejercicio7.md'
+        - 'Ejercicio 8': 'p4-grupal-plsql/ejercicio8.md'
 markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
