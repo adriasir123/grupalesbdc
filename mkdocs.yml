@@ -1,4 +1,4 @@
-site_name: Instalación de Servidores y Clientes
+site_name: Grupales de BD Grupo C 22/23
 theme:
   name: 'material'
   icon:
@@ -18,17 +18,18 @@ theme:
         name: Cambiar a tema normal
 nav:
     - Introducción: index.md
-    - Responsabilidad individual:
-        - 'Alumno 1: Adrián': 'ri/alumno1.md'
-        - 'Alumno 2: José Juan': 'ri/alumno2.md'
-        - 'Alumno 3: Arantxa': 'ri/alumno3.md'
-        - 'Alumno 4: Antonio': 'ri/alumno4.md'
-    - Responsabilidad grupal:
-        - 'SQL Developer': 'rg/sql-developer.md'
-        - 'Herramienta web PostgreSQL': 'rg/herramienta-postgresql.md'
-        - 'phpMyAdmin': 'rg/phpmyadmin.md'
-        - 'Herramienta web MongoDB': 'rg/herramienta-mongodb.md'
-        - 'Oracle Enterprise Manager': 'rg/oracle-enterprise-manager.md'
+    - Práctica 1 servidores y clientes:
+        - Responsabilidad individual:
+            - 'Alumno 1: Adrián': 'p1-servidores-clientes/ri/alumno1.md'
+            - 'Alumno 2: José Juan': 'p1-servidores-clientes/ri/alumno2.md'
+            - 'Alumno 3: Arantxa': 'p1-servidores-clientes/ri/alumno3.md'
+            - 'Alumno 4: Antonio': 'p1-servidores-clientes/ri/alumno4.md'
+        - Responsabilidad grupal:
+            - 'SQL Developer': 'p1-servidores-clientes/rg/sql-developer.md'
+            - 'Herramienta web PostgreSQL': 'p1-servidores-clientes/rg/herramienta-postgresql.md'
+            - 'phpMyAdmin': 'p1-servidores-clientes/rg/phpmyadmin.md'
+            - 'Herramienta web MongoDB': 'p1-servidores-clientes/rg/herramienta-mongodb.md'
+            - 'Oracle Enterprise Manager': 'p1-servidores-clientes/rg/oracle-enterprise-manager.md'
 markdown_extensions:
   - attr_list
   - md_in_html
