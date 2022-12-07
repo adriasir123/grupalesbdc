@@ -1,5 +1,5 @@
-# Instalación de Servidores y Clientes
+# Grupales de BD Grupo C
 
-Esta es la práctica 1 de BD.
+Aquí se aloja el código que genera la web donde estarán todas nuestras prácticas.
 
-[Haz click aquí](https://www.servidoresclientes.ga) para ir a la publicación de la práctica.
+[Haz click aquí](https://www.servidoresclientes.ga) para entrar.
