@@ -1,7 +1,12 @@
 site_name: Grupales de BD Grupo C 22/23
 theme:
   name: 'material'
+  features:
+    - content.code.annotate
+    - navigation.tabs
+    - navigation.sections
   icon:
+    logo: material/database
     repo: fontawesome/brands/github-alt
   palette:
     - scheme: default
@@ -39,7 +44,13 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
+extra_css:
+  - stylesheets/asciinema-player.css
+extra_javascript:
+  - javascripts/asciinema-player.min.js
 plugins:
   - glightbox
+  - search
+  - mkdocs-asciinema
 repo_url: https://github.com/adriasir123/p1-bd-servidores-clientes
 repo_name: p1-bd-servidores-clientes
