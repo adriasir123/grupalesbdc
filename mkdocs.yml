@@ -32,18 +32,18 @@ nav:
             - 'Alumno 4: Antonio': 'p1-servidores-clientes/ri/alumno4.md'
         - Responsabilidad grupal:
             - 'SQL Developer': 'p1-servidores-clientes/rg/sql-developer.md'
-            - 'Herramienta web PostgreSQL': 'p1-servidores-clientes/rg/herramienta-postgresql.md'
+            - 'phpPgAdmin': 'p1-servidores-clientes/rg/herramienta-postgresql.md'
             - 'phpMyAdmin': 'p1-servidores-clientes/rg/phpmyadmin.md'
-            - 'Herramienta web MongoDB': 'p1-servidores-clientes/rg/herramienta-mongodb.md'
+            - 'MongoDB-PHP-GUI': 'p1-servidores-clientes/rg/herramienta-mongodb.md'
             - 'Oracle Enterprise Manager': 'p1-servidores-clientes/rg/oracle-enterprise-manager.md'
 markdown_extensions:
-  - attr_list
-  - md_in_html
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
+  - admonition
+  - pymdownx.details
 extra_css:
   - stylesheets/asciinema-player.css
 extra_javascript:
