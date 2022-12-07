@@ -17,8 +17,9 @@ theme:
         icon: material/brightness-7
         name: Cambiar a tema normal
 nav:
-    - Introducción: index.md
+    - Principal: index.md
     - Práctica 1 servidores y clientes:
+        - 'Introducción': 'p1-servidores-clientes/intro.md'
         - Responsabilidad individual:
             - 'Alumno 1: Adrián': 'p1-servidores-clientes/ri/alumno1.md'
             - 'Alumno 2: José Juan': 'p1-servidores-clientes/ri/alumno2.md'
