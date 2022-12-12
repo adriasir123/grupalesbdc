@@ -1,7 +1,7 @@
 # Ejercicio 1
 
 
-## Realiza una función que reciba como parámetros un código de carrera y un código de caballo y devuelva el importe total que tendrá que pagar el hipódromo a los apostantes suponiendo que dicha carrera sea ganada por el caballo recibido como parámetro. Se deben contemplar las siguientes excepciones: Carrera inexistente, Caballo inexistente, Caballo no participante en esa carrera.
+> Realiza una función que reciba como parámetros un código de carrera y un código de caballo y devuelva el importe total que tendrá que pagar el hipódromo a los apostantes suponiendo que dicha carrera sea ganada por el caballo recibido como parámetro. Se deben contemplar las siguientes excepciones: Carrera inexistente, Caballo inexistente, Caballo no participante en esa carrera.
 
 
 ```sql
@@ -39,8 +39,9 @@ END;
 /
 ```
 
-LO SIGUIENTE ES PARA PROBAR LA PRIMERA FUNCIÓN, COMPROBANDO EL PROCEDIMIENTO:
+!!! note "Ejercicio de prueba"
 
+    Este ejercicio está hecho para ser probado antes de utilizar la función.
 
 
 ```sql
