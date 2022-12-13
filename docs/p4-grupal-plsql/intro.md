@@ -1,16 +1,16 @@
 # Introducción
 
-En esta práctica se instalan y configuran distintos servidores y clientes de bases de datos.
+En esta práctica se explota la base de datos del proyecto "Gran Hipódromo" mediante PL/SQL.
 
-Este trabajo ha sido realizado por:
+Reparto de roles:
 
-- Adrián Jaramillo Rodríguez (capitán)
-- José Juan Hervás Carrasco (secretario)
-- Arantxa Fernández Morató (facilitadora)
-- Antonio Marchán Posada (portavoz)
+- Capitán: Antonio Marchán Posada
+- Secretario: Adrián Jaramillo Rodríguez
+- Facilitadora: José Juan Hervás Carrasco
+- Portavoz: Arantxa Fernández Morató
 
 Puedes empezar a navegar por la documentación utilizando el navbar a tu izquierda.
 
 Esperamos que esta documentación sea clara, y de utilidad.
 
-![databases](https://i.postimg.cc/0QzzjFCN/wordcloud-p1-bd.png)
+![hipodromo](https://www.hipodromodelazarzuela.es/sites/default/files/styles/original/public/page_dragdrop/slider_cabecera/Hipodromo%2002%20recortada.jpg?itok=2aUNOK-8)

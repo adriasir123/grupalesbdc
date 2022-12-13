@@ -39,6 +39,7 @@ nav:
             - 'Oracle Enterprise Manager': 'p1-servidores-clientes/rg/oracle-enterprise-manager.md'
     - Práctica 4 grupal de PL/SQL:
         - 'Introducción': 'p4-grupal-plsql/intro.md'
+        - 'Pasos previos': 'p4-grupal-plsql/pasos-previos.md'
         - 'Ejercicio 1': 'p4-grupal-plsql/ejercicio1.md'
         - 'Ejercicio 2': 'p4-grupal-plsql/ejercicio2.md'
         - 'Ejercicio 3': 'p4-grupal-plsql/ejercicio3.md'
