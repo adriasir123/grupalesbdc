@@ -4,8 +4,6 @@ hide:
   - toc
 ---
 
-# Principal
-
 En esta web encontrarás todas nuestras prácticas.
 
 Los miembros del grupo somos:
