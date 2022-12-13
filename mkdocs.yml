@@ -6,9 +6,11 @@ theme:
     - content.code.annotate
     - navigation.tabs
     - navigation.sections
+    - navigation.top
   icon:
     logo: material/database
     repo: simple/git
+  favicon: material/database
   palette:
     - scheme: default
       primary: red
