@@ -10,7 +10,7 @@ theme:
   icon:
     logo: material/database
     repo: simple/git
-  favicon: material/database
+  favicon: img/favicon.ico
   palette:
     - scheme: default
       primary: red
