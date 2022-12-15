@@ -3,7 +3,7 @@
 Descargo el script de generación de tablas y datos:
 
 ```shell
-wget https://gist.githubusercontent.com/adriasir123/0896abce2b81714557d3c1e2a038c3cb/raw/e0db989401d04b1603cccb0a21288d40381ffe8e/gran-hipodromo-oracle.sql
+wget https://gist.githubusercontent.com/adriasir123/0896abce2b81714557d3c1e2a038c3cb/raw/312c27d4e56b292cfb4fb1d235eacb781b98a4e4/gran-hipodromo-oracle.sql
 ```
 
 Accedo como `sys`:
