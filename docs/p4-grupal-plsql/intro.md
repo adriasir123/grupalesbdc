@@ -6,7 +6,7 @@ Reparto de roles:
 
 - Capitán: Antonio Marchán Posada
 - Secretario: Adrián Jaramillo Rodríguez
-- Facilitadora: José Juan Hervás Carrasco
+- Facilitador: José Juan Hervás Carrasco
 - Portavoz: Arantxa Fernández Morató
 
 Puedes empezar a navegar por la documentación utilizando el navbar a tu izquierda.
