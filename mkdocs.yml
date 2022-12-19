@@ -50,6 +50,17 @@ nav:
         - 'Ejercicio 6': 'p4-grupal-plsql/ejercicio6.md'
         - 'Ejercicio 7': 'p4-grupal-plsql/ejercicio7.md'
         - 'Ejercicio 8': 'p4-grupal-plsql/ejercicio8.md'
+    - Práctica 5 usuarios:
+        - 'Introducción': 'p5-usuarios/intro.md'
+        - Responsabilidad individual:
+            - 'Alumno 1: Adrián': 'p5-usuarios/ri/alumno1.md'
+            - 'Alumno 2: José Juan': 'p5-usuarios/ri/alumno2.md'
+            - 'Alumno 3: Arantxa': 'p5-usuarios/ri/alumno3.md'
+            - 'Alumno 4: Antonio': 'p5-usuarios/ri/alumno4.md'
+        - Responsabilidad grupal:
+            - 'Caso práctico 1': 'p5-usuarios/rg/caso-practico-1.md'
+            - 'Caso práctico 2': 'p5-usuarios/rg/caso-practico-2.md'
+            - 'Ejercicio grupal 3': 'p5-usuarios/rg/ejercicio-grupal-3.md'
 markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
