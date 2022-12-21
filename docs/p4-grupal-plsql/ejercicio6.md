@@ -40,8 +40,8 @@ END LOOP;
 END RELLENARVARIABLESDNI;
 /
 ```
+## PASO 3
 
-# PASO 3
 Vamos a generar una función que realice la comprobación de que esa carrera existe, entonces en el bucle for vamos a recorrer el paquete de principio a fin buscando las coincidencias de que los nuevos parámetros que se inserten van a ser los mismos que los ya albergados en el array (tabla en memoria), así que si el nuevo dni introducido coincide con uno que esté dentro de la tabla y el nuevo código carrera coincide tabién, la función devolverá un 1, que sería similar a un booleano.
 
 
@@ -83,6 +83,7 @@ END IF;
 END CONTROLARCABALLOS;
 /
 ```
+
 ## PASO 4
 
 Por último podemos ver que en ACTUALIZARPARTICIPACIONES declaramos el índice, el cual cuando se llame procederá a ingresar una fila nueva, por tanto en los valores CODIGODNI y CODIGOCARRERA vamos a actualizar los nuevos valores con los introducidos por los parámetros, para así cuando se vuelva a ingresar, se vuelve a actualizar por cada insert que yo realice.
