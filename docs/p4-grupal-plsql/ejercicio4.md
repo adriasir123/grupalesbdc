@@ -1,6 +1,8 @@
 # Ejercicio 4
 
-## Añade una columna email en la tabla Clientes y rellénala con datos consistentes. Realiza un trigger que cuando se actualice la tabla Participaciones para introducir los resultados de la carrera envíe un correo electrónico a todos los apostantes del caballo ganador informándoles del importe apostado y el beneficio obtenido
+> Añade una columna email en la tabla Clientes y rellénala con datos consistentes. Realiza un trigger que cuando se actualice la tabla Participaciones para introducir los resultados de la carrera envíe un correo electrónico a todos los apostantes del caballo ganador informándoles del importe apostado y el beneficio obtenido
+
+## Modificación de la tabla y los datos
 
 ```
 ALTER TABLE clientes ADD email varchar2(50);
@@ -13,6 +15,8 @@ UPDATE clientes SET email = 'desaconnif@correo.com' WHERE dni = 'X5339679E';
 UPDATE clientes SET email = 'mayumiozaki@correo.com' WHERE dni = '18498310P';
 UPDATE clientes SET email = 'pacojovercobos@correo.com' WHERE dni = '02411561B';
 ```
+
+## Envío de correos mediante UTL_MAIL
 
 Para poder enviar correos desde PLSQL seguir los siguientes pasos conectándose como sysdba.
 
@@ -67,7 +71,7 @@ END;
 
 ![correo-prueba](/img/capturas-arantxa/82)
 
-**Creación del trigger:**
+## Creación del trigger
 
 ```
 CREATE OR REPLACE TRIGGER enviar_correo_clientes
@@ -113,7 +117,7 @@ END enviar_correo_clientes;
 /
 ```
 
-**Prueba:**
+## Prueba
 
 ```
 insert into clientes values ('49034862N', 'Arantxa', 'Fernandez', '', 'Avenida Ramón y Cajal', 'Dos Hermanas', 'Sevilla', '628806858', 'ara.fer.mor@gmail.com');
@@ -136,7 +140,6 @@ insert into participaciones values(13, 3, 'Y6857984L', 1, 1);
    select * from dba_network_acls;
    select * from dba_network_acl_privileges;
    ```
-
    Procedimientos para borrar un privilegio de una ACL y para borrar una ACL:
   ```
   BEGIN
