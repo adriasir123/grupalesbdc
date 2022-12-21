@@ -23,7 +23,7 @@ END CONTROLPROPIETARIOS;
 /
 ```
 ## PASO 2
-Creamos un trigger que realice la función de rellenar las tablas que hemos creado en el paquete, esto afectará a la tabla que hemos creado en memoria, entonces en ningún momento toca la tabla participaciones, por lo tanto no mutará, así que se le puede hacer consultas y cursores. El índice es el identificador que s ele proporciona a la fila de la tabla, como vemos en el bucle for, tenemos un índice que al ser recorrido va insertando los datos de la tabla participaciones en el índice, y generará una nueva fila (+1) hasta que se hayan insertado todos los datos.
+Creamos un trigger que realice la función de rellenar las tablas que hemos creado en el paquete, esto afectará a la tabla que hemos creado en memoria entonces en ningún momento toca la tabla participaciones, por lo tanto no mutará, así que se le puede hacer consultas y cursores. El índice es el identificador que se le proporciona a la fila de la tabla, como vemos en el bucle for, tenemos un índice que al ser recorrido va insertando los datos de la tabla participaciones en el índice, y generará una nueva fila (+1) hasta que se hayan insertado todos los datos.
 
 ```sql
 CREATE OR REPLACE TRIGGER RELLENARVARIABLESDNI
@@ -42,7 +42,7 @@ END RELLENARVARIABLESDNI;
 ```
 
 # PASO 3
-Vamos a generar una función que realice la comprobación de que esa carrera existe, entonces en el bucle for vamos a recorrer el paquete de principio a fin buscando las coincidencias de que los nuevos parámetros que se inserten van a ser los mismos, que los que ya se albergan en el array (tabla en memoria), así que si el nuevo dni que introduzca coincide con uno que esté dentro de la tabla y el nuevo código carrera coincide tabién, la función devolverá un 1, que sería similar a un booleano.
+Vamos a generar una función que realice la comprobación de que esa carrera existe, entonces en el bucle for vamos a recorrer el paquete de principio a fin buscando las coincidencias de que los nuevos parámetros que se inserten van a ser los mismos que los ya albergados en el array (tabla en memoria), así que si el nuevo dni introducido coincide con uno que esté dentro de la tabla y el nuevo código carrera coincide tabién, la función devolverá un 1, que sería similar a un booleano.
 
 
 ```sql
