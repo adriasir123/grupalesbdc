@@ -129,29 +129,26 @@ insert into participaciones values(13, 3, 'Y6857984L', 1, 1);
 ![inserts](/img/capturas-arantxa/83.png)
 ![correo-enviado](/img/capturas-arantxa/84.png)
 
-> **Comandos que me han ayudado a solucionar algunos problemas con UTL_MAIL:**
->
-> Para ver las ACL creadas y los pivilegios asignados a esas ACLs:
->
-> ```
-> select * from dba_network_acls;
-> select * from dba_network_acl_privileges;
-> ```
->
-> Procedimientos para borrar un privilegio de una ACL y para borrar una ACL:
->
->```
->BEGIN
->  DBMS_NETWORK_ACL_ADMIN.DELETE_PRIVILEGE(
->        acl         => 'aclmail.xml',
->        principal   => 'ADMIN');
->END;
->/
->
->BEGIN
->   DBMS_NETWORK_ACL_ADMIN.DROP_ACL(
->      acl => 'aclmail.xml');
->END;
->/
->```
->
+!!! info "**Comandos que me han ayudado a solucionar algunos problemas con UTL_MAIL:**"
+
+  Para ver las ACL creadas y los pivilegios asignados a esas ACLs:
+   ```
+   select * from dba_network_acls;
+   select * from dba_network_acl_privileges;
+   ```
+
+   Procedimientos para borrar un privilegio de una ACL y para borrar una ACL:
+  ```
+  BEGIN
+    DBMS_NETWORK_ACL_ADMIN.DELETE_PRIVILEGE(
+          acl         => 'aclmail.xml',
+          principal   => 'ADMIN');
+  END;
+  /
+
+  BEGIN
+     DBMS_NETWORK_ACL_ADMIN.DROP_ACL(
+        acl => 'aclmail.xml');
+  END;
+  /
+  ```
