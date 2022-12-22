@@ -76,7 +76,7 @@ V_DNIPROP CABALLOS.DNIPROPIETARIO%TYPE;
 BEGIN
 select DNIPROPIETARIO into V_DNIPROP from CABALLOS where CODIGOCABALLO = :new.CODIGOCABALLO;
 IF EXISTECARRERADNI(V_DNIPROP,:NEW.CODIGOCARRERA) = 1 THEN
-    RAISE_APPLICATION_ERROR(-20002,'No puedes meter más de un caballo por propietario');
+    RAISE_APPLICATION_ERROR(-20003,'No puedes meter más de un caballo por propietario');
 ELSE
     ACTUALIZARPARTICIPACIONES(V_DNIPROP,:NEW.CODIGOCARRERA);
 END IF;
@@ -100,4 +100,9 @@ END;
 /
 ```
 
+## PRUEBA DE FUNCIONAMIENTO
 
+insert into participaciones values(90, 10, '09849927Q', 3, 4);
+insert into participaciones values(90, 11, '09849927Q', 7, 6);
+
+![prueba1](/img/capturas-antonio/comprobar-mutante.png)
