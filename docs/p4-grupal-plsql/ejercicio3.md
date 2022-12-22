@@ -3,10 +3,6 @@
 > Realiza un trigger que controle que solo participan en una carrera caballos en el rango de edades permitido. Si es necesario, cambia el modelo de datos
 
 ```sql
--- Este procedimiento comprueba que la edad de un caballo sea permitida
--- según la carrera. Si la edad del caballo está en el rango permitido o no,
--- lo controla el parámetro OUT BOOLEAN
-
 CREATE OR REPLACE PROCEDURE comprobar_edad(p_codigocarrera participaciones.codigocarrera%TYPE, p_codigocaballo participaciones.codigocaballo%TYPE, p_control OUT BOOLEAN)
 IS
   v_fechanac_caballo caballos.fechanac%TYPE;
@@ -32,16 +28,13 @@ EXCEPTION
   WHEN NO_DATA_FOUND THEN
     RAISE_APPLICATION_ERROR(-20002, 'La carrera o caballo, o ambos, que estas intentando insertar no existen');
 END;
-/ -- (1)!
+/
+-- (1)!
 ```
 
 1. Este procedimiento comprueba que la edad de un caballo sea permitida según la carrera. Si la edad del caballo está en el rango permitido o no, lo controla el parámetro OUT BOOLEAN
 
 ```sql
--- Este es el bloque de código principal, el trigger que
--- monitoriza las participaciones. Desde aquí se llama al 
--- procedimiento hijo anterior
-
 CREATE OR REPLACE TRIGGER monitorizar_participaciones
   BEFORE INSERT OR UPDATE ON participaciones
   FOR EACH ROW
@@ -54,7 +47,10 @@ BEGIN
   END IF;
 END;
 /
+-- (1)!
 ```
+
+1. Este es el bloque de código principal, el trigger que monitoriza las participaciones. Desde aquí se llama al procedimiento hijo anterior
 
 !!! danger
 
