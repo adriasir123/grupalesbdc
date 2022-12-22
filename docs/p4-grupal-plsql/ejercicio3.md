@@ -32,8 +32,10 @@ EXCEPTION
   WHEN NO_DATA_FOUND THEN
     RAISE_APPLICATION_ERROR(-20002, 'La carrera o caballo, o ambos, que estas intentando insertar no existen');
 END;
-/
+/ -- (1)!
 ```
+
+1. Este procedimiento comprueba que la edad de un caballo sea permitida según la carrera. Si la edad del caballo está en el rango permitido o no, lo controla el parámetro OUT BOOLEAN
 
 ```sql
 -- Este es el bloque de código principal, el trigger que
