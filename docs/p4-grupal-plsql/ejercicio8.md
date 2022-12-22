@@ -5,10 +5,6 @@
 ## Código
 
 ```sql
--- Este procedimiento comprueba si un cliente es propietario o no,
--- recibiendo el dni insertado y buscándolo en la tabla propietarios.
--- Se utiliza un parámetro OUT BOOLEAN para responder si el cliente era propietario o no.
-
 CREATE OR REPLACE PROCEDURE comprobar_si_propietario(p_dnicliente apuestas.dnicliente%TYPE, p_control_propietario OUT BOOLEAN)
 IS
   v_propietario_si_no NUMBER;
@@ -25,13 +21,12 @@ BEGIN
   END IF;
 END;
 /
+-- (1)!
 ```
 
-```sql
--- Este procedimiento comprueba si un caballo es propiedad de un propietario o no,
--- recibiendo el código del caballo y el dni del propietario, buscándolo en la tabla caballos.
--- Se utiliza un parámetro OUT BOOLEAN para responder si el caballo era suyo o no.
+1. Este procedimiento comprueba si un cliente es propietario o no, recibiendo el dni insertado y buscándolo en la tabla propietarios. Se utiliza un parámetro OUT BOOLEAN para responder si el cliente era propietario o no.
 
+```sql
 CREATE OR REPLACE PROCEDURE comprobar_si_caballo_suyo(p_codigocaballo participaciones.codigocaballo%TYPE, p_dnicliente apuestas.dnicliente%TYPE, p_control_caballo_suyo OUT BOOLEAN)
 IS
   v_caballo_suyo_si_no NUMBER;
@@ -48,15 +43,12 @@ BEGIN
   END IF;
 END;
 /
+-- (1)!
 ```
 
-```sql
--- Este procedimiento comprueba si alguno de los caballos de una carrera específica
--- es propiedad del propietario que intenta apostar.
--- Recibe el código de la carrera, el dni del propietario, y
--- se utiliza un parámetro OUT BOOLEAN para responder si en la carrera
--- había algún caballo suyo o no
+1. Este procedimiento comprueba si un caballo es propiedad de un propietario o no, recibiendo el código del caballo y el dni del propietario, buscándolo en la tabla caballos. Se utiliza un parámetro OUT BOOLEAN para responder si el caballo era suyo o no.
 
+```sql
 CREATE OR REPLACE PROCEDURE comprobar_carrera(p_codigocarrera apuestas.codigocarrera%TYPE, p_dnicliente apuestas.dnicliente%TYPE, p_control_carrera OUT BOOLEAN)
 IS
   CURSOR c_caballos IS
@@ -79,13 +71,12 @@ BEGIN
   END IF;
 END;
 /
+-- (1)!
 ```
 
-```sql
--- Este es el bloque de código principal, el trigger que
--- monitoriza las apuestas. Desde aquí se llama a los 
--- procedimientos hijos anteriores
+1. Este procedimiento comprueba si alguno de los caballos de una carrera específica es propiedad del propietario que intenta apostar. Recibe el código de la carrera, el dni del propietario, y se utiliza un parámetro OUT BOOLEAN para responder si en la carrera había algún caballo suyo o no.
 
+```sql
 CREATE OR REPLACE TRIGGER monitorizar_apuestas
   BEFORE INSERT OR UPDATE ON apuestas
   FOR EACH ROW
@@ -106,7 +97,10 @@ BEGIN
   END IF;
 END;
 /
+-- (1)!
 ```
+
+1. Este es el bloque de código principal, el trigger que monitoriza las apuestas. Desde aquí se llama a los procedimientos hijos anteriores
 
 ## Requerimientos
 
