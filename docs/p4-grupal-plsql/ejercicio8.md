@@ -5,6 +5,10 @@
 ## Código
 
 ```sql
+-- Este procedimiento comprueba si un cliente es propietario o no,
+-- recibiendo el dni insertado y buscándolo en la tabla propietarios.
+-- Se utiliza un parámetro OUT BOOLEAN para responder si el cliente era propietario o no.
+
 CREATE OR REPLACE PROCEDURE comprobar_si_propietario(p_dnicliente apuestas.dnicliente%TYPE, p_control_propietario OUT BOOLEAN)
 IS
   v_propietario_si_no NUMBER;
