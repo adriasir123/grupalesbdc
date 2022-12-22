@@ -29,7 +29,7 @@ END;
 
 ```sql
 -- Este procedimiento comprueba si un caballo es propiedad de un propietario o no,
--- recibiendo el código del caballo y y el dni del propietario, buscándolo en la tabla caballos.
+-- recibiendo el código del caballo y el dni del propietario, buscándolo en la tabla caballos.
 -- Se utiliza un parámetro OUT BOOLEAN para responder si el caballo era suyo o no.
 
 CREATE OR REPLACE PROCEDURE comprobar_si_caballo_suyo(p_codigocaballo participaciones.codigocaballo%TYPE, p_dnicliente apuestas.dnicliente%TYPE, p_control_caballo_suyo OUT BOOLEAN)
