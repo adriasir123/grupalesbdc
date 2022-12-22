@@ -9,7 +9,7 @@ root@debian:/home/usuario# apt update && apt install postgresql -y
 
 Comprobamos si el servicio está activo, si no es así lo iniciamos con `sudo systemctl start postgresql`
 
-![postgres](/img/alumno4/postgres-instalacion-1.png)
+![postgres](/img/capturas-antonio/postgres-instalacion-1.png)
 
 Tras esto, comprobaremos que el usuario postrgres existe, ya que es el que nos dará el acceso a la base de datos, lo podemos comprobar con el siguiente comando:
 
@@ -19,7 +19,7 @@ Si no tenemos el usuario creado, lo haremos con `sudo useradd postgres`
 
 Con el comando groups podemos ver que ese usuario tiene certificación SSL, con lo cual podrá conectarse a la base de datos ya que su usuario tiene esos derechos:
 
-![postgres](/img/alumno4/postgres-instalacion-2.png)
+![postgres](/img/capturas-antonio/postgres-instalacion-2.png)
 
 ```
 postgres@debian:/home/usuario$ createdb dark-souls
@@ -58,7 +58,7 @@ Con esto podré conectarme desde un cliente a un servidor postgres
 A continuación a través del fichero **pg_hba.conf** podemos decir qué máquina va a entrar a nuestro servidor, sirve de filtro de conexiones.
 
 
-![postgres](/img/alumno4/postgres-instalacion-5.png)
+![postgres](/img/capturas-antonio/postgres-instalacion-5.png)
 
 Nos vamos a la máquina cliente y hacemos lo siguiete:
 
@@ -66,7 +66,7 @@ Nos vamos a la máquina cliente y hacemos lo siguiete:
 sudo apt update && sudo apt install postgresql-client -y
 ```
 Ahora nos faltaría saber por qué puerto está escuchando:
-![postgres](/img/alumno4/postgres-instalacion-7.png)
+![postgres](/img/capturas-antonio/postgres-instalacion-7.png)
 
 luego creamos el usuario en el cual pondremos como parámetro en el cliente:
 createuser -s antonio -P
@@ -76,7 +76,7 @@ Con el siguiente comando estamos diciendo que se conecte al siguiente host, con 
 
 psql -h 192.168.122.188 -p 5432 -U antonio -d dark-souls
 
-![postgres](/img/alumno4/postgres-instalacion-6.png)
+![postgres](/img/capturas-antonio/postgres-instalacion-6.png)
 
 ##Instalación de un servidor Mariadb y su posterior acceso
 
@@ -111,7 +111,7 @@ Ahora procedemos a instalar el cliente en nuestra máquina:
 ```
 sudo apt install mariadb-client
 ```
-![mariadb](/img/alumno4/mariadb-instalacion-2.png)
+![mariadb](/img/capturas-antonio/mariadb-instalacion-2.png)
 
 ##Instalación de un servidor Mongodb y su posterior acceso
 
@@ -160,7 +160,7 @@ Ahora vamos a entrar en /etc/mongod.conf y especificaremos lo siguiente:
 security:
 authorization: enabled
 ```
-![mongo](/img/alumno4/mongo-instalacion-2.png)
+![mongo](/img/capturas-antonio/mongo-instalacion-2.png)
 
 
 Ahora procedemos a importar nuestra base de datos guardada en JSON, ya que es el sistema de ficheros con el que trabaja Mongo, así podremos transformarlo en colecciones dentro de la base de datos SOULS que se especifica en el siguiente comando:
@@ -179,7 +179,7 @@ Accederemos a la base de datos creada anteriormente con el siguiente comando:
 
 `use SOULS`
 
-![mongo](/img/alumno4/mongo-instalacion-4.png)
+![mongo](/img/capturas-antonio/mongo-instalacion-4.png)
 
 Ahora salimos y volvemos a entrar en el archivo de configuración de mongo /etc/mongod.conf
 
@@ -198,7 +198,7 @@ net:
  ` mongo --host 192.168.122.168 -u AMP`
 
 
-![mongo](/img/alumno4/mongo-instalacion-5.png)
+![mongo](/img/capturas-antonio/mongo-instalacion-5.png)
 
 
 ##Conexión de aplicación web a través de Oracle, Pyhton3 y Flask
@@ -246,9 +246,9 @@ Ejecutaremos python3 app.py para arrancar el servidor flask que nos dará el acc
 
 IMPORTANTE: Para realizar esto debemos previamente activar el listener y hacer un startup para levantar la base de datos, podemos comprobarlo antes accediendo desde un cliente remoto por consola.
 
- ![oracle](/img/alumno4/oracle-web1.png)
+ ![oracle](/img/capturas-antonio/oracle-web1.png)
 
 
 Aquí podemos ver que al entrar a través del login, podemos ver las tablas de la base de datos.
 
- ![oracle](/img/alumno4/oracle-web2.png)
+ ![oracle](/img/capturas-antonio/oracle-web2.png)
