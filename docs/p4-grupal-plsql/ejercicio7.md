@@ -4,7 +4,7 @@
 
 En un primer momento hice este trigger, pero éste no contempla el error de mutación de la tabla al hacer un insert all. Si se hacen los inserts uno a uno sí funciona.
 
-```
+```sql
 CREATE OR REPLACE TRIGGER evitar_tres_carreras_jockey
 BEFORE INSERT OR UPDATE ON participaciones
 FOR EACH ROW
@@ -28,11 +28,11 @@ END;
 
 Las carreras con código 10, 11 y 12 son en la misma fecha (13-11-2016), voy a añadir otra carrera que sea en esa fecha y voy a añadir las participaciones de un mismo jockey en esas carreras.
 
-```
+```sql
 insert into carrerasProfesionales  values (14, to_date('13-11-2016 13:00', 'DD-MM-YYYY HH24:MI'), 6125, 450, '01-01-2016', '01-06-2016');
 ```
 
-```
+```sql
 insert into participaciones values(10, 2, 'Y6857984L', 2, 5);
 insert into participaciones values(11, 2, 'Y6857984L', 7, 4);
 insert into participaciones values(12, 2, 'Y6857984L', 1, 3);
@@ -43,7 +43,7 @@ insert into participaciones values(14, 2, 'Y6857984L', 1, 1);
 
 Con insert all vemos que nos aparece el problema de la tabla mutando.
 
-```
+```sql
 insert all into participaciones values(10, 5, '00015258D', 3, 4) into participaciones values(11, 5, '00015258D', 5, 1) into participaciones values(12, 5, '00015258D', 2, 5) into participaciones values(14, 2, '00015258D', 1, 1) select * from dual;
 ```
 
@@ -51,7 +51,7 @@ insert all into participaciones values(10, 5, '00015258D', 3, 4) into participac
 
 Borro los datos que he insertado y el trigger y vamos a intentar hacerlo de forma que no de error por mutación de la tabla.
 
-```
+```sql
 delete from participaciones where codigocarrera=10 and codigocaballo=2 and dnijockey='Y6857984L';
 
 delete from participaciones where codigocarrera=11 and codigocaballo=2 and dnijockey='Y6857984L';
@@ -67,7 +67,7 @@ drop trigger evitar_tres_carreras_jockey;
 
 Mi código lo muestro a continuación pero no hemos conseguido hacer que funcione, no vemos dónde está el error (ningún compañero del grupo). El error es que al hacer inserts individuales no detecta que haya jockeys que ya hayan participado tres veces ese día, y al hacer insert all aparece un error como el siguiente:
 
-```
+```sql
 ORA-04091: la tabla ADMIN.PARTICIPACIONES esta mutando, puede que el
 disparador/la funcion no puedan verla
 ORA-06512: en "ADMIN.RELLENARTABLACONTROLJOCKEYS", linea 3
@@ -76,9 +76,9 @@ ORA-04088: error durante la ejecucion del disparador
 'ADMIN.RELLENARTABLACONTROLJOCKEYS'
 ```
 
-**Módulos de progrmación:**
+**Módulos de programación:**
 
-```
+```sql
 CREATE OR REPLACE PACKAGE CONTROLJOCKEYS
 AS
 TYPE tREGISTROJOCKEYFECHA IS RECORD
@@ -172,7 +172,7 @@ Creo que el error puede estar en RELLENARTABLACONTROLJOCKEYS. A continuación co
 
 - He probado si la función superacarreras funcionaba y he comprobado que efectivamente funciona:
 
-```
+```sql
 select superacarreras('Y6857984L', '13-11-2016') from dual;
 
 SUPERACARRERAS('Y6857984L','13-11-2016')
@@ -194,7 +194,7 @@ SUPERACARRERAS('09849927Q','13-11-2016')
 
 - He probado a meter "prints" en el código para encontrar dónde falla, por ejemplo en RELLENARTABLACONTROLJOCKEYS:
 
-```
+```sql
 CREATE OR REPLACE TRIGGER RELLENARTABLACONTROLJOCKEYS
 BEFORE INSERT OR UPDATE ON PARTICIPACIONES
 DECLARE
@@ -220,7 +220,7 @@ END;
 
 - También he probado lo anterior en la función superacarreras.
 
-```
+```sql
 CREATE OR REPLACE FUNCTION superacarreras (p_dni PARTICIPACIONES.DNIJOCKEY%TYPE, p_fecha DATE)
 RETURN NUMBER
 AS
@@ -240,7 +240,7 @@ BEGIN
 
 - He hecho lo mismo con el último trigger MaxTresCarreras.
 
-```
+```sql
 CREATE OR REPLACE TRIGGER MaxTresCarreras
 ...
 BEGIN
@@ -267,7 +267,7 @@ Al hacer un insert individual me aparece el mensaje de que ya ha participado má
 
 Para borrar los datos de la colección he hecho lo siguiente:
 
-```
+```sql
 CREATE OR REPLACE PROCEDURE borrar_controljockeys
 AS
   -- Declare a variable to hold the number of elements in the collection
