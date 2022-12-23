@@ -51,29 +51,29 @@ end;
 
 - Instertamos nueva información en las tablas carrerasProfesionales y participaciones para comprobar si el trigger funciona correctamente:
 
-```sql
+    ```sql
 
-SQL> insert into carrerasProfesionales values (13, to_date('20-11-2016 13:00' , 'DD-MM-YYYY HH24:MI'), 8000, 650, to_date('01-01-2010', 'DD-MM-YYYY'), to_date('01-06-2013', 'DD-MM-YYYY'));
+    SQL> insert into carrerasProfesionales values (13, to_date('20-11-2016 13:00' , 'DD-MM-YYYY HH24:MI'), 8000, 650, to_date('01-01-2010', 'DD-MM-YYYY'), to_date('01-06-2013', 'DD-MM-YYYY'));
 
-1 fila creada.
+    1 fila creada.
 
-SQL> insert into participaciones values(13, 7, 'X6785562X', 1, 1);
+    SQL> insert into participaciones values(13, 7, 'X6785562X', 1, 1);
 
-1 fila creada.
+    1 fila creada.
 
-SQL> insert into participaciones values(13, 4, '85108890N', 5, 5);
+    SQL> insert into participaciones values(13, 4, '85108890N', 5, 5);
 
-1 fila creada.
+    1 fila creada.
 
-DNI	       NOMBRE          APELLIDO1       APELLIDO2	   CUOTAMENSUAL IMPORTETOTALPREMIOS
----------- --------------- --------------- --------------- ------------ -------------------
+    DNI	       NOMBRE          APELLIDO1       APELLIDO2	   CUOTAMENSUAL IMPORTETOTALPREMIOS
+    ---------- --------------- --------------- --------------- ------------ -------------------
 
-21913124n  Horacio	       Arreguy	       Fazzio		   250          16607
-	      
-Z7782152S  Robert	       Chase				           300          8750
-	       
-83069279H  Lucas	       Martinez	       Munoz		   200,7        15000
-	       
-X58056225B Gustavo	       Scarpello				       100          7000
+    21913124n  Horacio	       Arreguy	       Fazzio		   250          16607
+            
+    Z7782152S  Robert	       Chase				           300          8750
+            
+    83069279H  Lucas	       Martinez	       Munoz		   200,7        15000
+            
+    X58056225B Gustavo	       Scarpello				       100          7000
 
-```
+    ```
