@@ -45,6 +45,7 @@ nav:
         - 'Ejercicio 1': 'p4-grupal-plsql/ejercicio1.md'
         - 'Ejercicio 2': 'p4-grupal-plsql/ejercicio2.md'
         - 'Ejercicio 3': 'p4-grupal-plsql/ejercicio3.md'
+        - 'Ejercicio 3 PostgreSQL': 'p4-grupal-plsql/ejercicio3-postgres.md'
         - 'Ejercicio 4': 'p4-grupal-plsql/ejercicio4.md'
         - 'Ejercicio 5': 'p4-grupal-plsql/ejercicio5.md'
         - 'Ejercicio 6': 'p4-grupal-plsql/ejercicio6.md'
