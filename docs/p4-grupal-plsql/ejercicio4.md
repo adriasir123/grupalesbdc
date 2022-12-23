@@ -69,7 +69,7 @@ END;
 /
 ```
 
-![correo-prueba](/img/capturas-arantxa/82)
+![correo-prueba](/img/capturas-arantxa/82.png)
 
 ## Creación del trigger
 
