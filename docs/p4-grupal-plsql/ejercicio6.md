@@ -2,10 +2,9 @@
 
 > Realiza los módulos de programación necesarios para evitar que un mismo propietario envíe dos caballos a una misma carrera.
 
-
 ## PASO 1
-Primero voy a crear el paquete que albergue la tabla vacía con el código del dni de la tabla caballos, y el código de la carrera de la tabla participaciones, le damos los nombres que consideremos necesarios y al final al realizar el llamamiento del paquete debemos utilizar CONTROLPROPIETARIOS.CONTAR y el nombre del registro de la tabla, ya sea codigodni o codigocarrera.
 
+Primero voy a crear el paquete que albergue la tabla vacía con el código del dni de la tabla caballos, y el código de la carrera de la tabla participaciones, le damos los nombres que consideremos necesarios y al final al realizar el llamamiento del paquete debemos utilizar CONTROLPROPIETARIOS.CONTAR y el nombre del registro de la tabla, ya sea codigodni o codigocarrera.
 
 ```sql
 CREATE OR REPLACE PACKAGE CONTROLPROPIETARIOS
@@ -22,7 +21,9 @@ CONTAR tTABLACONTROLDNI;
 END CONTROLPROPIETARIOS;
 /
 ```
+
 ## PASO 2
+
 Creamos un trigger que realice la función de rellenar las tablas que hemos creado en el paquete, esto afectará a la tabla que hemos creado en memoria entonces en ningún momento toca la tabla participaciones, por lo tanto no mutará, así que se le puede hacer consultas y cursores. El índice es el identificador que se le proporciona a la fila de la tabla, como vemos en el bucle for, tenemos un índice que al ser recorrido va insertando los datos de la tabla participaciones en el índice, y generará una nueva fila (+1) hasta que se hayan insertado todos los datos.
 
 ```sql
@@ -40,10 +41,10 @@ END LOOP;
 END RELLENARVARIABLESDNI;
 /
 ```
+
 ## PASO 3
 
 Vamos a generar una función que realice la comprobación de que esa carrera existe, entonces en el bucle for vamos a recorrer el paquete de principio a fin buscando las coincidencias de que los nuevos parámetros que se inserten van a ser los mismos que los ya albergados en el array (tabla en memoria), así que si el nuevo dni introducido coincide con uno que esté dentro de la tabla y el nuevo código carrera coincide tabién, la función devolverá un 1, que sería similar a un booleano.
-
 
 ```sql
 CREATE OR REPLACE FUNCTION EXISTECARRERADNI (p_dni CABALLOS.DNIPROPIETARIO%type, p_carrera PARTICIPACIONES.CODIGOCARRERA%type)
