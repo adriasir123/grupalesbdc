@@ -1,24 +1,26 @@
 # Ejercicio 2
 
-> Realizar un procedimiento llamado MostrarInformes que recibirá tres parámetros. El primero determinará el tipo de
-informe que queremos obtener y los otros dos dependerán del tipo de informe.
+> Realizar un procedimiento llamado MostrarInformes que recibirá tres parámetros. El primero determinará el tipo de informe que queremos obtener y los otros dos dependerán del tipo de informe.
 
 ## Código
 
 - Mostrar Informes:
 
 ```sql
-create or replace procedure MostrarInformes(p_tipoinforme varchar2, p_segundo carrerasprofesionales.fechahora%type, p_tercero carrerasprofesionales.codigocarrera%type)
-is
-begin
-    if p_tipoinforme = 'tipo1' then
+CREATE OR REPLACE PROCEDURE mostrarinformes(
+    p_tipoinforme VARCHAR2,
+    p_segundo carrerasprofesionales.fechahora%type,
+    p_tercero carrerasprofesionales.codigocarrera%type
+) IS
+BEGIN
+    IF p_tipoinforme = 'tipo1' THEN
         informetipo1(p_segundo);
-    elsif p_tipoinforme = 'tipo2' then
+    ELSIF p_tipoinforme = 'tipo2' THEN
         informetipo2(p_tercero);
-    elsif p_tipoinforme = 'tipo3' then
+    ELSIF p_tipoinforme = 'tipo3' THEN
         informe_tipo3(p_tercero);
-    end if;
-end MostrarInformes;
+    END IF;
+END mostrarinformes;
 /
 ```
 
@@ -55,56 +57,79 @@ end mostrar_horas;
 - Informe tipo2:
 
 ```sql
-create or replace procedure informetipo2 (p_tercero carrerasprofesionales.CODIGOCARRERA%type)
-is
-begin
+CREATE OR REPLACE PROCEDURE informetipo2 (
+    p_tercero carrerasprofesionales.codigocarrera%type
+) IS
+BEGIN
     dbms_output.put_line('Código Carrera: ' || p_tercero );
     mostrar_fecha(p_tercero);
     mostrar_horas2(p_tercero);
     importe_premio(p_tercero);
     caballos_nacidos(p_tercero);
     mostrar_clasificacion(p_tercero);
-end informetipo2;
+END informetipo2;
 /
 
-create or replace procedure mostrar_fecha (p_tercero carrerasprofesionales.CODIGOCARRERA%type)
-is
-    v_fecha carrerasprofesionales.FECHAHORA%type;
-begin
-    select fechahora into v_fecha from CARRERASPROFESIONALES where CODIGOCARRERA=p_tercero;
+CREATE OR REPLACE PROCEDURE mostrar_fecha (
+    p_tercero carrerasprofesionales.codigocarrera%type
+) IS
+    v_fecha carrerasprofesionales.fechahora%type;
+BEGIN
+    SELECT fechahora INTO v_fecha
+    FROM carrerasprofesionales
+    WHERE codigocarrera=p_tercero;
+    
     dbms_output.put_line('Fecha: ' || v_fecha );
-end mostrar_fecha;
+END mostrar_fecha;
 /
 
-create or replace procedure mostrar_horas2(p_tercero carrerasprofesionales.CODIGOCARRERA%type)
-is
-    v_hora CABALLOS.NOMBRE%type;
-begin
-    select to_char(FECHAHORA,'HH24:MM') into v_hora from CARRERASPROFESIONALES where CODIGOCARRERA=p_tercero;  
+CREATE OR REPLACE PROCEDURE mostrar_horas2(
+    p_tercero carrerasprofesionales.codigocarrera%type
+) IS
+    v_hora caballos.nombre%type;
+BEGIN
+    SELECT to_char(fechahora, 'HH24:MM') INTO v_hora
+    FROM carrerasprofesionales
+    WHERE codigocarrera=p_tercero;
+    
     dbms_output.put_line('Hora: ' || v_hora );
-end mostrar_horas2;
+END mostrar_horas2;
 /
 
-create or replace procedure importe_premio(p_tercero carrerasprofesionales.CODIGOCARRERA%type)
-is
-    v_importe   CARRERASPROFESIONALES.IMPORTEPREMIO%type;
-    v_limite    CARRERASPROFESIONALES.LIMITEAPUESTA%type;
-begin
-    select IMPORTEPREMIO into v_importe from CARRERASPROFESIONALES where CODIGOCARRERA=p_tercero;
-    select LIMITEAPUESTA into v_limite from CARRERASPROFESIONALES where CODIGOCARRERA=p_tercero;
+CREATE OR REPLACE PROCEDURE importe_premio(
+    p_tercero carrerasprofesionales.codigocarrera%type
+) IS
+    v_importe carrerasprofesionales.importepremio%type;
+    v_limite  carrerasprofesionales.limiteapuesta%type;
+BEGIN
+    SELECT importepremio INTO v_importe
+    FROM carrerasprofesionales
+    WHERE codigocarrera=p_tercero;
+
+    SELECT limiteapuesta INTO v_limite
+    FROM carrerasprofesionales
+    WHERE codigocarrera=p_tercero;
+    
     dbms_output.put_line('Importe Premio: ' || v_importe || '       ' || 'Límite apuesta: ' || v_limite);
-end importe_premio;
+END importe_premio;
 /
 
-create or replace procedure caballos_nacidos(p_tercero carrerasprofesionales.CODIGOCARRERA%type)
-is
-    v_min CARRERASPROFESIONALES.FECHANACMIN%type;
-    v_mac CARRERASPROFESIONALES.FECHANACMAC%type;
-begin
-    select FECHANACMIN into v_min from CARRERASPROFESIONALES where CODIGOCARRERA=p_tercero;
-    select FECHANACMAC into v_mac from CARRERASPROFESIONALES where CODIGOCARRERA=p_tercero;
+CREATE OR REPLACE PROCEDURE caballos_nacidos(
+    p_tercero carrerasprofesionales.codigocarrera%type
+) IS
+    v_min carrerasprofesionales.fechanacmin%type;
+    v_mac carrerasprofesionales.fechanacmac%type;
+BEGIN
+    SELECT fechanacmin INTO v_min
+    FROM carrerasprofesionales
+    WHERE codigocarrera=p_tercero;
+
+    SELECT fechanacmac INTO v_mac
+    FROM carrerasprofesionales
+    WHERE codigocarrera=p_tercero;
+    
     dbms_output.put_line('Caballos nacidos de : ' || v_min || ' a ' || v_mac);
-end caballos_nacidos;
+END caballos_nacidos;
 /
 
 create or replace procedure mostrar_clasificacion(p_tercero carrerasprofesionales.CODIGOCARRERA%type)
@@ -125,26 +150,34 @@ end mostrar_clasificacion;
 - Informe tipo3:
 
 ```sql
-create or replace procedure informe_tipo3(p_tercero carrerasprofesionales.CODIGOCARRERA%type)
-is
-begin
+CREATE OR REPLACE PROCEDURE informe_tipo3(
+    p_tercero carrerasprofesionales.codigocarrera%type
+) IS
+BEGIN
     comprobar_fecha(p_tercero);
     dbms_output.put_line('Código Carrera: ' || p_tercero );
     mostrar_fecha(p_tercero);
     mostrar_horas3(p_tercero);
     caballos_participantes(p_tercero);
-end informe_tipo3;
+END informe_tipo3;
 /
 
-create or replace procedure mostrar_horas3(p_tercero carrerasprofesionales.CODIGOCARRERA%type)
-is
-    v_hora date;
-    v_limite CARRERASPROFESIONALES.LIMITEAPUESTA%type;
-begin
-    select to_char(FECHAHORA,'HH24:MM') into v_hora from CARRERASPROFESIONALES where CODIGOCARRERA=p_tercero;  
-    select LIMITEAPUESTA into v_limite from CARRERASPROFESIONALES where CODIGOCARRERA=p_tercero;
+CREATE OR REPLACE PROCEDURE mostrar_horas3(
+    p_tercero carrerasprofesionales.codigocarrera%type
+) IS
+    v_hora   date;
+    v_limite carrerasprofesionales.limiteapuesta%type;
+BEGIN
+    SELECT to_char(fechahora, 'HH24:MM') INTO v_hora
+    FROM carrerasprofesionales
+    WHERE codigocarrera=p_tercero;
+
+    SELECT limiteapuesta INTO v_limite
+    FROM carrerasprofesionales
+    WHERE codigocarrera=p_tercero;
+    
     dbms_output.put_line('Hora: ' || v_hora || ' Limite apuesta: ' || v_limite );
-end mostrar_horas3;
+END mostrar_horas3;
 /
 
 create or replace procedure caballos_participantes(p_tercero carrerasprofesionales.CODIGOCARRERA%type)
@@ -172,14 +205,18 @@ end caballos_participantes;
 - Excepción de errores:
 
 ```sql
-CREATE OR REPLACE PROCEDURE comprobar_fecha (p_tercero carrerasprofesionales.CODIGOCARRERA%type)
-IS
-v_fecha CARRERASPROFESIONALES.FECHAHORA%type;
+CREATE OR REPLACE PROCEDURE comprobar_fecha (
+    p_tercero carrerasprofesionales.codigocarrera%type
+) IS
+    v_fecha carrerasprofesionales.fechahora%type;
 BEGIN
-    select FECHAHORA into v_fecha from CARRERASPROFESIONALES where CODIGOCARRERA=p_tercero;
-    if v_fecha < '01-01-2017' then
+    SELECT fechahora INTO v_fecha
+    FROM carrerasprofesionales
+    WHERE codigocarrera=p_tercero;
+    
+    IF v_fecha < '01-01-2017' THEN
         raise_application_error(-20001, 'La carrera ya se ha celebrado');
-    end if;
+    END IF;
 END;
 /
 ```
@@ -188,46 +225,46 @@ END;
 
 - Tipo 1:
 
-```sql
-SQL> exec MostrarInformes('tipo1',08-01-2017,1);
+    ```sql
+    SQL> exec MostrarInformes('tipo1',08-01-2017,1);
 
-Fecha: 08-JAN-17
-Hora: 09:00      Importe Premio: 8750
-Clasificación:  
-1 º Dagoberto N. de Julian
-4 º Mayo J.Gelabert
-7 º Daniela B.Fayos
-```
+    Fecha: 08-JAN-17
+    Hora: 09:00      Importe Premio: 8750
+    Clasificación:  
+    1 º Dagoberto N. de Julian
+    4 º Mayo J.Gelabert
+    7 º Daniela B.Fayos
+    ```
 
 - Tipo 2:
 
-```sql
-SQL> exec MostrarInformes('tipo2',08-01-2017,1);
+    ```sql
+    SQL> exec MostrarInformes('tipo2',08-01-2017,1);
 
-Código Carrera: 1
-Fecha: 08-JAN-17
-Hora: 09:01
-Importe Premio: 8750       Límite apuesta: 650
-Caballos nacidos de : 01-JAN-10 a 31-DEC-12
-1 º Dagoberto N. de Julian
-4 º Mayo J.Gelabert
-7 º Daniela B.Fayos
+    Código Carrera: 1
+    Fecha: 08-JAN-17
+    Hora: 09:01
+    Importe Premio: 8750       Límite apuesta: 650
+    Caballos nacidos de : 01-JAN-10 a 31-DEC-12
+    1 º Dagoberto N. de Julian
+    4 º Mayo J.Gelabert
+    7 º Daniela B.Fayos
 
-PL/SQL procedure successfully completed.
-```
+    PL/SQL procedure successfully completed.
+    ```
 
 - Tipo 3:
 
-```sql
-SQL> exec MostrarInformes('tipo3',1);
+    ```sql
+    SQL> exec MostrarInformes('tipo3',1);
 
-Código Carrera: 1
-Fecha: 08-JAN-17
-Hora: 09:01 Limite apuesta: 650
-Caballos Participantes:
-Nombre: Dagoberto Jockey: N. de Julian Tanto a uno: 6.8  NumVictorias: 1 Ultima Participacion: 13-NOV-16 Posicion: 8
-Nombre: Mayo Jockey: J.Gelabert Tanto a uno: 4.3  NumVictorias: 1 Ultima Participacion: 13-NOV-16 Posicion: 7
-Nombre: Daniela Jockey: B.Fayos Tanto a uno: 2.1 NumVictorias: 0 Ultima Participacion: 13-NOV-16 Posicion: 5
+    Código Carrera: 1
+    Fecha: 08-JAN-17
+    Hora: 09:01 Limite apuesta: 650
+    Caballos Participantes:
+    Nombre: Dagoberto Jockey: N. de Julian Tanto a uno: 6.8  NumVictorias: 1 Ultima Participacion: 13-NOV-16 Posicion: 8
+    Nombre: Mayo Jockey: J.Gelabert Tanto a uno: 4.3  NumVictorias: 1 Ultima Participacion: 13-NOV-16 Posicion: 7
+    Nombre: Daniela Jockey: B.Fayos Tanto a uno: 2.1 NumVictorias: 0 Ultima Participacion: 13-NOV-16 Posicion: 5
 
-PL/SQL procedure successfully completed.
-```
+    PL/SQL procedure successfully completed.
+    ```
