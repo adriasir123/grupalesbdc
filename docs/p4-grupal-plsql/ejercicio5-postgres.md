@@ -66,7 +66,7 @@ hipodromo-# from propietarios;
 ------------+---------+-----------+-----------+--------------+---------------------
  21913124n  | Horacio | Arreguy   | Fazzio    |       250.00 |              16607                    
  Z7782152S  | Robert  | Chase     |           |       300.00 |              8750   
- 83069279H  | Lucas   | Martínez  | Muñoz     |       200.70 |              7000     
+ 83069279H  | Lucas   | Martínez  | Muñoz     |       200.70 |              15000    
  X58056225B | Gustavo | Scarpello |           |       100.00 |              7000     
 (4 filas)
 ```
