@@ -1,40 +1,58 @@
 # Ejercicio 1
 
-
 > Realiza una función que reciba como parámetros un código de carrera y un código de caballo y devuelva el importe total que tendrá que pagar el hipódromo a los apostantes suponiendo que dicha carrera sea ganada por el caballo recibido como parámetro. Se deben contemplar las siguientes excepciones: Carrera inexistente, Caballo inexistente, Caballo no participante en esa carrera.
 
-
 ```sql
-create or replace function importetotal (p_codcarrera apuestas.codigocarrera%type, p_codcaballo apuestas.codigocaballo%type)
-return number
+CREATE OR REPLACE FUNCTION IMPORTETOTAL (
+    P_CODCARRERA APUESTAS.CODIGOCARRERA%TYPE,
+    P_CODCABALLO APUESTAS.CODIGOCABALLO%TYPE
+)
+RETURN NUMBER
 IS
-v_mult number;
+    V_MULT NUMBER;
 BEGIN
-COMPROBARVACIAS(p_codcarrera,p_codcaballo);
-select importeapostado*tantoauno into v_mult from apuestas where codigocarrera = p_codcarrera and codigocaballo = p_codcaballo;
-dbms_output.put_line('Hay que pagar al ganador un total de ' || v_mult || 'euros');
-return v_mult;
+    COMPROBARVACIAS(P_CODCARRERA, P_CODCABALLO);
+
+    SELECT IMPORTEAPOSTADO * TANTOAUNO INTO V_MULT
+    FROM APUESTAS
+    WHERE CODIGOCARRERA = P_CODCARRERA AND CODIGOCABALLO = P_CODCABALLO;
+    
+    DBMS_OUTPUT.PUT_LINE('Hay que pagar al ganador un total de ' || V_MULT || 'euros');
+    RETURN V_MULT;
 END;
 /
 
-CREATE OR REPLACE PROCEDURE COMPROBARVACIAS (p_codcarrera apuestas.codigocarrera%type, p_codcaballo apuestas.codigocaballo%type)
-IS
-v_carrera number;
-v_caballo number;
-v_caballocarrera number;
+CREATE OR REPLACE PROCEDURE COMPROBARVACIAS (
+    P_CODCARRERA APUESTAS.CODIGOCARRERA%TYPE,
+    P_CODCABALLO APUESTAS.CODIGOCABALLO%TYPE
+) IS
+    V_CARRERA        NUMBER;
+    V_CABALLO        NUMBER;
+    V_CABALLOCARRERA NUMBER;
 BEGIN
-    select count (*) into v_carrera from apuestas where codigocarrera = p_codcarrera;
-    if v_carrera = 0 then
-        raise_application_error(-20112, 'No existe la carrera');
-    end if;
-    select count (*) into v_caballo from apuestas where codigocaballo = p_codcaballo;
-    if v_caballo = 0 then
-        raise_application_error(-20110, 'No se ha encontrado el caballo');
-    end if;
-        select count (*) into v_caballocarrera from participaciones where codigocarrera = p_codcarrera and codigocaballo = p_codcaballo;
-    if v_caballocarrera = 0 then
-        raise_application_error(-20103, 'No existen caballos en esas en esas carreras');
-    end if;
+    SELECT COUNT (*) INTO V_CARRERA
+    FROM APUESTAS
+    WHERE CODIGOCARRERA = P_CODCARRERA;
+
+    IF V_CARRERA = 0 THEN
+        RAISE_APPLICATION_ERROR(-20112, 'No existe la carrera');
+    END IF;
+
+    SELECT COUNT (*) INTO V_CABALLO
+    FROM APUESTAS
+    WHERE CODIGOCABALLO = P_CODCABALLO;
+
+    IF V_CABALLO = 0 THEN
+        RAISE_APPLICATION_ERROR(-20110, 'No se ha encontrado el caballo');
+    END IF;
+
+    SELECT COUNT (*) INTO V_CABALLOCARRERA
+    FROM PARTICIPACIONES
+    WHERE CODIGOCARRERA = P_CODCARRERA AND CODIGOCABALLO = P_CODCABALLO;
+    
+    IF V_CABALLOCARRERA = 0 THEN
+        RAISE_APPLICATION_ERROR(-20103, 'No existen caballos en esas en esas carreras');
+    END IF;
 END;
 /
 ```
@@ -43,37 +61,55 @@ END;
 
     Este ejercicio está hecho para ser probado antes de utilizar la función.
 
-
 ```sql
-create or replace procedure importetotal2 (p_codcarrera apuestas.codigocarrera%type, p_codcaballo apuestas.codigocaballo%type)
-IS
-v_mult number;
+CREATE OR REPLACE PROCEDURE IMPORTETOTAL2 (
+    P_CODCARRERA APUESTAS.CODIGOCARRERA%TYPE,
+    P_CODCABALLO APUESTAS.CODIGOCABALLO%TYPE
+) IS
+    V_MULT NUMBER;
 BEGIN
-COMPROBARVACIAS(p_codcarrera,p_codcaballo);
-select importeapostado*tantoauno into v_mult from apuestas where codigocarrera = p_codcarrera and codigocaballo = p_codcaballo;
-dbms_output.put_line('Hay que pagar al ganador un total de ' || v_mult || 'euros');
+    COMPROBARVACIAS(P_CODCARRERA, P_CODCABALLO);
+
+    SELECT IMPORTEAPOSTADO*TANTOAUNO INTO V_MULT
+    FROM APUESTAS
+    WHERE CODIGOCARRERA = P_CODCARRERA AND CODIGOCABALLO = P_CODCABALLO;
+    
+    DBMS_OUTPUT.PUT_LINE('Hay que pagar al ganador un total de ' || V_MULT || 'euros');
 END;
 /
 
 
-CREATE OR REPLACE PROCEDURE COMPROBARVACIAS (p_codcarrera apuestas.codigocarrera%type, p_codcaballo apuestas.codigocaballo%type)
-IS
-v_carrera number;
-v_caballo number;
-v_caballocarrera number;
+CREATE OR REPLACE PROCEDURE COMPROBARVACIAS (
+    P_CODCARRERA APUESTAS.CODIGOCARRERA%TYPE,
+    P_CODCABALLO APUESTAS.CODIGOCABALLO%TYPE
+) IS
+    V_CARRERA        NUMBER;
+    V_CABALLO        NUMBER;
+    V_CABALLOCARRERA NUMBER;
 BEGIN
-    select count (*) into v_carrera from apuestas where codigocarrera = p_codcarrera;
-    if v_carrera = 0 then
-        raise_application_error(-20112, 'No existe la carrera');
-    end if;
-    select count (*) into v_caballo from apuestas where codigocaballo = p_codcaballo;
-    if v_caballo = 0 then
-        raise_application_error(-20110, 'No se ha encontrado el caballo');
-    end if;
-        select count (*) into v_caballocarrera from participaciones where codigocarrera = p_codcarrera and codigocaballo = p_codcaballo;
-    if v_caballocarrera = 0 then
-        raise_application_error(-20103, 'No existen caballos en esas en esas carreras');
-    end if;
+    SELECT COUNT (*) INTO V_CARRERA
+    FROM APUESTAS
+    WHERE CODIGOCARRERA = P_CODCARRERA;
+
+    IF V_CARRERA = 0 THEN
+        RAISE_APPLICATION_ERROR(-20112, 'No existe la carrera');
+    END IF;
+
+    SELECT COUNT (*) INTO V_CABALLO
+    FROM APUESTAS
+    WHERE CODIGOCABALLO = P_CODCABALLO;
+
+    IF V_CABALLO = 0 THEN
+        RAISE_APPLICATION_ERROR(-20110, 'No se ha encontrado el caballo');
+    END IF;
+
+    SELECT COUNT (*) INTO V_CABALLOCARRERA
+    FROM PARTICIPACIONES
+    WHERE CODIGOCARRERA = P_CODCARRERA AND CODIGOCABALLO = P_CODCABALLO;
+    
+    IF V_CABALLOCARRERA = 0 THEN
+        RAISE_APPLICATION_ERROR(-20103, 'No existen caballos en esas en esas carreras');
+    END IF;
 END;
 /
 ```
