@@ -4,7 +4,7 @@
 
 ## Modificación de la tabla y los datos
 
-```
+```sql
 ALTER TABLE clientes ADD email varchar2(50);
 
 
@@ -20,7 +20,7 @@ UPDATE clientes SET email = 'pacojovercobos@correo.com' WHERE dni = '02411561B';
 
 Para poder enviar correos desde PLSQL seguir los siguientes pasos conectándose como sysdba.
 
-```
+```sql
 @$ORACLE_HOME/rdbms/admin/utlmail.sql
 
 @$ORACLE_HOME/rdbms/admin/prvtmail.plb
@@ -57,7 +57,7 @@ grant execute on UTL_MAIL to ADMIN;
 
 A continuación ya podremos conectarnos con ADMIN y enviar un correo de prueba:
 
-```
+```sql
 BEGIN
   UTL_MAIL.SEND (
     sender => 'ara.fer.mor@gmail.com',
@@ -73,7 +73,7 @@ END;
 
 ## Creación del trigger
 
-```
+```sql
 CREATE OR REPLACE TRIGGER enviar_correo_clientes
 AFTER INSERT OR UPDATE ON participaciones
 FOR EACH ROW
@@ -119,7 +119,7 @@ END enviar_correo_clientes;
 
 ## Prueba
 
-```
+```sql
 insert into clientes values ('49034862N', 'Arantxa', 'Fernandez', '', 'Avenida Ramón y Cajal', 'Dos Hermanas', 'Sevilla', '628806858', 'ara.fer.mor@gmail.com');
 
 insert into carrerasProfesionales  values (13, to_date('11-12-2022 12:00' , 'DD-MM-YYYY HH24:MI'), 6125, 450, '01-01-2020', '01-06-2020');
@@ -135,23 +135,26 @@ insert into participaciones values(13, 3, 'Y6857984L', 1, 1);
 
 !!! info "**Comandos que me han ayudado a solucionar algunos problemas con UTL_MAIL:**"
 
-  Para ver las ACL creadas y los pivilegios asignados a esas ACLs:
-   ```
-   select * from dba_network_acls;
-   select * from dba_network_acl_privileges;
-   ```
-   Procedimientos para borrar un privilegio de una ACL y para borrar una ACL:
-  ```
-  BEGIN
-    DBMS_NETWORK_ACL_ADMIN.DELETE_PRIVILEGE(
+    Para ver las ACL creadas y los privilegios asignados a esas ACLs:
+
+    ```sql
+    select * from dba_network_acls;
+    select * from dba_network_acl_privileges;
+    ```
+
+    Procedimientos para borrar un privilegio de una ACL y para borrar una ACL:
+
+    ```sql
+    BEGIN
+      DBMS_NETWORK_ACL_ADMIN.DELETE_PRIVILEGE(
           acl         => 'aclmail.xml',
           principal   => 'ADMIN');
-  END;
-  /
+    END;
+    /
 
-  BEGIN
-     DBMS_NETWORK_ACL_ADMIN.DROP_ACL(
+    BEGIN
+      DBMS_NETWORK_ACL_ADMIN.DROP_ACL(
         acl => 'aclmail.xml');
-  END;
-  /
-  ```
+    END;
+    /
+    ```
