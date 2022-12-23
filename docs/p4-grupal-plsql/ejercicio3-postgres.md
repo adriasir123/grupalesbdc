@@ -31,7 +31,7 @@ $$ LANGUAGE plpgsql;
 -- (1)!
 ```
 
-1. Esta es la función comprueba que la edad de un caballo sea permitida según la carrera. Si la edad del caballo está en el rango permitido se devuelve `TRUE`, sino `FALSE`.
+1. Esta es la función que comprueba que la edad de un caballo sea permitida según la carrera. Si la edad del caballo está en el rango permitido se devuelve `TRUE`, sino `FALSE`.
 
 ```sql
 CREATE OR REPLACE FUNCTION fn_monitorizar_participaciones()
