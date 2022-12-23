@@ -2,7 +2,7 @@
 
 > Realiza los módulos de programación necesarios para evitar que un mismo jockey corra más de tres carreras en el mismo día.
 
-Voy a crear un trigger que antes de insertar los datos de participación en una carrera compruebe si el jockey que se quiere insertar ha participado en más carreras ese mismo día.
+En un primer momento hice este trigger, pero éste no contempla el error de mutación de la tabla al hacer un insert all. Si se hacen los inserts uno a uno sí funciona.
 
 ```
 CREATE OR REPLACE TRIGGER evitar_tres_carreras_jockey
@@ -24,10 +24,7 @@ END;
 /
 ```
 
-
-
-
-**PRUEBA:**
+**Prueba:**
 
 Las carreras con código 10, 11 y 12 son en la misma fecha (13-11-2016), voy a añadir otra carrera que sea en esa fecha y voy a añadir las participaciones de un mismo jockey en esas carreras.
 
@@ -44,16 +41,17 @@ insert into participaciones values(14, 2, 'Y6857984L', 1, 1);
 
 ![prueba1](/img/capturas-arantxa/80.png)
 
+Con insert all vemos que nos aparece el problema de la tabla mutando.
+
 ```
 insert all into participaciones values(10, 5, '00015258D', 3, 4) into participaciones values(11, 5, '00015258D', 5, 1) into participaciones values(12, 5, '00015258D', 2, 5) into participaciones values(14, 2, '00015258D', 1, 1) select * from dual;
 ```
 
 ![prueba2](/img/capturas-arantxa/81.png)
 
+Borro los datos que he insertado y el trigger y vamos a intentar hacerlo de forma que no de error por mutación de la tabla.
 
-
-
-
+```
 delete from participaciones where codigocarrera=10 and codigocaballo=2 and dnijockey='Y6857984L';
 
 delete from participaciones where codigocarrera=11 and codigocaballo=2 and dnijockey='Y6857984L';
@@ -62,12 +60,23 @@ delete from participaciones where codigocarrera=12 and codigocaballo=2 and dnijo
 
 delete from participaciones where codigocarrera=14 and codigocaballo=2 and dnijockey='Y6857984L';
 
-
-
-
-
+drop trigger evitar_tres_carreras_jockey;
+```
 
 ## Mutante
+
+Mi código lo muestro a continuación pero no hemos conseguido hacer que funcione, no vemos dónde está el error (ningún compañero del grupo). El error es que al hacer inserts individuales no detecta que haya jockeys que ya hayan participado tres veces ese día, y al hacer insert all aparece un error como el siguiente:
+
+```
+ORA-04091: la tabla ADMIN.PARTICIPACIONES esta mutando, puede que el
+disparador/la funcion no puedan verla
+ORA-06512: en "ADMIN.RELLENARTABLACONTROLJOCKEYS", linea 3
+ORA-06512: en "ADMIN.RELLENARTABLACONTROLJOCKEYS", linea 8
+ORA-04088: error durante la ejecucion del disparador
+'ADMIN.RELLENARTABLACONTROLJOCKEYS'
+```
+
+**Módulos de progrmación:**
 
 ```
 CREATE OR REPLACE PACKAGE CONTROLJOCKEYS
@@ -99,7 +108,7 @@ BEGIN
     CONTROLJOCKEYS.CONTAR(INDICE).FECHAHORA := TRUNC(v.FECHAHORA);
     INDICE := INDICE + 1;
   END LOOP;
-END RELLENARTABLACONTROLJOCKEYS;
+END;
 /
 
 
@@ -127,13 +136,13 @@ END;
 
 
 
-CREATE OR REPLACE PROCEDURE actualizartablajockeys (P_DNIJOCKEY PARTICIPACIONES.DNIJOCKEY%TYPE, P_FECHA_CARRERA CARRERASPROFESIONALES.FECHAHORA%TYPE)
+CREATE OR REPLACE PROCEDURE actualizartablacontroljockeys (P_DNIJOCKEY PARTICIPACIONES.DNIJOCKEY%TYPE, P_FECHA_CARRERA CARRERASPROFESIONALES.FECHAHORA%TYPE)
 IS
   INDICE NUMBER := CONTROLJOCKEYS.CONTAR.LAST + 1;
 BEGIN
   CONTROLJOCKEYS.CONTAR(INDICE).DNIJOCKEY := P_DNIJOCKEY;
   CONTROLJOCKEYS.CONTAR(INDICE).FECHAHORA := P_FECHA_CARRERA;
-END actualizartablajockeys;
+END actualizartablacontroljockeys;
 /
 
 
@@ -142,7 +151,7 @@ CREATE OR REPLACE TRIGGER MaxTresCarreras
 BEFORE INSERT OR UPDATE ON PARTICIPACIONES
 FOR EACH ROW
 DECLARE
-  V_DNIJOCKEY PARTICIPACIONES.DNIJOCKEY%TYPE;
+  V_DNIJOCKEY PARTICIPACIONES.DNIJOCKEY%TYPE; 
   V_FECHA_CARRERA CARRERASPROFESIONALES.FECHAHORA%TYPE;
 BEGIN
   V_DNIJOCKEY := :NEW.DNIJOCKEY;
@@ -151,8 +160,128 @@ BEGIN
   IF SUPERACARRERAS(V_DNIJOCKEY, V_FECHA_CARRERA) = 1 THEN
     RAISE_APPLICATION_ERROR(-20002, 'No puedes participar en más de tres carreras en un mismo día');
   ELSE
-    actualizartablajockeys(V_DNIJOCKEY, V_FECHA_CARRERA);
+    actualizartablacontroljockeys(V_DNIJOCKEY, V_FECHA_CARRERA);
   END IF;
 END MaxTresCarreras;
 /
+```
+
+## Prueba de errores
+
+Creo que el error puede estar en RELLENARTABLACONTROLJOCKEYS. A continuación comento algunas cosas que he probado:
+
+- He probado si la función superacarreras funcionaba y he comprobado que efectivamente funciona:
+
+```
+select superacarreras('Y6857984L', '13-11-2016') from dual;
+
+SUPERACARRERAS('Y6857984L','13-11-2016')
+----------------------------------------
+			    1
+
+select superacarreras('00015258D', '13-11-2016') from dual;
+
+SUPERACARRERAS('00015258D','13-11-2016')
+----------------------------------------
+				0
+
+select superacarreras('09849927Q', '13-11-2016') from dual;
+
+SUPERACARRERAS('09849927Q','13-11-2016')
+----------------------------------------
+				1
+```
+
+- He probado a meter "prints" en el código para encontrar dónde falla, por ejemplo en RELLENARTABLACONTROLJOCKEYS:
+
+```
+CREATE OR REPLACE TRIGGER RELLENARTABLACONTROLJOCKEYS
+BEFORE INSERT OR UPDATE ON PARTICIPACIONES
+DECLARE
+  CURSOR C_DNIFECHA IS
+    SELECT P.DNIJOCKEY, C.FECHAHORA
+    FROM PARTICIPACIONES P, CARRERASPROFESIONALES C
+    WHERE P.CODIGOCARRERA = C.CODIGOCARRERA;
+  INDICE NUMBER := 0;
+BEGIN
+  dbms_output.put_line('Empezando cursor');
+  FOR v IN C_DNIFECHA LOOP
+    CONTROLJOCKEYS.CONTAR(INDICE).DNIJOCKEY := v.DNIJOCKEY;
+    CONTROLJOCKEYS.CONTAR(INDICE).FECHAHORA := TRUNC(v.FECHAHORA);
+    INDICE := INDICE + 1;
+    dbms_output.put_line('Indice:'||INDICE);
+    dbms_output.put_line('IndiceDNI:'||CONTROLJOCKEYS.CONTAR(INDICE).DNIJOCKEY);
+    dbms_output.put_line('IndiceFECHA:'||CONTROLJOCKEYS.CONTAR(INDICE).FECHAHORA);
+  END LOOP;
+  dbms_output.put_line('Terminado cursor');
+END;
+/
+```
+
+- También he probado lo anterior en la función superacarreras.
+
+```
+CREATE OR REPLACE FUNCTION superacarreras (p_dni PARTICIPACIONES.DNIJOCKEY%TYPE, p_fecha DATE)
+RETURN NUMBER
+AS
+  v_exist NUMBER := 0;
+BEGIN
+  FOR i IN CONTROLJOCKEYS.CONTAR.FIRST .. CONTROLJOCKEYS.CONTAR.LAST LOOP
+    dbms_output.put_line('superacarreras i '||i);
+    dbms_output.put_line('superacarreras dni '||P_DNI || 'vs DNI ' || CONTROLJOCKEYS.CONTAR(i).DNIJOCKEY);
+    dbms_output.put_line('superacarreras fechahora '||P_FECHA || 'vs fechahora ' || CONTROLJOCKEYS.CONTAR(i).FECHAHORA);
+    IF CONTROLJOCKEYS.CONTAR(i).DNIJOCKEY = P_DNI 
+    AND CONTROLJOCKEYS.CONTAR(i).FECHAHORA = P_FECHA THEN
+      v_exist := v_exist + 1;
+      dbms_output.put_line('dentro if');
+    END IF;
+    ....
+```
+
+- He hecho lo mismo con el último trigger MaxTresCarreras.
+
+```
+CREATE OR REPLACE TRIGGER MaxTresCarreras
+...
+BEGIN
+  dbms_output.put_line('Empieza la ejecución');
+  V_DNIJOCKEY := :NEW.DNIJOCKEY;
+  select c.fechahora into V_FECHA_CARRERA from carrerasprofesionales c where c.codigocarrera=:new.codigocarrera;
+  dbms_output.put_line('Se ha hecho el select y se han guardado los datos');
+  .....
+```
+
+La primera vez que metí un dbms_output de comprobación en RELLENARTABLACONTROLJOCKEYS me apareció lo siguiente:
+
+![error](/img/capturas-arantxa/85.png)
+
+Lo cual me pareció raro, ya que una vez terminado el loop no debería haberme aparecido de nuevo "Empezando cursor".
+
+Al meter los prints de dentro del loop en el mismo trigger, el error cambió.
+
+![error](/img/capturas-arantxa/86.png)
+
+Al hacer un insert individual me aparece el mensaje de que ya ha participado más de tres veces por lo que he intentado borrar los datos de la colección pero me sigue dando el mismo error a pesar de no haber más datos que tengan al mismo jockey participando el mismo día.
+
+![error](/img/capturas-arantxa/87.png)
+
+Para borrar los datos de la colección he hecho lo siguiente:
+
+```
+CREATE OR REPLACE PROCEDURE borrar_controljockeys
+AS
+  -- Declare a variable to hold the number of elements in the collection
+  v_count NUMBER;
+BEGIN
+  -- Get the number of elements in the collection
+  v_count := CONTROLJOCKEYS.CONTAR.COUNT;
+
+  -- Loop through the collection and delete each element
+  FOR i IN 1 .. v_count LOOP
+    CONTROLJOCKEYS.CONTAR.DELETE(1);
+  END LOOP;
+END borrar_controljockeys;
+/
+
+exec borrar_controljockeys;
 ```
