@@ -1,5 +1,8 @@
 # Ejercicio 2
 
+> Realizar un procedimiento llamado MostrarInformes que recibirá tres parámetros. El primero determinará el tipo de
+informe que queremos obtener y los otros dos dependerán del tipo de informe.
+
 ## Código
 
 - Mostrar Informes:
