@@ -6,19 +6,23 @@ En un primer momento hice este trigger, pero éste no contempla el error de muta
 
 ```sql
 CREATE OR REPLACE TRIGGER evitar_tres_carreras_jockey
-BEFORE INSERT OR UPDATE ON participaciones
-FOR EACH ROW
+    BEFORE INSERT OR UPDATE ON participaciones
+    FOR EACH ROW
 DECLARE
     v_num_carreras NUMBER;
 BEGIN
     SELECT COUNT(*) INTO v_num_carreras
-    FROM participaciones p, carrerasProfesionales c
-    WHERE p.codigoCarrera=c.codigoCarrera
-    AND p.dniJockey = :new.dniJockey
-    AND TO_CHAR(c.fechaHora, 'DD-MM-YYYY') = (SELECT TO_CHAR(fechaHora, 'DD-MM-YYYY') FROM carrerasProfesionales WHERE codigoCarrera = :new.codigoCarrera);
-    
+    FROM participaciones p, carrerasprofesionales c
+    WHERE p.codigocarrera=c.codigocarrera
+        AND p.dnijockey = :new.dnijockey
+        AND to_char(c.fechahora, 'DD-MM-YYYY') = (
+            SELECT to_char(fechahora, 'DD-MM-YYYY')
+            FROM carrerasprofesionales
+            WHERE codigocarrera = :new.codigocarrera
+        );
+        
     IF v_num_carreras >= 3 THEN
-        RAISE_APPLICATION_ERROR(-20001, 'El jockey ya ha corrido tres carreras ese día.');
+        raise_application_error(-20001, 'El jockey ya ha corrido tres carreras ese día.');
     END IF;
 END;
 /
@@ -44,7 +48,12 @@ insert into participaciones values(14, 2, 'Y6857984L', 1, 1);
 Con insert all vemos que nos aparece el problema de la tabla mutando.
 
 ```sql
-insert all into participaciones values(10, 5, '00015258D', 3, 4) into participaciones values(11, 5, '00015258D', 5, 1) into participaciones values(12, 5, '00015258D', 2, 5) into participaciones values(14, 2, '00015258D', 1, 1) select * from dual;
+INSERT ALL
+    INTO participaciones VALUES(10, 5, '00015258D', 3, 4)
+    INTO participaciones VALUES(11, 5, '00015258D', 5, 1)
+    INTO participaciones VALUES(12, 5, '00015258D', 2, 5)
+    INTO participaciones VALUES(14, 2, '00015258D', 1, 1)
+SELECT * FROM dual;
 ```
 
 ![prueba2](/img/capturas-arantxa/81.png)
