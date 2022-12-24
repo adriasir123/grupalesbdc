@@ -5,23 +5,54 @@
 ## Código
 
 ```sql
-create or replace procedure importe_total
-is
-    cursor c_propietarios is select NOMBRE from propietarios where DNI in (select dniPropietario from caballos where codigoCaballo in (select codigocaballo from participaciones where POSICIONFINAL=1));  
-    v_importe number;
-begin
-    for i in c_propietarios loop
-        select sum(IMPORTEPREMIO) into v_importe from carrerasprofesionales where codigoCarrera in (select codigoCarrera from participaciones where POSICIONFINAL=1 and codigocaballo in (select codigocaballo from caballos where dnipropietario in (select dni from propietarios where nombre=i.nombre)));
-        update propietarios set IMPORTETOTALPREMIOS=v_importe where nombre=i.nombre;
-    end loop;
-end importe_total;
+CREATE OR REPLACE PROCEDURE importe_total IS
+    CURSOR c_propietarios IS
+        SELECT nombre
+        FROM propietarios
+        WHERE dni IN (
+                SELECT dnipropietario
+                FROM caballos
+                WHERE codigocaballo IN (
+                        SELECT codigocaballo
+                        FROM participaciones
+                        WHERE posicionfinal=1
+                    )
+            );
+    v_importe NUMBER;
+BEGIN
+    FOR i IN c_propietarios LOOP
+
+        SELECT SUM(importepremio) INTO v_importe
+        FROM carrerasprofesionales
+        WHERE codigocarrera IN (
+                SELECT codigocarrera
+                FROM participaciones
+                WHERE posicionfinal=1 AND codigocaballo IN (
+                        SELECT codigocaballo
+                        FROM caballos
+                        WHERE dnipropietario IN (
+                                SELECT dni
+                                FROM propietarios
+                                WHERE nombre=i.nombre
+                            )
+                    )
+            );
+
+        UPDATE propietarios
+        SET
+            importetotalpremios=v_importe
+        WHERE
+            nombre=i.nombre;
+            
+    END LOOP;
+END importe_total;
 /
  
 CREATE OR REPLACE TRIGGER nueva_carrera
-before insert or update on PARTICIPACIONES
+    BEFORE INSERT OR UPDATE ON participaciones
 BEGIN
     importe_total;
-end;
+END;
 /
 ```
 
