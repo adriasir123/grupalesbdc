@@ -28,27 +28,27 @@ Para poder enviar correos desde PLSQL seguir los siguientes pasos conectándose 
 ALTER SYSTEM SET smtp_out_server='localhost' SCOPE=BOTH;
 
 BEGIN
-  DBMS_NETWORK_ACL_ADMIN.CREATE_ACL(
-    acl => 'aclcorreo.xml',
-    description => 'Enviar correos',
-    principal => 'ADMIN',
-    is_grant => true,
-    privilege => 'connect',
-    start_date => SYSTIMESTAMP,
-    end_date => NULL
-  );
-  COMMIT;
+    dbms_network_acl_admin.create_acl(
+        acl => 'aclcorreo.xml',
+        description => 'Enviar correos',
+        principal => 'ADMIN',
+        is_grant => true,
+        privilege => 'connect',
+        start_date => systimestamp,
+        end_date => NULL
+    );
+    COMMIT;
 END;
 /
 
 BEGIN
-  DBMS_NETWORK_ACL_ADMIN.ASSIGN_ACL (
-    acl => 'aclcorreo.xml',
-    host => '*',
-    lower_port => NULL,
-    upper_port => NULL
-  );
-  COMMIT;
+    dbms_network_acl_admin.assign_acl (
+        acl => 'aclcorreo.xml',
+        host => '*',
+        lower_port => NULL,
+        upper_port => NULL
+    );
+    COMMIT;
 END;
 /
 
@@ -59,12 +59,12 @@ A continuación ya podremos conectarnos con ADMIN y enviar un correo de prueba:
 
 ```sql
 BEGIN
-  UTL_MAIL.SEND (
-    sender => 'ara.fer.mor@gmail.com',
-    recipients => 'ara.fer.mor@gmail.com',
-    subject => 'Prueba',
-    message => 'Esto es un mensaje de prueba.'
-  );
+    utl_mail.send (
+        sender => 'ara.fer.mor@gmail.com',
+        recipients => 'ara.fer.mor@gmail.com',
+        subject => 'Prueba',
+        message => 'Esto es un mensaje de prueba.'
+    );
 END;
 /
 ```
@@ -133,7 +133,7 @@ insert into participaciones values(13, 3, 'Y6857984L', 1, 1);
 ![inserts](/img/capturas-arantxa/83.png)
 ![correo-enviado](/img/capturas-arantxa/84.png)
 
-!!! info "**Comandos que me han ayudado a solucionar algunos problemas con UTL_MAIL:**"
+!!! info "**Comandos que me han ayudado a solucionar algunos problemas con UTL_MAIL**"
 
     Para ver las ACL creadas y los privilegios asignados a esas ACLs:
 
