@@ -107,8 +107,9 @@ END;
 ```
 
 ## PRUEBA DE FUNCIONAMIENTO
-
+```sql
 insert into participaciones values(90, 10, '09849927Q', 3, 4);
 insert into participaciones values(90, 11, '09849927Q', 7, 6);
+```
 
 ![prueba1](/img/capturas-antonio/comprobar-mutante.png)
