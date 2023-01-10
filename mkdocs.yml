@@ -67,7 +67,11 @@ nav:
                 - 'Ejercicio 4 Oracle': 'p5-usuarios/rg/caso-practico-1-ej4-oracle.md'
                 - 'Ejercicio 4 PostgreSQL': 'p5-usuarios/rg/caso-practico-1-ej4-postgres.md'
                 - 'Ejercicio 5': 'p5-usuarios/rg/caso-practico-1-ej5.md'
-            - 'Caso práctico 2': 'p5-usuarios/rg/caso-practico-2.md'
+            - 'Caso práctico 2':
+                - 'Ejercicio 1': 'p5-usuarios/rg/caso-practico-2-ej1.md'
+                - 'Ejercicio 2': 'p5-usuarios/rg/caso-practico-2-ej2.md'
+                - 'Ejercicio 3': 'p5-usuarios/rg/caso-practico-2-ej3.md'
+                - 'Ejercicio 4': 'p5-usuarios/rg/caso-practico-2-ej4.md'
             - 'Ejercicio grupal 3': 'p5-usuarios/rg/ejercicio-grupal-3.md'
 markdown_extensions:
   - pymdownx.highlight:
