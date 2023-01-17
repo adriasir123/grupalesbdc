@@ -20,7 +20,7 @@ end CrearRol;
 /
 ```
 
-Procedimientos que buscan los privilegios por objeto y del sistema del usuario especificado en el procedimiento principal.
+Los siguientes procedimientos buscan los privilegios por objeto y del sistema del usuario especificado en el procedimiento principal.
 
 PrivilegiosSobreObjetos asigna los privilegios sobre objetos a través de un cursor que recupera los privilegios de DBA_TAB_PRIVS para el usuario especificado o para cualquier rol asignado al usuario, y PrivilegiosDelSistema asigna los privilegios del sistema de la misma manera a través de otro cursor que recupera los privilegios de DBA_SYS_PRIVS.
 
