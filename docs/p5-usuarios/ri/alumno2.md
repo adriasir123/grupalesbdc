@@ -4,11 +4,13 @@
 
 ---
 
-### Averigua que privilegios de sistema hay en Postgres y como se asignan a un usuario.
+### EJERCICIO 1
 
- Para asignar privilegios de sistema a un usuario o grupos de usuario en concreto, en Postgres, debemos realizar la creación de roles, a los cuáles se les irán otorgando permisos. 
+Averigua que privilegios de sistema hay en Postgres y como se asignan a un usuario.
 
- Podemos asignar los siguientes privilegios a un rol:
+Para asignar privilegios de sistema a un usuario o grupos de usuario en concreto, en Postgres, debemos realizar la creación de roles, a los cuáles se les irán otorgando permisos. 
+
+Podemos asignar los siguientes privilegios a un rol:
 
 - superuser status: Se otorga a un rol los privilegios de un super usuario.
 
@@ -26,7 +28,9 @@
 
 - connection limit: Se otorga a un rol el privilegio de limitar el numero de conexiones a la base de datos.
 
-### Averigua cual es la forma de asignar y revocar privilegios sobre una tabla concreta en Postgres.
+### EJERCICIO 2
+
+Averigua cual es la forma de asignar y revocar privilegios sobre una tabla concreta en Postgres.
 
 La forma de asignar privilegios en sobre una tabla en concreto tiene la siguiente sintaxis:
 
@@ -40,7 +44,9 @@ Para revocar los privilegios de una tabla:
 REVOKE * ON TABLE table1, table2...
 ```
 
-### Averigua si existe el concepto de rol en Postgres y señala las diferencias con los roles de ORACLE.
+### EJERCICIO 3
+
+Averigua si existe el concepto de rol en Postgres y señala las diferencias con los roles de ORACLE.
 
 Sí, existe el concepto de "rol" en PostgreSQL. Los roles en PostgreSQL son similares a los roles en Oracle en el sentido de que ambos se utilizan para controlar el acceso a los objetos de la base de datos. Sin embargo, hay algunas diferencias clave entre los roles de PostgreSQL y los roles de Oracle.
 
@@ -56,7 +62,9 @@ Sí, existe el concepto de "rol" en PostgreSQL. Los roles en PostgreSQL son simi
 
 En resumen, los roles en PostgreSQL y Oracle son similares en cuanto a su función principal: controlar el acceso a los objetos de la base de datos. Sin embargo, hay algunas diferencias importantes en la forma en que se utilizan y se administran en cada sistema.
 
-### Averigua si existe el concepto de perfil como conjunto de límites sobre el uso de recursos o sobre la contraseña en Postgres y señala las diferencias con los perfiles de ORACLE.
+### EJERCICIO 4
+
+Averigua si existe el concepto de perfil como conjunto de límites sobre el uso de recursos o sobre la contraseña en Postgres y señala las diferencias con los perfiles de ORACLE.
 
 Sí, existe el concepto de perfil en PostgreSQL, pero funciona de manera diferente a como se utiliza en Oracle.
 
@@ -66,7 +74,9 @@ En PostgreSQL, no existe un sistema de perfiles integrado para establecer límit
 
 En resumen, en Oracle existe un sistema de perfiles integrado que se utiliza para establecer límites de recursos y contraseñas, mientras que en PostgreSQL no existe un sistema de perfiles integrado, pero se pueden establecer límites de recursos y contraseñas utilizando configuraciones del sistema operativo o herramientas de terceros.
 
-### Realiza consultas al diccionario de datos de Postgres para averiguar todos los privilegios que tiene un usuario concreto.
+### EJERCICIO 5
+
+Realiza consultas al diccionario de datos de Postgres para averiguar todos los privilegios que tiene un usuario concreto.
 
 ```sql
 SELECT grantee, privilege_type, table_name
@@ -74,7 +84,9 @@ FROM information_schema.role_table_grants
 WHERE grantee = 'joseju';
 ```
 
-### Realiza consultas al diccionario de datos en Postgres para averiguar qué usuarios pueden consultar una tabla concreta.
+### EJERCICIO 6
+
+Realiza consultas al diccionario de datos en Postgres para averiguar qué usuarios pueden consultar una tabla concreta.
 
 Para obtener una lista de usuarios y roles que tienen permisos de SELECT en una tabla específica, ejecutamos la siguiente consulta:
 
@@ -92,11 +104,15 @@ Es importante mencionar que estas consultas estan basadas en la estructura del d
 
 ## ORACLE:
 
-### Realiza una función de verificación de contraseñas que compruebe que la contraseña difiere en más de tres caracteres de la anterior y que la longitud de la misma es diferente de la anterior. Asígnala al perfil CONTRASEÑASEGURA. Comprueba que funciona correctamente.
+### EJERCICIO 7
+
+Realiza una función de verificación de contraseñas que compruebe que la contraseña difiere en más de tres caracteres de la anterior y que la longitud de la misma es diferente de la anterior. Asígnala al perfil CONTRASEÑASEGURA. Comprueba que funciona correctamente.
 
 
 
-### Realiza un procedimiento llamado MostrarPrivilegiosdelRol que reciba el nombre de un rol y muestre los privilegios de sistema y los privilegios sobre objetos que lo componen.
+### EJERCICIO 8
+
+Realiza un procedimiento llamado MostrarPrivilegiosdelRol que reciba el nombre de un rol y muestre los privilegios de sistema y los privilegios sobre objetos que lo componen.
 
 ```sql
 create or replace procedure MostrarPrivilegiosdeRol(p_rol dba_roles.role%type)

@@ -1,7 +1,8 @@
 # Ejercicio 4 Oracle
 
-## Realiza un procedimiento que reciba un nombre de usuario y nos muestre cuántas sesiones tiene abiertas en este momento. Además, para cada una de dichas sesiones nos mostrará la hora de comienzo y el nombre de la máquina, sistema operativo y programa desde el que fue abierta.
+Realiza un procedimiento que reciba un nombre de usuario y nos muestre cuántas sesiones tiene abiertas en este momento. Además, para cada una de dichas sesiones nos mostrará la hora de comienzo y el nombre de la máquina, sistema operativo y programa desde el que fue abierta.
 
+Creamos el procedimiento:
 
 ```sql
 CREATE OR REPLACE PROCEDURE MostrarSesionUsuario (p_usuario VARCHAR2)
