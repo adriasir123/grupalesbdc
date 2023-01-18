@@ -9,6 +9,8 @@ order by first_load_TIME desc
 fetch first 1 rows only;
 ```
 
+### Comprobación
+
 Podemos comprobar que la última sentencia que se ejecutó fue "select * from pelicula", se ha ejecutado 1 vez desde que se cargó en el Shared Pool y el tiempo usado ha sido 21710.
 
 ![prueba](/img/capturas-arantxa/88.png)
