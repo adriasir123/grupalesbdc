@@ -2,7 +2,7 @@
 
 ## 4. (ORACLE) Realiza un procedimiento que genere un script que cree un rol conteniendo todos los permisos que tenga el usuario cuyo nombre reciba como parámetro, le hayan sido asignados a aquél directamente o a traves de roles. El nuevo rol deberá llamarse BackupPrivsNombreUsuario
 
-Este sería el procedimiento principal, al cual le daríamos un usuario y, si existe, nos mostrará por pantalla la creación del rol y la asignación de todos los privilegios al rol creado.
+Este sería el procedimiento principal, al cual le daríamos un usuario y, si existe, nos mostrará por pantalla la creación del rol y la asignación de todos los privilegios (de sistema, sobre objetos y sobre columnas) al rol creado.
 
 ```sql
 create or replace procedure CrearRol (p_usuario varchar2)
@@ -15,6 +15,7 @@ begin
         dbms_output.put_line('CREATE ROLE BackupPrivs'||p_usuario);
         SysPrivs(p_usuario, v_nuevoRol);
         PrivsObjetos(p_usuario, v_nuevoRol);
+        ColPrivs(p_usuario, v_nuevorol);
     end if;
 end CrearRol;
 /
@@ -22,7 +23,7 @@ end CrearRol;
 
 Los siguientes procedimientos buscan los privilegios por objeto y del sistema del usuario especificado en el procedimiento principal.
 
-PrivilegiosSobreObjetos asigna los privilegios sobre objetos a través de un cursor que recupera los privilegios de DBA_TAB_PRIVS para el usuario especificado o para cualquier rol asignado al usuario, y PrivilegiosDelSistema asigna los privilegios del sistema de la misma manera a través de otro cursor que recupera los privilegios de DBA_SYS_PRIVS.
+PrivsObjetos asigna los privilegios sobre objetos a través de un cursor que recupera los privilegios sobre objetos de DBA_TAB_PRIVS para el usuario especificado o para cualquier rol asignado al usuario, y SysPrivs asigna los privilegios del sistema de la misma manera a través de otro cursor que recupera los privilegios de DBA_SYS_PRIVS. ColPrivs hace lo mismo que los anteriores pero recupera los privilegios sobre columnas (DBA_COL_PRIVS) del usuario.
 
 ```sql
 create or replace procedure PrivsObjetos(p_usuario varchar2, p_nuevoRol varchar2)
@@ -50,9 +51,23 @@ begin
     end loop;
 end SysPrivs;
 /
+
+
+create or replace procedure ColPrivs(p_usuario varchar2, p_nuevoRol varchar2)
+is
+    cursor c_colprivs is
+        select distinct PRIVILEGE, OWNER, TABLE_NAME, COLUMN_NAME from DBA_COL_PRIVS where GRANTEE=p_usuario or GRANTEE in
+            (select distinct granted_role from DBA_ROLE_PRIVS start with GRANTEE = p_usuario connect by GRANTEE = prior GRANTED_ROLE);
+    v_cursor c_colprivs%ROWTYPE;
+begin
+    for v_cursor in c_colprivs loop
+        AgregarColPrivs(v_cursor.PRIVILEGE, v_cursor.OWNER, v_cursor.TABLE_NAME, v_cursor.COLUMN_NAME, p_nuevoRol);
+    end loop;
+end ColPrivs;
+/
 ```
 
-Los procedimientos AgregarPrivilegioSobreObjeto y AgregarPrivilegioDelSistema, con lo datos obtenido con los cursores de los procedimientos anteriores, devuelven el código concreto del script que se mostrará por pantalla al ejecutar el procedimiento principal.
+Los procedimientos AgregarPrivsObjeto, AgregarSysPrivs y AgregarColPrivs, con lo datos obtenido en los cursores de los procedimientos anteriores, devuelven el código concreto del script que se mostrará por pantalla al ejecutar el procedimiento principal.
 
 ```sql
 create or replace procedure AgregarPrivsObjeto(p_privilegio DBA_TAB_PRIVS.PRIVILEGE%TYPE, p_propietario DBA_TAB_PRIVS.OWNER%TYPE, p_nombreTabla DBA_TAB_PRIVS.TABLE_NAME%TYPE, p_nuevoRol varchar2)
@@ -70,6 +85,13 @@ begin
     else dbms_output.put_line('grant '||p_privilegio||' to '||p_nuevoRol||';');
     end if;
 end AgregarSysPrivs;
+/
+
+create or replace procedure AgregarColPrivs(p_privilegio DBA_COL_PRIVS.PRIVILEGE%TYPE, p_propietario DBA_COL_PRIVS.OWNER%TYPE, p_nombreTabla DBA_COL_PRIVS.TABLE_NAME%TYPE, p_nombreColumna DBA_COL_PRIVS.COLUMN_NAME%TYPE, p_nuevoRol varchar2)
+is
+begin
+    dbms_output.put_line('grant '||p_privilegio||'('||p_nombreColumna||')'||' on '||p_propietario||'.'||p_nombreTabla||' to '||p_nuevoRol||';');
+end AgregarColPrivs;
 /
 ```
 
