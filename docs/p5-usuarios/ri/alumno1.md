@@ -93,7 +93,7 @@ Session altered.
 
 !!! Note
 
-    Esos errores de privilegios no son relevantes, ya que como vemos he conectado correctamente.
+    Esos errores de privilegios no son relevantes, ya que como vemos he conectado correctamente.  
     Aclaro que simplemente aparecen porque tengo un script personalizado en sqlplus que se lanza en cada conexión, que hace ciertas acciones; algunas necesitan permisos de administrador.
 
 Creo una tabla:
