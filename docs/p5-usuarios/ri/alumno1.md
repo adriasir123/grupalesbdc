@@ -134,7 +134,154 @@ INSERT INTO scott.emp VALUES (8000,'TESTER','TESTER',7782,to_date('23-1-1982','d
 
 ## Ejercicio 2
 
-> Crea un usuario USRPRACTICA1 con el tablespace USERS por defecto y averigua que cuota se le ha asignado por defecto en el mismo. Sustitúyela por una cuota de 1M.
+### 2. Enunciado
+
+Crear el usuario USRPRACTICA1 con el tablespace USERS por defecto y averiguar qué cuota se le ha asignado por defecto en el mismo. Sustitúyela por una cuota de 1M.
+
+### 2. Realización
+
+Creo el usuario:
+
+```sql
+CREATE USER USRPRACTICA1 IDENTIFIED BY 1234 DEFAULT TABLESPACE USERS;
+
+User created.
+```
+
+Por defecto, la cuota de los usuarios sobre los tablespaces es 0:
+
+```sql
+SELECT tablespace_name,username,max_bytes
+FROM DBA_TS_QUOTAS
+WHERE username = 'USRPRACTICA1' AND tablespace_name = 'USERS';
+```
+
+```sql
+SELECT tablespace_name,username,max_bytes
+  2  FROM DBA_TS_QUOTAS
+WHERE username = 'USRPRACTICA1' AND tablespace_name = 'USERS';
+
+no rows selected
+```
+
+No hay registros porque `USRPRACTICA1` todavía no tiene cuota. Si quisiéramos insertar datos, no podríamos, aunque para que podamos hacer esto antes primero tenemos que dar algunos permisos:
+
+```sql
+GRANT CREATE SESSION, CREATE TABLE TO USRPRACTICA1;
+```
+
+Ahora ya sí, comprobamos que no podemos meter datos:
+
+```sql
+CREATE TABLE tabla (
+  id NUMBER(10) NOT NULL,
+  campo VARCHAR2(50) NOT NULL,
+  CONSTRAINT tabla_pk PRIMARY KEY (id)
+);
+
+Table created.
+
+INSERT INTO tabla VALUES (1,'test');
+INSERT INTO tabla VALUES (1,'test')
+            *
+ERROR at line 1:
+ORA-01950: no privileges on tablespace 'USERS'
+```
+
+!!! Info
+
+    Aunque diga tabla creada, realmente no se ha creado porque no tenemos cuota.  
+    Cuando pasa esto, estamos experimentando el mecanismo `deferred_segment_creation` de Oracle, que básicamente "retrasa" el allocation real de datos hasta que la tabla contiene datos.
+
+Le cambio la cuota:
+
+```sql
+ALTER USER USRPRACTICA1 QUOTA 1M ON USERS;
+
+User altered.
+```
+
+Compruebo que ya sí aparece la cuota registrada:
+
+```sql
+SELECT tablespace_name,username,max_bytes
+FROM DBA_TS_QUOTAS
+WHERE username = 'USRPRACTICA1' AND tablespace_name = 'USERS';
+```
+
+```sql
+SELECT tablespace_name,username,max_bytes
+  2  FROM DBA_TS_QUOTAS
+WHERE username = 'USRPRACTICA1' AND tablespace_name = 'USERS';
+
+TABLE USERNAME	    MAX_BYTES
+----- ------------ ----------
+USERS USRPRACTICA1    1048576
+```
+
+Ya podría insertar el registro:
+
+```sql
+INSERT INTO tabla VALUES (1,'test');
+
+1 row created.
+
+select * from tabla;
+
+	ID CAMPO
+---------- --------------------------------------------------
+	 1 test
+```
+
+## Ejercicio 3
+
+### 3. Enunciado
+
+Modificar el usuario `USRPRACTICA1` para que tenga cuota 0 en el tablespace SYSTEM.
+
+### 3. Realización
+
+```sql
+ALTER USER USRPRACTICA1 QUOTA 0 ON system;
+
+User altered.
+```
+
+### 3. Comprobaciones
+
+Muestro que no hay cuota:
+
+```sql
+SELECT tablespace_name,username,max_bytes
+FROM DBA_TS_QUOTAS
+WHERE username = 'USRPRACTICA1' AND tablespace_name = 'SYSTEM';
+
+no rows selected
+```
+
+Muestro que no puedo insertar datos en `SYSTEM`:
+
+```sql
+CREATE TABLE tabla_system (
+  id NUMBER(10) NOT NULL,
+  campo VARCHAR2(50) NOT NULL,
+  CONSTRAINT tabla_system_pk PRIMARY KEY (id)
+) TABLESPACE SYSTEM;
+
+Table created.
+
+INSERT INTO tabla_system VALUES (1,'test');
+INSERT INTO tabla_system VALUES (1,'test')
+            *
+ERROR at line 1:
+ORA-01536: space quota exceeded for tablespace 'SYSTEM'
+```
+
+## Ejercicio 4
+
+### 4. Enunciado
+
+Conceder `ROLPRACTICA1` a `USRPRACTICA1`.
 
 
 
@@ -145,14 +292,6 @@ INSERT INTO scott.emp VALUES (8000,'TESTER','TESTER',7782,to_date('23-1-1982','d
 
 
 
-
-
-
-
-
-    3. Modifica el usuario USRPRACTICA1 para que tenga cuota 0 en el tablespace SYSTEM.
-
-    4. Concede a USRPRACTICA1 el ROLPRACTICA1.
 
     5. Concede a USRPRACTICA1 el privilegio de crear tablas e insertar datos en el esquema de cualquier usuario. Prueba el privilegio. Comprueba si puede modificar la estructura o eliminar las tablas creadas.
 
