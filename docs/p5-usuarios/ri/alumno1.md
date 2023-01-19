@@ -4,7 +4,7 @@ create user testing identified by 1234;
 
 ## Ejercicio 1
 
-### Enunciado
+### 1. Enunciado
 
 Crear el rol `ROLPRACTICA1` con privilegios:
 
@@ -13,7 +13,7 @@ Crear el rol `ROLPRACTICA1` con privilegios:
 - Creación de vistas
 - Inserción de datos en la tabla EMP de SCOTT
 
-### Realización
+### 1. Realización
 
 Creo el rol:
 
@@ -28,7 +28,7 @@ GRANT CREATE SESSION, CREATE TABLE, CREATE VIEW TO rolpractica1;
 GRANT INSERT ON scott.emp TO rolpractica1;
 ```
 
-### Comprobaciones
+### 1. Comprobaciones
 
 Compruebo que se ha creado el rol:
 
@@ -283,6 +283,125 @@ ORA-01536: space quota exceeded for tablespace 'SYSTEM'
 
 Conceder `ROLPRACTICA1` a `USRPRACTICA1`.
 
+### 4. Realización
+
+```sql
+GRANT ROLPRACTICA1 TO USRPRACTICA1;
+
+Grant succeeded.
+```
+
+### 4. Comprobaciones
+
+Muestro que tiene el rol asignado:
+
+```sql
+SELECT granted_role,grantee
+FROM DBA_ROLE_PRIVS
+WHERE granted_role = 'ROLPRACTICA1' AND grantee = 'USRPRACTICA1';
+```
+
+```sql
+GRANTED_ROLE GRANTEE
+------------ --------------------------------------------------------------------------------------------------------------------------------
+ROLPRACTICA1 USRPRACTICA1
+```
+
+!!! Info
+
+    El funcionamiento del rol ya se ha probado en el ejercicio 1
+
+## Ejercicio 5
+
+### 5. Enunciado
+
+Conceder a USRPRACTICA1 el privilegio de crear tablas e insertar datos en el esquema de cualquier usuario. Probar los privilegios. Comprobar si se puede modificar la estructura o eliminar la tabla creada.
+
+### 5. Realización
+
+Doy privilegios:
+
+```sql
+GRANT CREATE ANY TABLE, INSERT ANY TABLE, CREATE ANY INDEX TO USRPRACTICA1;
+
+Grant succeeded.
+```
+
+!!! Info
+
+    No se menciona en el enunciado, pero el privilegio `CREATE ANY INDEX` es necesario
+
+Le doy cuota a `TESTING` para que luego se puedan insertar datos:
+
+```sql
+ALTER USER TESTING QUOTA 1M ON USERS;
+```
+
+### 5. Comprobaciones
+
+Creo una tabla e inserto un registro en `TESTING` desde `USRPRACTICA1`:
+
+```sql
+CREATE TABLE TESTING.tabla (
+  id NUMBER(10) NOT NULL,
+  campo VARCHAR2(50) NOT NULL,
+  CONSTRAINT tabla_testing_pk PRIMARY KEY (id)
+);
+
+Table created.
+
+INSERT INTO TESTING.tabla VALUES (1,'test');
+
+1 row created.
+```
+
+Como desde `USRPRACTICA1` no tengo privilegios de SELECT sobre esa tabla, la muestro desde `SYS`:
+
+```sql
+connect sys/sys as sysdba
+Connected.
+ORA-01081: cannot start already-running ORACLE - shut it down first
+
+Session altered.
+
+select * from TESTING.tabla;
+
+        ID CAMPO
+---------- --------------------------------------------------
+         1 test
+```
+
+Vuelvo a `USRPRACTICA1` y compruebo si se puede modificar la estructura de la tabla creada o eliminarla:
+
+```sql
+connect USRPRACTICA1/1234
+Connected.
+ORA-01031: insufficient privileges
+ORA-01078: failure in processing system parameters
+
+Session altered.
+
+ALTER TABLE TESTING.tabla DROP COLUMN CAMPO;
+ALTER TABLE TESTING.tabla DROP COLUMN CAMPO
+*
+ERROR at line 1:
+ORA-01031: insufficient privileges
+
+
+DROP TABLE TESTING.tabla;
+DROP TABLE TESTING.tabla
+                   *
+ERROR at line 1:
+ORA-01031: insufficient privileges
+```
+
+No se puede, porque en ningún momento le hemos dado a `USRPRACTICA1` los privilegios necesarios para estas acciones.
+
+## Ejercicio 6
+
+### 6. Enunciado
+
+Conceder a `USRPRACTICA1` el privilegio de leer la tabla DEPT de SCOTT con la posibilidad de que lo pase a su vez a terceros usuarios.
 
 
 
@@ -293,9 +412,12 @@ Conceder `ROLPRACTICA1` a `USRPRACTICA1`.
 
 
 
-    5. Concede a USRPRACTICA1 el privilegio de crear tablas e insertar datos en el esquema de cualquier usuario. Prueba el privilegio. Comprueba si puede modificar la estructura o eliminar las tablas creadas.
 
-    6. Concede a USRPRACTICA1 el privilegio de leer la tabla DEPT de SCOTT con la posibilidad de que lo pase a su vez a terceros usuarios.
+
+
+
+
+
 
     7. Comprueba que USRPRACTICA1 puede realizar todas las operaciones previstas en el rol.
 
