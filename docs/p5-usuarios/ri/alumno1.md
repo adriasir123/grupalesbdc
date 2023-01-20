@@ -527,7 +527,57 @@ ORA-01031: insufficient privileges
 
 ### 9. Enunciado
 
-Crear un perfil NOPARESDECURRAR que limita a dos el número de minutos de inactividad permitidos en una sesión.
+Crear el perfil `NOPARESDECURRAR` que limite a dos el número de minutos de inactividad permitidos en una sesión.
+
+### 9. Realización
+
+```sql
+CREATE PROFILE NOPARESDECURRAR LIMIT IDLE_TIME 2;
+
+Profile created.
+```
+
+### 9. Comprobaciones
+
+Compruebo que se ha creado:
+
+```sql
+SELECT profile,resource_name,limit
+FROM DBA_PROFILES
+WHERE profile = 'NOPARESDECURRAR';
+
+PROFILE                                                                                                                          RESOURCE_NAME                    LIMIT
+-------------------------------------------------------------------------------------------------------------------------------- -------------------------------- --------------------------------------------------------------------------------------------------------------------------------
+NOPARESDECURRAR                                                                                                                  COMPOSITE_LIMIT                  DEFAULT
+NOPARESDECURRAR                                                                                                                  SESSIONS_PER_USER                DEFAULT
+NOPARESDECURRAR                                                                                                                  CPU_PER_SESSION                  DEFAULT
+NOPARESDECURRAR                                                                                                                  CPU_PER_CALL                     DEFAULT
+NOPARESDECURRAR                                                                                                                  LOGICAL_READS_PER_SESSION        DEFAULT
+NOPARESDECURRAR                                                                                                                  LOGICAL_READS_PER_CALL           DEFAULT
+NOPARESDECURRAR                                                                                                                  IDLE_TIME                        2
+NOPARESDECURRAR                                                                                                                  CONNECT_TIME                     DEFAULT
+NOPARESDECURRAR                                                                                                                  PRIVATE_SGA                      DEFAULT
+NOPARESDECURRAR                                                                                                                  FAILED_LOGIN_ATTEMPTS            DEFAULT
+NOPARESDECURRAR                                                                                                                  PASSWORD_LIFE_TIME               DEFAULT
+NOPARESDECURRAR                                                                                                                  PASSWORD_REUSE_TIME              DEFAULT
+NOPARESDECURRAR                                                                                                                  PASSWORD_REUSE_MAX               DEFAULT
+NOPARESDECURRAR                                                                                                                  PASSWORD_VERIFY_FUNCTION         DEFAULT
+NOPARESDECURRAR                                                                                                                  PASSWORD_LOCK_TIME               DEFAULT
+NOPARESDECURRAR                                                                                                                  PASSWORD_GRACE_TIME              DEFAULT
+NOPARESDECURRAR                                                                                                                  INACTIVE_ACCOUNT_TIME            DEFAULT
+
+17 rows selected.
+```
+
+!!! Info
+
+    Aunque no se lo indiquemos, Oracle nos añade unos límites por defecto, pero lo importante es que el límite que nosotros hemos añadido es correcto
+
+## Ejercicio 10
+
+### 10. Enunciado
+
+Activar el uso de perfiles en ORACLE.
 
 
 
@@ -543,12 +593,6 @@ Crear un perfil NOPARESDECURRAR que limita a dos el número de minutos de inacti
 
 
 
-
-
-
-
-
-    10. Activa el uso de perfiles en ORACLE.
 
     11. Asigna el perfil creado a USRPRACTICA1 y comprueba su correcto funcionamiento.
 
