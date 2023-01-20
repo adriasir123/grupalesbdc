@@ -811,10 +811,29 @@ USRPRACTICA1
 
 ### 15. Enunciado
 
-Elige un usuario concreto y consulta qué cuota tiene sobre cada uno de los tablespaces.
+Eligir un usuario concreto y consultar qué cuota tiene sobre cada uno de los tablespaces.
 
 ### 15. Realización
 
+Elijo `AUDSYS`:
+
+```sql
+SELECT tablespace_name,username,max_bytes
+FROM DBA_TS_QUOTAS
+WHERE username = 'AUDSYS';
+
+TABLESPACE_NAME                USERNA  MAX_BYTES
+------------------------------ ------ ----------
+SYSAUX                         AUDSYS         -1
+```
+
+Sólo tiene cuota sobre 1 tablespace, `SYSAUX`, y el tamaño -1 quiere decir que es ilimitada.
+
+## Ejercicio 16
+
+### 16. Enunciado
+
+Eligir un usuario concreto y mostrar qué privilegios de sistema tiene asignados.
 
 
 
@@ -837,8 +856,6 @@ Elige un usuario concreto y consulta qué cuota tiene sobre cada uno de los tabl
 
 
 
-
-    16. Elige un usuario concreto y muestra qué privilegios de sistema tiene asignados.
 
     17. Elige un usuario concreto y muestra qué privilegios sobre objetos tiene asignados.
 
