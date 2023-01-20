@@ -482,7 +482,52 @@ Comprobar que `USRPRACTICA1` puede realizar todas las operaciones previstas en e
 
 ### 8. Enunciado
 
-Quitar a USRPRACTICA1 el privilegio de crear vistas. Comprueba que ya no puede hacerlo.
+Quitar a `USRPRACTICA1` el privilegio de crear vistas. Comprobar que ya no puede hacerlo.
+
+### 8. Realización
+
+```sql
+REVOKE CREATE VIEW FROM ROLPRACTICA1;
+
+Revoke succeeded.
+```
+
+!!! Info
+
+    El privilegio `CREATE VIEW` se dio a `ROLPRACTICA1`, no a `USRPRACTICA1`.  
+    Este usuario puede crear vistas por el rol, no porque tenga el privilegio otorgado directamente, así que el privilegio se tiene que quitar del rol.
+
+### 8. Comprobaciones
+
+Me conecto a `USRPRACTICA1`, y aprovechando que en el [ejercicio 6](#ejercicio-6) se le dio permisos de lectura sobre `scott.dept`, intento crear una vista de esa tabla:
+
+```sql
+connect USRPRACTICA1/1234
+Connected.
+ORA-01031: insufficient privileges
+ORA-01078: failure in processing system parameters
+
+Session altered.
+```
+
+```sql
+CREATE OR REPLACE VIEW view_dept AS
+    SELECT *
+    FROM scott.dept;
+```
+
+```sql
+CREATE OR REPLACE VIEW view_dept AS
+                       *
+ERROR at line 1:
+ORA-01031: insufficient privileges
+```
+
+## Ejercicio 9
+
+### 9. Enunciado
+
+Crear un perfil NOPARESDECURRAR que limita a dos el número de minutos de inactividad permitidos en una sesión.
 
 
 
@@ -502,18 +547,6 @@ Quitar a USRPRACTICA1 el privilegio de crear vistas. Comprueba que ya no puede h
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-    9. Crea un perfil NOPARESDECURRAR que limita a dos el número de minutos de inactividad permitidos en una sesión.
 
     10. Activa el uso de perfiles en ORACLE.
 
