@@ -605,6 +605,43 @@ resource_limit                       boolean     TRUE
 
 Asignar el perfil creado a `USRPRACTICA1` y comprobar su correcto funcionamiento.
 
+### 11. Realización
+
+```sql
+ALTER USER USRPRACTICA1 PROFILE NOPARESDECURRAR;
+
+User altered.
+```
+
+### 11. Comprobaciones
+
+Me conecto a `USRPRACTICA1` y tras 2 minutos, esto es lo que pasa:
+
+```sql
+connect USRPRACTICA1/1234
+Connected.
+ORA-01031: insufficient privileges
+ORA-01078: failure in processing system parameters
+
+Session altered.
+
+select user from dual;
+select user from dual
+*
+ERROR at line 1:
+ORA-02396: exceeded maximum idle time, please connect again
+```
+
+!!! Warning
+
+    Cuando sobrepasamos el tiempo de inactividad no se corta la conexión automáticamente.  
+    El error aparecerá cuando intentemos realizar alguna acción, por eso he escrito un comando de ejemplo para la prueba
+
+## Ejercicio 12
+
+### 12. Enunciado
+
+Crear un perfil CONTRASEÑASEGURA especificando que la contraseña caduca mensualmente y sólo se permiten tres intentos fallidos para acceder a la cuenta. En caso de superarse, la cuenta debe quedar bloqueada indefinidamente.
 
 
 
@@ -618,7 +655,13 @@ Asignar el perfil creado a `USRPRACTICA1` y comprobar su correcto funcionamiento
 
 
 
-    12. Crea un perfil CONTRASEÑASEGURA especificando que la contraseña caduca mensualmente y sólo se permiten tres intentos fallidos para acceder a la cuenta. En caso de superarse, la cuenta debe quedar bloqueada indefinidamente.
+
+
+
+
+
+
+
 
     13. Asigna el perfil creado a USRPRACTICA1 y comprueba su funcionamiento. Desbloquea posteriormente al usuario.
 
