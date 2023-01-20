@@ -577,7 +577,33 @@ NOPARESDECURRAR                                                                 
 
 ### 10. Enunciado
 
-Activar el uso de perfiles en ORACLE.
+Activar el uso de perfiles.
+
+### 10. Realización
+
+```sql
+ALTER SYSTEM SET RESOURCE_LIMIT=TRUE;
+
+System altered.
+```
+
+### 10. Comprobaciones
+
+Compruebo el estado del parámetro:
+
+```sql
+show parameter resource_limit;
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+resource_limit                       boolean     TRUE
+```
+
+## Ejercicio 11
+
+### 11. Enunciado
+
+Asignar el perfil creado a `USRPRACTICA1` y comprobar su correcto funcionamiento.
 
 
 
@@ -591,10 +617,6 @@ Activar el uso de perfiles en ORACLE.
 
 
 
-
-
-
-    11. Asigna el perfil creado a USRPRACTICA1 y comprueba su correcto funcionamiento.
 
     12. Crea un perfil CONTRASEÑASEGURA especificando que la contraseña caduca mensualmente y sólo se permiten tres intentos fallidos para acceder a la cuenta. En caso de superarse, la cuenta debe quedar bloqueada indefinidamente.
 
