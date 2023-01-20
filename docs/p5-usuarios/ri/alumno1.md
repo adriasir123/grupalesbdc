@@ -641,7 +641,49 @@ ORA-02396: exceeded maximum idle time, please connect again
 
 ### 12. Enunciado
 
-Crear un perfil CONTRASEÑASEGURA especificando que la contraseña caduca mensualmente y sólo se permiten tres intentos fallidos para acceder a la cuenta. En caso de superarse, la cuenta debe quedar bloqueada indefinidamente.
+Crear el perfil `CONTRASENASEGURA` con los límites:
+
+- Caducidad mensual
+- Máximo tres intentos fallidos permitidos de acceso
+- Bloqueo de cuenta indefinido si se superan los intentos
+
+### 12. Realización
+
+```sql
+CREATE PROFILE CONTRASENASEGURA LIMIT
+    PASSWORD_LIFE_TIME 30
+    FAILED_LOGIN_ATTEMPTS 4
+    PASSWORD_LOCK_TIME UNLIMITED;
+```
+
+```sql
+Profile created.
+```
+
+### 12. Comprobaciones
+
+Muestro que se ha creado con los límites dichos:
+
+```sql
+SELECT profile,resource_name,limit
+FROM DBA_PROFILES
+WHERE profile = 'CONTRASENASEGURA'
+  AND resource_name IN ('PASSWORD_LIFE_TIME','FAILED_LOGIN_ATTEMPTS','PASSWORD_LOCK_TIME');
+```
+
+```sql
+PROFILE                                                                                                                          RESOURCE_NAME                    LIMIT
+-------------------------------------------------------------------------------------------------------------------------------- -------------------------------- --------------------------------------------------------------------------------------------------------------------------------
+CONTRASENASEGURA                                                                                                                 FAILED_LOGIN_ATTEMPTS            4
+CONTRASENASEGURA                                                                                                                 PASSWORD_LIFE_TIME               30
+CONTRASENASEGURA                                                                                                                 PASSWORD_LOCK_TIME               UNLIMITED
+```
+
+## Ejercicio 13
+
+### 13. Enunciado
+
+Asignar el perfil creado a USRPRACTICA1 y comprobar su funcionamiento. Desbloquear posteriormente al usuario.
 
 
 
@@ -662,8 +704,6 @@ Crear un perfil CONTRASEÑASEGURA especificando que la contraseña caduca mensua
 
 
 
-
-    13. Asigna el perfil creado a USRPRACTICA1 y comprueba su funcionamiento. Desbloquea posteriormente al usuario.
 
     14. Consulta qué usuarios existen en tu base de datos.
 
