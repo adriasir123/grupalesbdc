@@ -683,7 +683,75 @@ CONTRASENASEGURA                                                                
 
 ### 13. Enunciado
 
-Asignar el perfil creado a USRPRACTICA1 y comprobar su funcionamiento. Desbloquear posteriormente al usuario.
+Asignar el perfil `CONTRASENASEGURA` a `USRPRACTICA1` y comprobar su funcionamiento. Desbloquear posteriormente al usuario.
+
+### 13. Realización
+
+```sql
+ALTER USER USRPRACTICA1 PROFILE CONTRASENASEGURA;
+
+User altered.
+```
+
+### 13. Comprobaciones
+
+Me equivoco 4 veces en la contraseña para probar el funcionamiento:
+
+```sql
+connect USRPRACTICA1/123
+ERROR:
+ORA-01017: invalid username/password; logon denied
+
+
+Warning: You are no longer connected to ORACLE.
+connect USRPRACTICA1/123
+ERROR:
+ORA-01017: invalid username/password; logon denied
+
+
+connect USRPRACTICA1/123
+ERROR:
+ORA-01017: invalid username/password; logon denied
+
+
+connect USRPRACTICA1/123
+ERROR:
+ORA-01017: invalid username/password; logon denied
+
+
+connect USRPRACTICA1/1234
+ERROR:
+ORA-28000: The account is locked.
+```
+
+Como vemos, aunque Oracle no nos avise explícitamente, al 4 intento fallido la cuenta se ha bloqueado.  
+
+Lo sabemos porque si intentamos acceder una 5 vez, aunque sea con la contraseña correcta, nos dará el error `ORA-28000: The account is locked.`
+
+Desbloqueo la cuenta:
+
+```sql
+ALTER USER USRPRACTICA1 IDENTIFIED BY 1234 ACCOUNT UNLOCK;
+
+User altered.
+```
+
+Pruebo que se ha desbloqueado:
+
+```sql
+connect USRPRACTICA1/1234
+Connected.
+ORA-01031: insufficient privileges
+ORA-01078: failure in processing system parameters
+
+Session altered.
+```
+
+## Ejercicio 14
+
+### 14. Enunciado
+
+Consultar qué usuarios existen en tu base de datos.
 
 
 
@@ -698,14 +766,6 @@ Asignar el perfil creado a USRPRACTICA1 y comprobar su funcionamiento. Desbloque
 
 
 
-
-
-
-
-
-
-
-    14. Consulta qué usuarios existen en tu base de datos.
 
     15. Elige un usuario concreto y consulta qué cuota tiene sobre cada uno de los tablespaces.
 
