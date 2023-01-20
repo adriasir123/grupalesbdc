@@ -751,7 +751,69 @@ Session altered.
 
 ### 14. Enunciado
 
-Consultar qué usuarios existen en tu base de datos.
+Consultar qué usuarios existen en la base de datos.
+
+### 14. Realización
+
+```sql
+SELECT USERNAME
+FROM DBA_USERS;
+
+USERNAME
+--------------------------------------------------------------------------------------------------------------------------------
+SYS
+SYSTEM
+XS$NULL
+OJVMSYS
+LBACSYS
+OUTLN
+SYS$UMF
+DBSNMP
+APPQOSSYS
+DBSFWUSER
+GGSYS
+ANONYMOUS
+CTXSYS
+DVSYS
+DVF
+GSMADMIN_INTERNAL
+MDSYS
+OLAPSYS
+XDB
+WMSYS
+GSMCATUSER
+MDDATA
+BECARIO
+SYSBACKUP
+REMOTE_SCHEDULER_AGENT
+GSMUSER
+SYSRAC
+GSMROOTUSER
+SI_INFORMTN_SCHEMA
+AUDSYS
+EXAMENBD34
+DIP
+ORDPLUGINS
+TESTING
+SYSKM
+ORDDATA
+ORACLE_OCM
+SCOTT
+HIPODROMO
+SYSDG
+ORDSYS
+USRPRACTICA1
+
+42 rows selected.
+```
+
+## Ejercicio 15
+
+### 15. Enunciado
+
+Elige un usuario concreto y consulta qué cuota tiene sobre cada uno de los tablespaces.
+
+### 15. Realización
 
 
 
@@ -767,7 +829,14 @@ Consultar qué usuarios existen en tu base de datos.
 
 
 
-    15. Elige un usuario concreto y consulta qué cuota tiene sobre cada uno de los tablespaces.
+
+
+
+
+
+
+
+
 
     16. Elige un usuario concreto y muestra qué privilegios de sistema tiene asignados.
 
