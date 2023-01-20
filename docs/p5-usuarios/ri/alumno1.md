@@ -403,6 +403,76 @@ No se puede, porque en ningún momento le hemos dado a `USRPRACTICA1` los privil
 
 Conceder a `USRPRACTICA1` el privilegio de leer la tabla DEPT de SCOTT con la posibilidad de que lo pase a su vez a terceros usuarios.
 
+### 6. Realización
+
+```sql
+GRANT READ ON scott.dept TO USRPRACTICA1 WITH GRANT OPTION;
+
+Grant succeeded.
+```
+
+!!! Info
+
+    El privilegio `READ` se añadió en la versión 12.1 de Oracle, y es equivalente a `SELECT` pero más seguro; no se da implícitamente privilegio de LOCK sobre el objeto.  
+    Si se otorga el privilegio `SELECT` a un usuario sobre una tabla por ejemplo, éste podría bloquearla, pero con `READ` no podría.
+
+### 6. Comprobaciones
+
+Me conecto a `USRPRACTICA1` y pruebo el privilegio:
+
+```sql
+connect USRPRACTICA1/1234
+Connected.
+ORA-01031: insufficient privileges
+ORA-01078: failure in processing system parameters
+
+Session altered.
+
+SELECT * FROM scott.dept;
+
+    DEPTNO DNAME          LOC
+---------- -------------- -------------
+        10 ACCOUNTING     NEW YORK
+        20 RESEARCH       DALLAS
+        30 SALES          CHICAGO
+        40 OPERATIONS     BOSTON
+```
+
+Pruebo a pasarle el privilegio a `TESTING`:
+
+```sql
+GRANT READ ON scott.dept TO TESTING;
+
+Grant succeeded.
+```
+
+Me conecto a `TESTING` y pruebo que puedo hacer lo mismo:
+
+```sql
+connect TESTING/1234
+Connected.
+ORA-01031: insufficient privileges
+ORA-01078: failure in processing system parameters
+
+Session altered.
+
+SELECT * FROM scott.dept;
+
+    DEPTNO DNAME          LOC
+---------- -------------- -------------
+        10 ACCOUNTING     NEW YORK
+        20 RESEARCH       DALLAS
+        30 SALES          CHICAGO
+        40 OPERATIONS     BOSTON
+```
+
+## Ejercicio 7
+
+### 7. Enunciado
+
+Comprobar que `USRPRACTICA1` puede realizar todas las operaciones previstas en el rol (ROLPRACTICA1, que se lo dimos antes).
+
+### 7. Realización
 
 
 
@@ -418,8 +488,6 @@ Conceder a `USRPRACTICA1` el privilegio de leer la tabla DEPT de SCOTT con la po
 
 
 
-
-    7. Comprueba que USRPRACTICA1 puede realizar todas las operaciones previstas en el rol.
 
     8. Quita a USRPRACTICA1 el privilegio de crear vistas. Comprueba que ya no puede hacerlo.
 
