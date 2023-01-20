@@ -470,10 +470,19 @@ SELECT * FROM scott.dept;
 
 ### 7. Enunciado
 
-Comprobar que `USRPRACTICA1` puede realizar todas las operaciones previstas en el rol (ROLPRACTICA1, que se lo dimos antes).
+Comprobar que `USRPRACTICA1` puede realizar todas las operaciones previstas en el rol `ROLPRACTICA1` (se dio en el [ejercicio 4](#ejercicio-4)).
 
 ### 7. Realización
 
+!!! Info
+
+    El funcionamiento del rol ya se ha probado en el [ejercicio 1](#ejercicio-1)
+
+## Ejercicio 8
+
+### 8. Enunciado
+
+Quitar a USRPRACTICA1 el privilegio de crear vistas. Comprueba que ya no puede hacerlo.
 
 
 
@@ -489,7 +498,20 @@ Comprobar que `USRPRACTICA1` puede realizar todas las operaciones previstas en e
 
 
 
-    8. Quita a USRPRACTICA1 el privilegio de crear vistas. Comprueba que ya no puede hacerlo.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     9. Crea un perfil NOPARESDECURRAR que limita a dos el número de minutos de inactividad permitidos en una sesión.
 
