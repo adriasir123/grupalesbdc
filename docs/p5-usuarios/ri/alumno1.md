@@ -1003,6 +1003,45 @@ Elegir un perfil y consultar qué límites se establecen en el mismo.
 
 ### 22. Realización
 
+Elijo `DEFAULT`:
+
+```sql
+SELECT resource_name,limit
+FROM DBA_PROFILES
+WHERE profile = 'DEFAULT';
+```
+
+```sql
+RESOURCE_NAME                    LIMIT
+-------------------------------- --------------------------------------------------------------------------------------------------------------------------------
+COMPOSITE_LIMIT                  UNLIMITED
+SESSIONS_PER_USER                UNLIMITED
+CPU_PER_SESSION                  UNLIMITED
+CPU_PER_CALL                     UNLIMITED
+LOGICAL_READS_PER_SESSION        UNLIMITED
+LOGICAL_READS_PER_CALL           UNLIMITED
+IDLE_TIME                        UNLIMITED
+CONNECT_TIME                     UNLIMITED
+PRIVATE_SGA                      UNLIMITED
+FAILED_LOGIN_ATTEMPTS            10
+PASSWORD_LIFE_TIME               180
+PASSWORD_REUSE_TIME              UNLIMITED
+PASSWORD_REUSE_MAX               UNLIMITED
+PASSWORD_VERIFY_FUNCTION         NULL
+PASSWORD_LOCK_TIME               1
+PASSWORD_GRACE_TIME              7
+INACTIVE_ACCOUNT_TIME            UNLIMITED
+
+17 rows selected.
+```
+
+## Ejercicio 23
+
+### 23. Enunciado
+
+Mostrar los nombres de los usuarios que tienen limitado el número de sesiones concurrentes.
+
+### 23. Realización
 
 
 
@@ -1013,7 +1052,9 @@ Elegir un perfil y consultar qué límites se establecen en el mismo.
 
 
 
-    23. Muestra los nombres de los usuarios que tienen limitado el número de sesiones concurrentes.
+
+
+
 
     24. Realiza un procedimiento que reciba un nombre de usuario y un privilegio de sistema y nos muestre el mensaje 'SI, DIRECTO' si el usuario tiene ese privilegio concedido directamente, 'SI, POR ROL' si el usuario tiene ese privilegio en alguno de los roles que tiene concedidos y un 'NO' si el usuario no tiene dicho privilegio.
 
