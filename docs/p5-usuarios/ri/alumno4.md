@@ -185,6 +185,7 @@ ejemplo> db.getRole("readWrite", { showPrivileges: true })
 Realiza un procedimiento llamado MostrarObjetosAccesibles que reciba un nombre de usuario y
 muestre todos los objetos a los que tiene acceso.
 
+```
 create or replace procedure MostrarObjetosAccesibles (p_usuario varchar2)
 IS
   Cursor c_objeto is
@@ -205,7 +206,9 @@ BEGIN
 end loop;
 END;
 /
+```
 
+Listado con tabulaciones:
 
 ![prueba1](/img/capturas-antonio/prueba-funcionamiento-individual-ejercicio-3-1.png)
 
@@ -248,5 +251,6 @@ END;
 /
 ```
 
+Ahora podemos contemplar cada tipo de posibilidad:
 
 ![prueba1](/img/capturas-antonio/prueba-funcionamiento-individual-ejercicio-4-1.png)
