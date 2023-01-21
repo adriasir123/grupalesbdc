@@ -168,9 +168,6 @@ ejemplo> db.getRole("readWrite", { showPrivileges: true })
 
 
 
-
-
-
 ## Oracle
 
 ### Ejercicio 1:
