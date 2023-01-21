@@ -866,6 +866,35 @@ CREATE MATERIALIZED VIEW
 
 Elegir un usuario concreto y mostrar qué privilegios sobre objetos tiene asignados.
 
+### 17. Realización
+
+Elijo `SYS`:
+
+```sql
+SELECT privilege,table_name
+FROM DBA_TAB_PRIVS
+WHERE grantee = 'SYS';
+```
+
+```sql
+PRIVILEGE                                TABLE_NAME
+---------------------------------------- --------------------------------------------------------------------------------------------------------------------------------
+EXECUTE                                  LBAC_STANDARD
+EXECUTE                                  LBAC_SERVICES
+SELECT                                   DBA_DV_STATUS
+EXECUTE                                  CONFIGURE_DV_INTERNAL
+SELECT                                   OL$
+SELECT                                   OL$HINTS
+SELECT                                   OL$NODES
+
+7 rows selected.
+```
+
+## Ejercicio 18
+
+### 18. Enunciado
+
+Consultar qué roles existen en la base de datos.
 
 
 
@@ -880,12 +909,6 @@ Elegir un usuario concreto y mostrar qué privilegios sobre objetos tiene asigna
 
 
 
-
-
-
-
-
-    18. Consulta qué roles existen en tu base de datos.
 
     19. Elige un rol concreto y consulta qué usuarios lo tienen asignado.
 
