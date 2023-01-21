@@ -44,7 +44,7 @@ END;
 ```
 
 
-Ahora procedemos a hacer la prueba de ingresar un usuario que no exista:
+Ahora procedemos a hacer la prueba de ingresar un usuario que no exista, tras esto introduciremos el usuario válido:
 
 ![prueba1](/img/capturas-antonio/prueba-funcionamiento-caso2-ejercicio-2.png)
 
