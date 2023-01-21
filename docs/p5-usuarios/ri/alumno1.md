@@ -939,6 +939,69 @@ SCOTT
 
 Elegir un rol concreto y averiguar si está compuesto por otros roles o no.
 
+### 20. Realización
+
+Elijo `DBA`:
+
+```sql
+SELECT granted_role
+FROM DBA_ROLE_PRIVS
+WHERE grantee = 'DBA';
+```
+
+```sql
+GRANTED_ROLE
+--------------------------------------------------------------------------------------------------------------------------------
+EXECUTE_CATALOG_ROLE
+DATAPUMP_IMP_FULL_DATABASE
+SCHEDULER_ADMIN
+XDBADMIN
+OLAP_DBA
+CAPTURE_ADMIN
+SELECT_CATALOG_ROLE
+DATAPUMP_EXP_FULL_DATABASE
+GATHER_SYSTEM_STATISTICS
+WM_ADMIN_ROLE
+EXP_FULL_DATABASE
+OPTIMIZER_PROCESSING_RATE
+EM_EXPRESS_ALL
+IMP_FULL_DATABASE
+XDB_SET_INVOKER
+JAVA_ADMIN
+OLAP_XS_ADMIN
+
+17 rows selected.
+```
+
+Esos son todos los roles por los que está compuesto el rol `DBA`.
+
+## Ejercicio 21
+
+### 21. Enunciado
+
+Consultar qué perfiles existen en la base de datos.
+
+### 21. Realización
+
+```sql
+SELECT DISTINCT profile
+FROM DBA_PROFILES;
+
+PROFILE
+--------------------------------------------------------------------------------------------------------------------------------
+CONTRASENASEGURA
+DEFAULT
+NOPARESDECURRAR
+ORA_STIG_PROFILE
+```
+
+## Ejercicio 22
+
+### 22. Enunciado
+
+Elegir un perfil y consultar qué límites se establecen en el mismo.
+
+### 22. Realización
 
 
 
@@ -949,11 +1012,6 @@ Elegir un rol concreto y averiguar si está compuesto por otros roles o no.
 
 
 
-
-
-    21. Consulta qué perfiles existen en tu base de datos.
-
-    22. Elige un perfil y consulta qué límites se establecen en el mismo.
 
     23. Muestra los nombres de los usuarios que tienen limitado el número de sesiones concurrentes.
 
