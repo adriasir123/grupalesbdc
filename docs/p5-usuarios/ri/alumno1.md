@@ -896,6 +896,21 @@ SELECT                                   OL$NODES
 
 Consultar qué roles existen en la base de datos.
 
+### 18. Realización
+
+```sql
+SELECT role FROM DBA_ROLES;
+```
+
+[Output largo](https://gist.github.com/adriasir123/51f018d18d794f9d66db8c72aa6a7134)
+
+## Ejercicio 19
+
+### 19. Enunciado
+
+Eligir un rol concreto y consultar qué usuarios lo tienen asignado.
+
+### 19. Realización
 
 
 
@@ -910,7 +925,11 @@ Consultar qué roles existen en la base de datos.
 
 
 
-    19. Elige un rol concreto y consulta qué usuarios lo tienen asignado.
+
+
+
+
+
 
     20. Elige un rol concreto y averigua si está compuesto por otros roles o no.
 
