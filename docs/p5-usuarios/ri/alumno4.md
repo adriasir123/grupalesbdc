@@ -29,12 +29,11 @@ db.revokeRolesFromUser("antonio",[ { "role" : "readWrite", db : "ejemplo" } ])
 
 
 Con esto al haber creado el usuario, se le da con derechos de lectura y escritura por defecto en la base de datos en la que ha sido creada, lo que ocurre es que al hacer un RevoqueRolesFromUser pues ha perdido su rol de readWrite, por tanto no podrá ver las colecciones:
-![prueba1](/img/capturas-antonio/prueba-funcionamiento-individual-ejercicio-1.png)
+
+![prueba1](/img/capturas-antonio/prueba-funcionamiento-individual-ejercicio-1-1.png)
 
 
-
-
-Si volvemos a entrar como administrador en el sistema y volvemos a entrar en la base de dato
+Si volvemos a entrar como administrador en el sistema y volvemos a entrar en la base de datos, podemos volver a conceder los permisos:
 
 ```
 use ejemplo
@@ -42,7 +41,8 @@ use ejemplo
 db.grantRolesToUser("antonio",[ { "role" : "readWrite", db : "ejemplo" } ])
 ```
 
-![prueba1](/img/capturas-antonio/prueba-funcionamiento-individual-ejercicio-1-1.png)
+Y de esta manera al listar las colecciones podemos ver que estará disponible la que hemos otorgado a través del rol:
+
 
 ![prueba1](/img/capturas-antonio/prueba-funcionamiento-individual-ejercicio-1-2.png)
 
@@ -50,7 +50,7 @@ db.grantRolesToUser("antonio",[ { "role" : "readWrite", db : "ejemplo" } ])
 
 ### Ejercicio 2: Averigua si en MongoDB existe el concepto de privilegio del sistema y muestra las diferencias más importantes con ORACLE.
 
-MongoDB tiene un sistema de autorización basado en roles que se utiliza para controlar el acceso a los recursos de la base de datos. Los roles se asignan a los usuarios y definen los privilegios de acceso que tienen sobre los recursos de la base de datos.
+MongoDB tiene un sistema de autorización basado en roles que se utiliza para controlar el acceso a los recursos de la base de datos, por tanto sí, tiene sistema de privilegios de usuario similar al de Oracle. Los roles se asignan a los usuarios y definen los privilegios de acceso que tienen sobre los recursos de la base de datos.
 
 En comparación con Oracle, MongoDB tiene algunas diferencias importantes en cuanto a los privilegios del sistema:
 
@@ -58,10 +58,13 @@ En comparación con Oracle, MongoDB tiene algunas diferencias importantes en cua
 
 2. MongoDB no tiene un sistema de vistas de seguridad como Oracle, donde los datos pueden ser filtrados para que solo se muestren los datos a los que un usuario tiene acceso.
 
-3. MongoDB tiene un sistema de autorización basado en roles en vez de a objetos, lo que significa que los privilegios se asignan a los roles en lugar de asignarlos directamente a los objetos de la base de datos.
+3. MongoDB tiene un sistema de autorización basado en roles en vez de a objetos, lo que significa que los privilegios se asignan a los roles en lugar de asignarlos directamente a los objetos de la base de datos como hemos podido comprobar en anteriores ejercicios con Oracle.
 
 4. MongoDB tiene un sistema de autorización en el nivel de campo, lo que significa que se pueden asignar privilegios específicos para el acceso a los campos individuales de un documento como hemos visto en el anterior ejercicio.
 
+5. MongoDB tiene un enfoque más simple en la gestión de privilegios. Los roles se definen en un nivel de base de datos, en lugar de en un nivel de sistema como en ORACLE.
+
+6. MongoDB no tiene una funcionalidad de encriptación de datos nativa como ORACLE, por lo que la encriptación debe ser manejada por el cliente o a través de un complemento.
 
 ### Ejercicio 3: Explica los roles por defecto que incorpora MongoDB y como se asignan a los usuarios.
 
@@ -79,6 +82,13 @@ clusterAdmin: permite al usuario realizar tareas administrativas en todo el clus
 
 backup: permite al usuario realizar copias de seguridad y restaurar datos.
 
+restore: Otorga acceso para restaurar la base de datos.
+
+dbOwner: Este rol otorga acceso total a todas las operaciones y colecciones en la base de datos, incluyendo la capacidad de crear y eliminar colecciones.
+
+readAnyDatabase: Otorga Acceso de lectura a cualquier base de datos.
+
+readWriteAnyDatabase: Otorga acceso de lectura y escritura a cualquier base de datos.
 
 Se le puede asignar un rol a un usuario cuando este es creado, si no se especifica este tendrá por defecto un readWrite.
 
