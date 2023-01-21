@@ -811,7 +811,7 @@ USRPRACTICA1
 
 ### 15. Enunciado
 
-Eligir un usuario concreto y consultar qué cuota tiene sobre cada uno de los tablespaces.
+Elegir un usuario concreto y consultar qué cuota tiene sobre cada uno de los tablespaces.
 
 ### 15. Realización
 
@@ -833,7 +833,38 @@ Sólo tiene cuota sobre 1 tablespace, `SYSAUX`, y el tamaño -1 quiere decir que
 
 ### 16. Enunciado
 
-Eligir un usuario concreto y mostrar qué privilegios de sistema tiene asignados.
+Elegir un usuario concreto y mostrar qué privilegios de sistema tiene asignados.
+
+### 16. Realización
+
+Elijo `SYSTEM`:
+
+```sql
+SELECT privilege
+FROM DBA_SYS_PRIVS
+WHERE grantee = 'SYSTEM';
+```
+
+```sql
+PRIVILEGE
+----------------------------------------
+GLOBAL QUERY REWRITE
+CREATE TABLE
+DEQUEUE ANY QUEUE
+ENQUEUE ANY QUEUE
+SELECT ANY TABLE
+MANAGE ANY QUEUE
+UNLIMITED TABLESPACE
+CREATE MATERIALIZED VIEW
+
+8 rows selected.
+```
+
+## Ejercicio 17
+
+### 17. Enunciado
+
+Elegir un usuario concreto y mostrar qué privilegios sobre objetos tiene asignados.
 
 
 
@@ -853,11 +884,6 @@ Eligir un usuario concreto y mostrar qué privilegios de sistema tiene asignados
 
 
 
-
-
-
-
-    17. Elige un usuario concreto y muestra qué privilegios sobre objetos tiene asignados.
 
     18. Consulta qué roles existen en tu base de datos.
 
