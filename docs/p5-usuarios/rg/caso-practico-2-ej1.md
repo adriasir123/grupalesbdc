@@ -13,42 +13,40 @@ Crea un usuario llamado Ayudante y, sin usar los roles predefinidos de ORACLE, d
 
 Pista: Si no recuerdas el nombre de un privilegio, puedes buscarlo en el diccionario de datos.
 
-
+Vamos a crear un usuario llamado ayudante:
+```
 CREATE USER ayudante identified by ayudante;
+```
 
+Ahora vamos a crear el rol:
+
+```
 CREATE ROLE rol_ayudante;
 
 GRANT ALTER SYSTEM TO rol_ayudante;
 GRANT CREATE SESSION TO rol_ayudante;
 GRANT SELECT ON v_$log TO rol_ayudante;
-
-
 GRANT CREATE ANY PROCEDURE TO rol_ayudante;
 GRANT ALTER PROFILE TO rol_ayudante;
-
 GRANT DROP ROLLBACK SEGMENT TO rol_ayudante WITH ADMIN OPTION;
 GRANT FLASHBACK ANY TABLE TO rol_ayudante WITH ADMIN OPTION;
-
 GRANT SELECT, UPDATE, DELETE ON scott.dept TO rol_ayudante;
-
 GRANT EXECUTE ANY PROCEDURE TO rol_ayudante;
-
 GRANT ALTER TABLESPACE TO rol_ayudante;
 
-
 GRANT rol_ayudante TO ayudante;
-
+```
+Aquí vamos a ver que con el usuario ayudante gracias al rol que ahora tenemos podemos ver las tablas de SCOTT.DEPT:
 
 ![prueba1](/img/capturas-antonio/prueba-funcionamiento-caso2-ejercicio-1.png)
 
+Ahora vamos a hacer una prueba de perfil en el cual haré que incremente el límite de sesiones por usuario:
+
 ![prueba1](/img/capturas-antonio/prueba-funcionamiento-caso2-ejercicio-1-1.png)
+
+Aquí incrementaré el tiempo de conexión del usuario a 10 minutos:
 
 ![prueba1](/img/capturas-antonio/prueba-funcionamiento-caso2-ejercicio-1-2.png)
 
-
-
-create tablespace PRUEBA2 datafile 'pruebaantonio2.dat' size 10M;
-
-CREATE PROFILE perfil_prueba1 LIMIT SESSIONS_PER_USER 5;
 
 
