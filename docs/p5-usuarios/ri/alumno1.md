@@ -1043,6 +1043,100 @@ Mostrar los nombres de los usuarios que tienen limitado el número de sesiones c
 
 ### 23. Realización
 
+Ahora mismo no tengo ningún perfil que tenga `SESSIONS_PER_USER` limitado:
+
+```sql
+SELECT profile
+FROM DBA_PROFILES
+WHERE resource_name = 'SESSIONS_PER_USER'
+  AND limit NOT IN ('UNLIMITED', 'DEFAULT');
+```
+
+```sql
+no rows selected
+```
+
+Por lo tanto, por ejemplo, voy a limitar `SESSIONS_PER_USER` en el perfil `NOPARESDECURRAR`:
+
+```sql
+ALTER PROFILE NOPARESDECURRAR LIMIT SESSIONS_PER_USER 1;
+```
+
+Si vuelvo a lanzar la consulta anterior, ya aparece el perfil:
+
+```sql
+SELECT profile
+  2  FROM DBA_PROFILES
+WHERE resource_name = 'SESSIONS_PER_USER'
+  AND limit NOT IN ('UNLIMITED', 'DEFAULT');
+
+PROFILE
+--------------------------------------------------------------------------------------------------------------------------------
+NOPARESDECURRAR
+```
+
+Además, ahora mismo tampoco tengo ningún usuario con el perfil `NOPARESDECURRAR` asignado:
+
+```sql
+SELECT username
+FROM DBA_USERS
+WHERE profile = 'NOPARESDECURRAR';
+```
+
+```sql
+no rows selected
+```
+
+Así que, por ejemplo, se lo vuelvo a asignar a `USRPRACTICA1`:
+
+```sql
+ALTER USER USRPRACTICA1 PROFILE NOPARESDECURRAR;
+
+User altered.
+```
+
+Si vuelvo a lanzar la consulta anterior, ya aparece el usuario con el perfil:
+
+```sql
+SELECT username
+  2  FROM DBA_USERS
+WHERE profile = 'NOPARESDECURRAR';
+
+USERNAME
+--------------------------------------------------------------------------------------------------------------------------------
+USRPRACTICA1
+```
+
+### 23. Comprobaciones
+
+Después de hacer todo lo anterior, ya podemos mostrar directamente los usuarios que tienen limitado el número de sesiones (que será 1, el que he "forzado" para que la siguiente consulta no saliera vacía):
+
+```sql
+SELECT username
+FROM DBA_USERS
+WHERE profile IN (
+        SELECT profile
+        FROM DBA_PROFILES
+        WHERE resource_name = 'SESSIONS_PER_USER'
+          AND limit NOT IN ('UNLIMITED', 'DEFAULT')
+);
+```
+
+```sql
+USERNAME
+--------------------------------------------------------------------------------------------------------------------------------
+USRPRACTICA1
+```
+
+Además, puedo comprobar que efectivamente las sesiones concurrentes de este usuario están limitadas a 1:
+
+![sesiones1](https://i.imgur.com/r3QIFDq.png)
+
+## Ejercicio 24
+
+### 24. Enunciado
+
+Realizar un procedimiento que reciba un nombre de usuario y un privilegio de sistema y nos muestre el mensaje 'SI, DIRECTO' si el usuario tiene ese privilegio concedido directamente, 'SI, POR ROL' si el usuario tiene ese privilegio en alguno de los roles que tiene concedidos y un 'NO' si el usuario no tiene dicho privilegio.
 
 
 
@@ -1052,10 +1146,12 @@ Mostrar los nombres de los usuarios que tienen limitado el número de sesiones c
 
 
 
+## Ejercicio 25
+
+### 25. Enunciado
+
+Realizar un procedimiento llamado MostrarNumSesiones que reciba un nombre de usuario y muestre el número de sesiones concurrentes que puede tener abiertas como máximo y las que tiene abiertas realmente.
 
 
 
 
-    24. Realiza un procedimiento que reciba un nombre de usuario y un privilegio de sistema y nos muestre el mensaje 'SI, DIRECTO' si el usuario tiene ese privilegio concedido directamente, 'SI, POR ROL' si el usuario tiene ese privilegio en alguno de los roles que tiene concedidos y un 'NO' si el usuario no tiene dicho privilegio.
-
-    25. Realiza un procedimiento llamado MostrarNumSesiones que reciba un nombre de usuario y muestre el número de sesiones concurrentes que puede tener abiertas como máximo y las que tiene abiertas realmente.
