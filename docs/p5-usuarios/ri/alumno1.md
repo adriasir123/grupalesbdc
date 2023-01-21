@@ -981,6 +981,27 @@ Esos son todos los roles por los que está compuesto el rol `DBA`.
 
 Consultar qué perfiles existen en la base de datos.
 
+### 21. Realización
+
+```sql
+SELECT DISTINCT profile
+FROM DBA_PROFILES;
+
+PROFILE
+--------------------------------------------------------------------------------------------------------------------------------
+CONTRASENASEGURA
+DEFAULT
+NOPARESDECURRAR
+ORA_STIG_PROFILE
+```
+
+## Ejercicio 22
+
+### 22. Enunciado
+
+Elegir un perfil y consultar qué límites se establecen en el mismo.
+
+### 22. Realización
 
 
 
@@ -991,7 +1012,6 @@ Consultar qué perfiles existen en la base de datos.
 
 
 
-    22. Elige un perfil y consulta qué límites se establecen en el mismo.
 
     23. Muestra los nombres de los usuarios que tienen limitado el número de sesiones concurrentes.
 
