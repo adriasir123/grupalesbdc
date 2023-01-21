@@ -908,10 +908,36 @@ SELECT role FROM DBA_ROLES;
 
 ### 19. Enunciado
 
-Eligir un rol concreto y consultar qué usuarios lo tienen asignado.
+Elegir un rol concreto y consultar qué usuarios lo tienen asignado.
 
 ### 19. Realización
 
+Elijo `CONNECT`:
+
+```sql
+SELECT grantee
+FROM DBA_ROLE_PRIVS
+WHERE granted_role = 'CONNECT';
+```
+
+```sql
+GRANTEE
+--------------------------------------------------------------------------------------------------------------------------------
+SYS
+DV_ACCTMGR
+GSMADMIN_ROLE
+GSM_POOLADMIN_ROLE
+GSMROOTUSER_ROLE
+SCOTT
+
+6 rows selected.
+```
+
+## Ejercicio 20
+
+### 20. Enunciado
+
+Elegir un rol concreto y averiguar si está compuesto por otros roles o no.
 
 
 
@@ -924,14 +950,6 @@ Eligir un rol concreto y consultar qué usuarios lo tienen asignado.
 
 
 
-
-
-
-
-
-
-
-    20. Elige un rol concreto y averigua si está compuesto por otros roles o no.
 
     21. Consulta qué perfiles existen en tu base de datos.
 
