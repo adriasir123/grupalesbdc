@@ -1146,12 +1146,64 @@ Realizar un procedimiento que reciba un nombre de usuario y un privilegio de sis
 
 
 
+
+
+
+
+
+
+
 ## Ejercicio 25
 
 ### 25. Enunciado
 
-Realizar un procedimiento llamado MostrarNumSesiones que reciba un nombre de usuario y muestre el número de sesiones concurrentes que puede tener abiertas como máximo y las que tiene abiertas realmente.
+Realizar un procedimiento llamado `MostrarNumSesiones` que:
 
+- Reciba un nombre de usuario
+- Muestre el número de sesiones concurrentes que puede tener abiertas como máximo
+- Muestre el número de sesiones concurrentes que tiene abiertas actualmente
 
+### 25. Código
 
+```sql
+CREATE OR REPLACE PROCEDURE MostrarNumSesiones (
+        usuarioentrante IN VARCHAR2
+) IS
+        v_perfilsacado     VARCHAR2(30);
+        v_limitmaxsesiones VARCHAR2(40);
+        v_numsesiones      NUMBER;
+BEGIN
+ -- Sacamos el perfil del usuario solicitado
+        SELECT profile INTO v_perfilsacado
+        FROM DBA_USERS
+        WHERE username = usuarioentrante;
+ -- Sacamos el número máximo de sesiones permitidas para ese usuario
+        SELECT limit INTO v_limitmaxsesiones
+        FROM DBA_PROFILES
+        WHERE profile = v_perfilsacado
+                AND resource_name = 'SESSIONS_PER_USER';
+ -- Sacamos las sesiones abiertas por ese usuario actualmente
+        SELECT COUNT(username) INTO v_numsesiones
+        FROM V$SESSION
+        WHERE username = usuarioentrante;
+        DBMS_OUTPUT.PUT_LINE('El usuario '|| usuarioentrante || ' tiene un limite de sesiones concurrentes permitidas de: ' || v_limitmaxsesiones);
+        DBMS_OUTPUT.PUT_LINE('Pero el numero real de sesiones que tiene abiertas son: '|| v_numsesiones);
+END;
+/
+```
 
+### 25. Comprobaciones
+
+Primero dejo abiertas 2 sesiones con el usuario `TESTING`:
+
+![2sesionestesting](https://i.imgur.com/P3tPeN3.png)
+
+Lanzo el procedimiento y pruebo que funciona:
+
+```sql
+EXEC MostrarNumSesiones('TESTING');
+El usuario TESTING tiene un limite de sesiones concurrentes permitidas de: UNLIMITED
+Pero el numero real de sesiones que tiene abiertas son: 2
+
+PL/SQL procedure successfully completed.
+```
