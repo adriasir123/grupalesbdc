@@ -1138,45 +1138,152 @@ Además, puedo comprobar que efectivamente las sesiones concurrentes de este usu
 
 Realizar un procedimiento que reciba un nombre de usuario y un privilegio de sistema y nos muestre el mensaje 'SI, DIRECTO' si el usuario tiene ese privilegio concedido directamente, 'SI, POR ROL' si el usuario tiene ese privilegio en alguno de los roles que tiene concedidos y un 'NO' si el usuario no tiene dicho privilegio.
 
-### 24. Realización
+### 24. Código
 
 ```sql
-CREATE OR REPLACE PROCEDURE comprobar_privilegio (
-        p_username IN VARCHAR2,
-        p_privilege IN VARCHAR2
+CREATE OR REPLACE PROCEDURE comprobar_privilegio_sistema (
+    p_usuario IN VARCHAR2,
+    p_privilegio IN VARCHAR2
 ) AS
-        v_grant_directo BOOLEAN;
-        v_role_grant   BOOLEAN;
-BEGIN
- -- Comprobar si el privilegio está concedido directamente al usuario
-        SELECT COUNT(*) INTO v_grant_directo
+    CURSOR c_lista_privilegios IS
+        SELECT *
         FROM DBA_SYS_PRIVS
-        WHERE grantee = p_username AND privilege = p_privilege;
- -- Comprobar si el privilegio está concedido a través de algún rol del usuario
-        SELECT COUNT(*) INTO v_role_grant
-        FROM DBA_ROLE_PRIVS
-        WHERE grantee = p_username AND privilege = p_privilege;
- -- Mostrar resultado
-        IF v_grant_directo = 1 THEN
-                dbms_output.put_line('SI, DIRECTO');
-        ELSIF v_role_grant = 1 THEN
-                dbms_output.put_line('SI, POR ROL');
-        ELSE
-                dbms_output.put_line('NO');
+        WHERE grantee = p_usuario
+            OR grantee IN (
+                SELECT granted_role
+                FROM DBA_ROLE_PRIVS
+                CONNECT BY PRIOR granted_role = grantee START WITH grantee = p_usuario
+            )
+        ORDER BY 1,2,3;
+    v_es_usuario NUMBER;
+    v_es_rol     NUMBER;
+BEGIN
+    FOR i IN c_lista_privilegios LOOP
+        IF i.privilege = p_privilegio THEN
+            SELECT COUNT(*) INTO v_es_usuario
+            FROM DBA_USERS
+            WHERE username = i.grantee;
+            SELECT COUNT(*) INTO v_es_rol
+            FROM DBA_ROLES
+            WHERE role = i.grantee;
         END IF;
+    END LOOP;
+    IF v_es_usuario = 1 THEN
+        DBMS_OUTPUT.PUT_LINE('SI, DIRECTO');
+    ELSIF v_es_rol = 1 THEN
+        DBMS_OUTPUT.PUT_LINE('SI, POR ROL');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('NO');
+    END IF;
 END;
 /
 ```
 
+### 24. Comprobaciones
 
+Antes de nada, aclaro que estaré usando el usuario `USRPRACTICA1` para las pruebas, porque lo tengo preparado con privilegios y roles para que salgan unos resultados lo más completos posibles.
 
+Primero voy a mostrar TODOS (directos, por rol, y con recursividad de rol) los privilegios de `USRPRACTICA1` para que tengamos una imagen global:
 
+```sql
+SELECT *
+FROM DBA_SYS_PRIVS
+WHERE grantee = 'USRPRACTICA1'
+    OR grantee IN (
+        SELECT granted_role
+        FROM DBA_ROLE_PRIVS
+        CONNECT BY PRIOR granted_role = grantee START WITH grantee = 'USRPRACTICA1'
+    )
+ORDER BY 1,2,3;
+```
 
+```sql
+GRANTEE                                                                                                                          PRIVILEGE                                ADM COM INH
+-------------------------------------------------------------------------------------------------------------------------------- ---------------------------------------- --- --- ---
+EJEMPLO                                                                                                                          CREATE ANY SYNONYM                       NO  YES NO
+ROLPRACTICA1                                                                                                                     CREATE SESSION                           NO  YES NO
+ROLPRACTICA1                                                                                                                     CREATE TABLE                             NO  YES NO
+USRPRACTICA1                                                                                                                     CREATE ANY INDEX                         NO  YES NO
+USRPRACTICA1                                                                                                                     CREATE ANY TABLE                         NO  YES NO
+USRPRACTICA1                                                                                                                     CREATE SESSION                           NO  YES NO
+USRPRACTICA1                                                                                                                     INSERT ANY TABLE                         NO  YES NO
 
+7 rows selected.
+```
 
+Depende de quien haya recibido el privilegio, es de un tipo u otro:
 
+- `USRPRACTICA1`: directo, lo recibe el usuario
+- `ROLPRACTICA1`: por rol, está otorgado a `USRPRACTICA1`
+- `EJEMPLO`: por rol recursivo, ya que ejemplo no es un rol otorgado a `USRPRACTICA1`, es un rol otorgado a `ROLPRACTICA1`
 
+Para probar lo dicho, muestro los roles de `USRPRACTICA1`:
 
+```sql
+SELECT granted_role
+FROM dba_role_privs
+WHERE grantee = 'USRPRACTICA1';
+```
+
+```sql
+GRANTED_ROLE
+--------------------------------------------------------------------------------------------------------------------------------
+ROLPRACTICA1
+```
+
+Y muestros los roles del rol `ROLPRACTICA1`:
+
+```sql
+SELECT granted_role
+FROM dba_role_privs
+WHERE grantee = 'ROLPRACTICA1';
+```
+
+```sql
+GRANTED_ROLE
+--------------------------------------------------------------------------------------------------------------------------------
+EJEMPLO
+```
+
+Como vemos, ejemplo (un rol que he creado y preparado) no es un rol directo de `USRPRACTICA1`, es un rol directo de `ROLPRACTICA1`, así que ya aquí entraría en juego la recursividad.
+
+Teniendo todo esto en mente, y el resultado completo de privilegios de arriba, podremos entender el resultado de la ejecución del procedimiento.
+
+Muestro un privilegio directo:
+
+```sql
+EXEC comprobar_privilegio_sistema('USRPRACTICA1','CREATE ANY TABLE');
+SI, DIRECTO
+
+PL/SQL procedure successfully completed.
+```
+
+Muestro un privilegio por rol:
+
+```sql
+EXEC comprobar_privilegio_sistema('USRPRACTICA1','CREATE TABLE');
+SI, POR ROL
+
+PL/SQL procedure successfully completed.
+```
+
+Muestro un privilegio por rol recursivo:
+
+```sql
+EXEC comprobar_privilegio_sistema('USRPRACTICA1','CREATE ANY SYNONYM');
+SI, POR ROL
+
+PL/SQL procedure successfully completed.
+```
+
+Muestro un privilegio que no tenga asignado de ninguna manera:
+
+```sql
+EXEC comprobar_privilegio_sistema('USRPRACTICA1','CREATE ANY PROCEDURE');
+NO
+
+PL/SQL procedure successfully completed.
+```
 
 ## Ejercicio 25
 
