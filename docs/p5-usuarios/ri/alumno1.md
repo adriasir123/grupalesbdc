@@ -1138,10 +1138,35 @@ Además, puedo comprobar que efectivamente las sesiones concurrentes de este usu
 
 Realizar un procedimiento que reciba un nombre de usuario y un privilegio de sistema y nos muestre el mensaje 'SI, DIRECTO' si el usuario tiene ese privilegio concedido directamente, 'SI, POR ROL' si el usuario tiene ese privilegio en alguno de los roles que tiene concedidos y un 'NO' si el usuario no tiene dicho privilegio.
 
+### 24. Realización
 
-
-
-
+```sql
+CREATE OR REPLACE PROCEDURE comprobar_privilegio (
+        p_username IN VARCHAR2,
+        p_privilege IN VARCHAR2
+) AS
+        v_grant_directo BOOLEAN;
+        v_role_grant   BOOLEAN;
+BEGIN
+ -- Comprobar si el privilegio está concedido directamente al usuario
+        SELECT COUNT(*) INTO v_grant_directo
+        FROM DBA_SYS_PRIVS
+        WHERE grantee = p_username AND privilege = p_privilege;
+ -- Comprobar si el privilegio está concedido a través de algún rol del usuario
+        SELECT COUNT(*) INTO v_role_grant
+        FROM DBA_ROLE_PRIVS
+        WHERE grantee = p_username AND privilege = p_privilege;
+ -- Mostrar resultado
+        IF v_grant_directo = 1 THEN
+                dbms_output.put_line('SI, DIRECTO');
+        ELSIF v_role_grant = 1 THEN
+                dbms_output.put_line('SI, POR ROL');
+        ELSE
+                dbms_output.put_line('NO');
+        END IF;
+END;
+/
+```
 
 
 
