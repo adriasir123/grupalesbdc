@@ -1,6 +1,12 @@
 # Alumno 1 (ORACLE)
 
-create user testing identified by 1234;
+## Pasos previos
+
+Durante toda esta parte individual, a veces usaré el siguiente usuario de pruebas:
+
+```sql
+CREATE USER TESTING IDENTIFIED BY 1234;
+```
 
 ## Ejercicio 1
 
