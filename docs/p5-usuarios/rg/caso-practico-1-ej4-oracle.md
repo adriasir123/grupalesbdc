@@ -1,29 +1,36 @@
 # Ejercicio 4 Oracle
 
-Realiza un procedimiento que reciba un nombre de usuario y nos muestre cuántas sesiones tiene abiertas en este momento. Además, para cada una de dichas sesiones nos mostrará la hora de comienzo y el nombre de la máquina, sistema operativo y programa desde el que fue abierta.
+## Enunciado
 
-Creamos el procedimiento:
+Realizar un procedimiento que reciba un nombre de usuario y nos muestre cuántas sesiones tiene abiertas en este momento. Además, para cada una de dichas sesiones nos mostrará la hora de comienzo y el nombre de la máquina, sistema operativo y programa desde el que fue abierta.
+
+## Código
 
 ```sql
-CREATE OR REPLACE PROCEDURE MostrarSesionUsuario (p_usuario VARCHAR2)
-IS
-cursor c_datos is SELECT s.sid, s.serial#, s.username, s.machine, s.osuser, s.program, s.logon_time FROM v$session s WHERE s.username = UPPER(p_usuario) AND STATUS='ACTIVE';
+CREATE OR REPLACE PROCEDURE MostrarSesionUsuario (
+    p_usuario VARCHAR2
+) IS
+    CURSOR c_datos IS
+        SELECT s.sid,s.serial#,s.username,s.machine,s.osuser,s.program,s.logon_time
+        FROM V$SESSION s
+        WHERE s.username = upper(p_usuario)
+          AND status='ACTIVE';
 BEGIN
-  for i in c_datos loop
-    DBMS_OUTPUT.PUT_LINE('SID: ' || i.sid);
-    DBMS_OUTPUT.PUT_LINE('Serial#: ' || i.serial#);
-    DBMS_OUTPUT.PUT_LINE('Username: ' || i.username);
-    DBMS_OUTPUT.PUT_LINE('Machine: ' || i.machine);
-    DBMS_OUTPUT.PUT_LINE('OS User: ' || i.osuser);
-    DBMS_OUTPUT.PUT_LINE('Program: ' || i.program);
-    DBMS_OUTPUT.PUT_LINE('Logon Time: ' || i.logon_time);
-    DBMS_OUTPUT.PUT_LINE('----------------');
-  END LOOP;
-END MostrarSesionUsuario;
+    FOR i IN c_datos LOOP
+        DBMS_OUTPUT.PUT_LINE('SID: ' || i.sid);
+        DBMS_OUTPUT.PUT_LINE('Serial#: ' || i.serial#);
+        DBMS_OUTPUT.PUT_LINE('Username: ' || i.username);
+        DBMS_OUTPUT.PUT_LINE('Machine: ' || i.machine);
+        DBMS_OUTPUT.PUT_LINE('OS User: ' || i.osuser);
+        DBMS_OUTPUT.PUT_LINE('Program: ' || i.program);
+        DBMS_OUTPUT.PUT_LINE('Logon Time: ' || i.logon_time);
+        DBMS_OUTPUT.PUT_LINE('----------------');
+    END LOOP;
+END;
 /
 ```
 
-### Prueba de funcionamiento:
+### Comprobaciones
 
 ```sql
 SQL> exec MostrarSesionUsuario('sys');
