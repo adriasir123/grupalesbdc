@@ -30,7 +30,7 @@ END;
 /
 ```
 
-### Comprobaciones
+## Comprobaciones
 
 ```sql
 SQL> exec MostrarSesionUsuario('sys');
