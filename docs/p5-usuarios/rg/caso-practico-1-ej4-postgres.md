@@ -25,7 +25,7 @@ CREATE OR REPLACE PROCEDURE MostrarSesionesUsuario (p_usuario VARCHAR)
 AS $$
 DECLARE
     c_sesiones CURSOR FOR 
-        SELECT client_hostname,usename,backend_start,application_name
+        SELECT client_hostname,backend_start,application_name
         FROM pg_stat_activity
         WHERE usename = p_usuario;
     v_hora VARCHAR;
@@ -36,7 +36,6 @@ BEGIN
         RAISE NOTICE 'Hora de comienzo: %', v_hora;
         RAISE NOTICE 'Hostname: %', i.client_hostname;
         RAISE NOTICE 'Programa: %', i.application_name;
-        RAISE NOTICE 'Username: %', i.usename;
         RAISE NOTICE '----------------';
     END LOOP;
 END;
@@ -52,17 +51,14 @@ postgres=# CALL MostrarSesionesUsuario('postgres');
 NOTICE:  Hora de comienzo: 09:48:14
 NOTICE:  Hostname: <NULL>
 NOTICE:  Programa: 
-NOTICE:  Username: postgres
 NOTICE:  ----------------
 NOTICE:  Hora de comienzo: 09:48:57
 NOTICE:  Hostname: <NULL>
 NOTICE:  Programa: psql
-NOTICE:  Username: postgres
 NOTICE:  ----------------
 NOTICE:  Hora de comienzo: 09:58:55
 NOTICE:  Hostname: servidorpostgresql1
 NOTICE:  Programa: psql
-NOTICE:  Username: postgres
 NOTICE:  ----------------
 ```
 
