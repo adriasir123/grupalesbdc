@@ -1,8 +1,10 @@
 # Ejercicio 5
 
-## Realiza un procedimiento que muestre los usuarios que pueden conceder privilegios de sistema a otros usuarios y cuales son dichos privilegios.
+## Enunciado
 
-### Creamos Procedimiento:
+Realiza un procedimiento que muestre los usuarios que pueden conceder privilegios de sistema a otros usuarios y cuales son dichos privilegios.
+
+## Código
 
 ```sql
 CREATE OR REPLACE PROCEDURE MostrarUsuariosPrivilegios

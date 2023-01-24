@@ -1,8 +1,12 @@
 # Ejercicio 3
 
-##  Crea un tablespace TS2 con tamaño de extensión de 256K. Realiza una consulta que genere un script que asigne ese tablespace como tablespace por defecto a los usuarios que no tienen privilegios para consultar ninguna tabla de SCOTT, excepto a SYSTEM.
+## Enunciado
 
-## Creamos el tablespace TS2:
+Crea un tablespace TS2 con tamaño de extensión de 256K. Realiza una consulta que genere un script que asigne ese tablespace como tablespace por defecto a los usuarios que no tienen privilegios para consultar ninguna tabla de SCOTT, excepto a SYSTEM.
+
+## Creación
+
+Creamos el tablespace TS2:
 
 ```sql
 SQL> CREATE TABLESPACE TS2
@@ -12,7 +16,9 @@ EXTENT MANAGEMENT LOCAL AUTOALLOCATE;
 Tablespace creado.
 ```
 
-## Realizamos la consulta que nos generara un script:
+## Comprobación
+
+Realizamos la consulta que nos generara un script:
 
 ```sql
 SQL> SELECT 'ALTER USER ' || username || ' DEFAULT TABLESPACE TS2;'
