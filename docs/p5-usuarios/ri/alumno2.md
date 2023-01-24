@@ -108,7 +108,42 @@ Es importante mencionar que estas consultas estan basadas en la estructura del d
 
 Realiza una función de verificación de contraseñas que compruebe que la contraseña difiere en más de tres caracteres de la anterior y que la longitud de la misma es diferente de la anterior. Asígnala al perfil CONTRASEÑASEGURA. Comprueba que funciona correctamente.
 
+```sql
+CREATE OR REPLACE FUNCTION verificar_contrasenas (old_password VARCHAR2, new_password VARCHAR2) 
+RETURN BOOLEAN 
+IS
+  different_characters INTEGER;
+BEGIN
+    different_characters := 0;
+    FOR i IN 1..LENGTH(old_password) LOOP
+        IF SUBSTR(old_password, i, 1) != SUBSTR(new_password, i, 1) THEN
+            different_characters := different_characters + 1;
+        END IF;
+    END LOOP;
+    IF different_characters > 3 AND LENGTH(old_password) != LENGTH(new_password) THEN
+        RETURN TRUE;
+    ELSE
+        RETURN FALSE;
+    END IF;
+END verificar_contrasenas;
+/
+```
 
+Para asignar la función que acabamos de crear al perfil CONTRASEÑASEGURA, ejecutamos el siguiente comando:
+
+```sql
+ALTER PROFILE "CONTRASENASEGURA" LIMIT PASSWORD_VERIFY_FUNCTION "verificar_contrasenas";
+```
+
+Comprobamos que se ha asignado correctamente realizando la siguiente consulta:
+
+```sql
+SQL> SELECT profile, resource_name, limit 
+FROM dba_profiles
+WHERE profile = 'CONTRASENASEGURA' AND resource_name = 'PASSWORD_VERIFY_FUNCTION';
+
+verificar_contrasenas
+```
 
 ### EJERCICIO 8
 
