@@ -1,12 +1,12 @@
 # Ejercicio 2
 
-## Oracle
+## 1. Oracle
 
-### Enunciado
+### 1. Enunciado
 
 Escribe una consulta que genere un script para quitar el privilegio de borrar registros en alguna tabla de SCOTT a los usuarios que lo tengan.
 
-### Código
+### 1. Código
 
 ```sql
 CREATE OR REPLACE FUNCTION generador_script_quitar_privilegios(
@@ -28,7 +28,7 @@ END;
 /
 ```
 
-### Comprobaciones
+### 1. Comprobaciones
 
 Para que la prueba funcione añado los siguientes privilegios de borrado sobre la tabla a probar de SCOTT en algunos usuarios:
 
@@ -52,7 +52,58 @@ REVOKE DELETE ON scott.DEPT FROM EXAMENBD34;
 
 Ya sólo tendríamos que copiar y pegar el resultado, y quitaríamos los privilegios.
 
-## PostgreSQL
+## 2. PostgreSQL
+
+### 2. Pasos previos
+
+Para que el output de la función sea "copiable y pegable", tenemos que acceder a postgres así:
+
+```sql
+psql -At
+```
+
+!!! Warning
+
+    Si no se hace esto, osea si se accede de forma normal, el output de la función saldrá con signos `+` al final de las líneas y no será "copiable y pegable".
+
+Las funciones en PostgreSQL se almacenan según la base de datos a la que estemos conectados, así que nos conectamos a la base de datos sobre la que queramos usar la función:
+
+```sql
+\c scott
+```
+
+### 2. Código
+
+```sql
+CREATE OR REPLACE FUNCTION generador_script_quitar_privilegios(p_tabla text)
+RETURNS text AS $$
+DECLARE
+    c_usuarios CURSOR FOR
+        SELECT grantee 
+        FROM information_schema.role_table_grants 
+        WHERE privilege_type = 'DELETE' 
+            AND table_name = p_tabla;
+    v_output text := '';
+BEGIN
+    FOR i IN c_usuarios LOOP
+        v_output := v_output || 'REVOKE DELETE ON ' || p_tabla || ' FROM ' || i.grantee || ';' || E'\n';
+    END LOOP;
+    RETURN v_output;
+END;
+$$ LANGUAGE plpgsql;
+```
+
+### 2. Comprobaciones
+
+Lanzo la consulta que genera el script y muestro el output:
+
+```sql
+scott=# SELECT generador_script_quitar_privilegios('dept');
+REVOKE DELETE ON dept FROM postgres;
+REVOKE DELETE ON dept FROM scott;
+```
+
+Ya sólo tendríamos que copiar y pegar el resultado, y quitaríamos los privilegios.
 
 
 
@@ -68,7 +119,7 @@ Ya sólo tendríamos que copiar y pegar el resultado, y quitaríamos los privile
 
 
 
-## MariaDB
+## 3. MariaDB
 
 
 
