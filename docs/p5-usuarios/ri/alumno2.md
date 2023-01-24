@@ -140,7 +140,7 @@ Comprobamos que se ha asignado correctamente realizando la siguiente consulta:
 ```sql
 SQL> SELECT profile, resource_name, limit 
 FROM dba_profiles
-WHERE profile = 'CONTRASEÑASEGURA' AND resource_name = 'PASSWORD_VERIFY_FUNCTION';
+WHERE profile = 'CONTRASENASEGURA' AND resource_name = 'PASSWORD_VERIFY_FUNCTION';
 
 verificar_contrasenas
 ```
