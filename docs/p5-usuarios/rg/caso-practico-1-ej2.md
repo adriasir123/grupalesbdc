@@ -64,7 +64,7 @@ psql -At
 
 !!! Warning
 
-    Si no se hace esto, osea si se accede de forma normal, el output de la función saldrá con signos `+` al final de las líneas y no será "copiable y pegable".
+    Si no se hace esto, osea si se accede de forma normal, el output de la función saldrá con signos `+` al final de las líneas y no será "copiable y pegable"
 
 Las funciones en PostgreSQL se almacenan según la base de datos a la que estemos conectados, así que nos conectamos a la base de datos sobre la que queramos usar la función:
 
@@ -105,22 +105,73 @@ REVOKE DELETE ON dept FROM scott;
 
 Ya sólo tendríamos que copiar y pegar el resultado, y quitaríamos los privilegios.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ## 3. MariaDB
 
+### 3. Pasos previos
 
+Es necesario acceder así:
 
+```sql
+sudo mariadb -Nsr
+```
 
+También que entre en la base de datos a usar:
+
+```sql
+USE scott;
+```
+
+Para que la prueba luego funcione, añado el siguiente privilegio de borrado sobre la tabla a probar de SCOTT:
+
+```sql
+GRANT DELETE ON dept TO 'scott'@'%' IDENTIFIED BY '1234';
+flush privileges;
+```
+
+### 3. Código
+
+```sql
+DELIMITER //
+CREATE OR REPLACE FUNCTION generador_script_quitar_privilegios(p_tabla text)
+RETURNS text
+BEGIN
+    DECLARE v_output text default '';
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE usuario TEXT;
+
+    DECLARE c_usuarios CURSOR FOR 
+        SELECT user
+        FROM mysql.tables_priv
+        WHERE table_priv = 'delete'
+            AND table_name = p_tabla
+            AND db = 'scott';
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    OPEN c_usuarios;
+
+    REPEAT
+        FETCH c_usuarios INTO usuario;
+        IF NOT done THEN
+            SET v_output = CONCAT(v_output, 'REVOKE DELETE ON ', p_tabla, ' FROM ', usuario, ';' , '\n');
+        END IF;
+    UNTIL done
+    END REPEAT;
+
+    CLOSE c_usuarios;
+
+    RETURN v_output;
+END //
+DELIMITER ;
+```
+
+### 3. Comprobaciones
+
+Lanzo la consulta que genera el script y muestro el output:
+
+```sql
+MariaDB [scott]> SELECT generador_script_quitar_privilegios('dept');
+REVOKE DELETE ON dept FROM scott;
+```
+
+Ya sólo tendríamos que copiar y pegar el resultado, y quitaríamos los privilegios.
