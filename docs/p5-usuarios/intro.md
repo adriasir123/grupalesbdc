@@ -2,12 +2,12 @@
 
 En esta práctica se gestionan usuarios, permisos, roles y perfiles sobre diferentes bases de datos.
 
-Este trabajo ha sido realizado por (falta elegir roles):
+Reparto de roles:
 
-- Adrián Jaramillo Rodríguez (capitán)
-- José Juan Hervás Carrasco (secretario)
-- Arantxa Fernández Morató (facilitadora)
-- Antonio Marchán Posada (portavoz)
+- Capitán: José Juan Hervás Carrasco
+- Secretaria: Arantxa Fernández Morató
+- Facilitador: Antonio Marchán Posada
+- Portavoz: Adrián Jaramillo Rodríguez
 
 Puedes empezar a navegar por la documentación utilizando el navbar a tu izquierda.
 

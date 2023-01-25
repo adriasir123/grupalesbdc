@@ -66,7 +66,25 @@ GRANT DROP ANY ROLE TO becario;
 GRANT GRANT ANY ROLE TO becario;
 ```
 
+
+
+
+
+
+
+
+
 ## PostgreSQL
+
+
+
+
+
+
+
+
+
+
 
 
 
