@@ -74,9 +74,93 @@ GRANT GRANT ANY ROLE TO becario;
 
 
 
-## PostgreSQL
+## 2. PostgreSQL
+
+### 2. Ejercicio 1
+
+> Crear el usuario `becario`
+
+En debian:
+
+```sql
+sudo adduser becario
+```
+
+En PostgreSQL:
+
+```sql
+CREATE USER becario WITH PASSWORD '1234';
+```
+
+!!! Info
+
+    `CREATE USER` lleva implícito el atributo `LOGIN`, por lo que no será necesario darle permisos de conexión a la base de datos
+
+### 2. Ejercicio 2
+
+> Dar el privilegio de modificar el número de errores en la introducción de contraseña de cualquier usuario
+
+En PostgreSQL [según este post](https://stackoverflow.com/questions/73925483/postgresql-failed-login-attempts), nativamente al menos, no existe un equivalente al `FAILED_LOGIN_ATTEMPTS` de Oracle. Existe `auth_delay`, pero no llegaríamos al mismo resultado.
+
+Podríamos llegar al mismo resultado, pero tendríamos que una de dos:
+
+- Usar herramientas externas como [Fail2Ban](https://github.com/fail2ban/fail2ban)
+- Usar versiones modificadas de PostgreSQL como [Postgres Pro](https://postgrespro.com/)
+
+### 2. Ejercicio 3
+
+> Dar el privilegio de modificar índices en cualquier esquema, pudiendo pasarlo a quien quiera
+
+Según [este](https://stackoverflow.com/questions/32432069/add-index-on-table-owned-by-other-user-in-postgres) y [este otro](https://dba.stackexchange.com/questions/114735/postgres-how-can-i-allow-index-creation-but-no-table-mutations-or-table-drops-b) post, la creación y modificación de índices en PostgreSQL funcionan un poco diferente a como es en Oracle.
+
+Primero de todo, no existen directamente estos privilegios en PostgreSQL. Sólo el superusuario y el propietario de una tabla pueden crear/modificar índices sobre ella.
+
+Por ejemplo, si intentamos crear un índice de una tabla que no es de ese usuario, aparece este error:
+
+```sql
+scott=> CREATE INDEX test ON dept(dname);
+ERROR:  must be owner of table dept
+```
+
+### 2. Ejercicio 4
+
+> Dar el privilegio de inserción de filas en scott.emp, pudiendo pasarlo a quien quiera
+
+```sql
+\c scott
+```
+
+```sql
+GRANT INSERT ON emp TO becario WITH GRANT OPTION;
+```
 
 
+https://dba.stackexchange.com/questions/261991/grant-usage-to-a-schema-from-another-database
+
+
+
+
+### 2. Ejercicio 5
+
+> Dar el privilegio de almacenamiento ilimitado en cualquier tablespace
+
+Aunque los tablespaces existan en PostgreSQL y se puedan listar con `\db`, no existe una equivalencia para el privilegio `UNLIMITED TABLESPACE`.
+
+### 2. Ejercicio 6
+
+> Gestión completa de usuarios
+
+```sql
+ALTER USER becario WITH CREATEROLE;
+```
+
+!!! Info
+
+    Un usuario con el parámetro `CREATEROLE` también podrá hacer ALTER y DROP de ellos
+
+### 2. Ejercicio 7
+
+>
 
 
 
