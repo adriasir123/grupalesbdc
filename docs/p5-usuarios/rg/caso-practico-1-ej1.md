@@ -66,14 +66,6 @@ GRANT DROP ANY ROLE TO becario;
 GRANT GRANT ANY ROLE TO becario;
 ```
 
-
-
-
-
-
-
-
-
 ## 2. PostgreSQL
 
 ### 2. Ejercicio 1
@@ -124,21 +116,23 @@ ERROR:  must be owner of table dept
 
 ### 2. Ejercicio 4
 
-> Dar el privilegio de inserción de filas en scott.emp, pudiendo pasarlo a quien quiera
+> Dar el privilegio de inserción de filas en la tabla emp de scott, pudiendo pasarlo a quien quiera
+
+Según [este post](https://dba.stackexchange.com/questions/261991/grant-usage-to-a-schema-from-another-database) no podemos dar permisos sobre objetos de una base de datos mientras estamos conectados a otra, así que primero nos conectamos a `scott`:
 
 ```sql
 \c scott
 ```
 
+Damos el privilegio:
+
 ```sql
 GRANT INSERT ON emp TO becario WITH GRANT OPTION;
 ```
 
+!!! Info
 
-https://dba.stackexchange.com/questions/261991/grant-usage-to-a-schema-from-another-database
-
-
-
+    Por este mismo funcionamiento, no podríamos insertar datos si no estamos conectados a la misma base de datos
 
 ### 2. Ejercicio 5
 
@@ -148,7 +142,7 @@ Aunque los tablespaces existan en PostgreSQL y se puedan listar con `\db`, no ex
 
 ### 2. Ejercicio 6
 
-> Gestión completa de usuarios
+> Dar gestión completa de usuarios
 
 ```sql
 ALTER USER becario WITH CREATEROLE;
@@ -160,7 +154,39 @@ ALTER USER becario WITH CREATEROLE;
 
 ### 2. Ejercicio 7
 
->
+> Dar gestión completa de privilegios
+
+En PostgreSQL no existe una equivalencia directa a `GRANT ANY PRIVILEGE` ni `GRANT ANY OBJECT PRIVILEGE`, pero sí que existe `WITH GRANT OPTION` al otorgar privilegios.
+
+Si el usuario `becario` tuviera [todos los privilegios posibles](https://www.postgresql.org/docs/current/sql-grant.html) con `WITH GRANT OPTION`, llegaríamos a una situación lo más similar posible a la que teníamos en Oracle, así que eso hacemos:
+
+```sql
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA schema_name TO becario WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA schema_name TO becario WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON DATABASE database_name TO becario WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON DOMAIN domain_name TO becario WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON FOREIGN DATA WRAPPER fdw_name TO becario WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON FOREIGN SERVER server_name TO becario WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA schema_name TO becario WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON ALL PROCEDURES IN SCHEMA schema_name TO becario WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON ALL ROUTINES IN SCHEMA schema_name TO becario WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON LANGUAGE lang_name TO becario WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON LARGE OBJECT loid TO becario WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON PARAMETER configuration_parameter TO becario WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON SCHEMA schema_name TO becario WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON TABLESPACE tablespace_name TO becario WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON TYPE type_name TO becario WITH GRANT OPTION;
+```
+
+### 2. Ejercicio 8
+
+> Dar gestión completa de roles
+
+En PostgreSQL, los usuarios y los roles son lo mismo; y más específicamente no existen los usuarios, sólo los roles.
+
+Por esto, cuando tuvimos que dar gestión completa de usuarios lo que dimos realmente fue gestión completa de roles, por lo que este paso no es necesario, ya se ha hecho.
+
+
 
 
 
