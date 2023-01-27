@@ -3,8 +3,7 @@
 
 ## Mongodb
 
-### Ejercicio 1: Averigua si existe la posibilidad en MongoDB de limitar el acceso de un usuario a los datos de
-una colección determinada.
+### Ejercicio 1: Averigua si existe la posibilidad en MongoDB de limitar el acceso de un usuario a los datos de una colección determinada.
 
 
 
