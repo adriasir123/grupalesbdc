@@ -186,20 +186,131 @@ En PostgreSQL, los usuarios y los roles son lo mismo; y más específicamente no
 
 Por esto, cuando tuvimos que dar gestión completa de usuarios lo que dimos realmente fue gestión completa de roles, por lo que este paso no es necesario, ya se ha hecho.
 
+## 3. MariaDB
 
+### 3. Ejercicio 1
 
+> Crear el usuario `becario`
 
+```sql
+CREATE USER 'becario'@'%' IDENTIFIED BY '1234';
+```
 
+### 3. Ejercicio 2
 
+> Dar el privilegio de conexión a la base de datos
 
+El privilegio `CREATE SESSION` no existe en MariaDB, porque este proceso funciona un poco diferente a Oracle.
 
+Nada más crear un usuario se permiten las conexiones pero no deja hacer nada, porque sólo se le otorga al usuario el privilegio `USAGE`, que no tiene ningún uso real:
 
+![usage](https://i.imgur.com/ZgKDS9S.png)
 
+```sql
+MariaDB [(none)]> show grants;
++--------------------------------------------------------------------------------------------------------+
+| Grants for becario@%                                                                                   |
++--------------------------------------------------------------------------------------------------------+
+| GRANT USAGE ON *.* TO `becario`@`%` IDENTIFIED BY PASSWORD '*A4B6157319038724E3560894F7F932C8886EBFCF' |
++--------------------------------------------------------------------------------------------------------+
+1 row in set (0.001 sec)
+```
 
+Para que un usuario pueda acceder a una base de datos en MariaDB, tiene que tener algún tipo de privilegio relacionado con los objetos.
 
+El mínimo que le podemos dar para llegar a la equivalencia más cercana con `CREATE SESSION` es `SELECT`:
 
+```sql
+GRANT SELECT ON *.* TO 'becario'@'%';
+```
 
+### 3. Ejercicio 3
 
-## MariaDB
+> Dar el privilegio de modificar el número de errores en la introducción de contraseña de cualquier usuario
 
+En MariaDB los perfiles no existen de la misma manera que existen en Oracle, de hecho no se pueden crear manualmente porque **no son el mismo concepto**.
 
+Sólo existen los comandos de visualización `SHOW PROFILE` y `SHOW PROFILES`, que incluso serán eliminados porque están obsoletos:
+
+![deprecated](https://i.imgur.com/2Y5uZCG.png)
+
+Se puede llegar a una equivalencia con Oracle pero no se podría hacer ni con privilegios ni con perfiles, tendría que ser fuera de la base de datos añadiendo lo siguiente a este fichero:
+
+```shell
+sudo nano /etc/mysql/my.cnf
+```
+
+```shell
+[mariadb]
+max_password_errors=3
+```
+
+Reinicio:
+
+```shell
+sudo systemctl restart mariadb
+```
+
+Compruebo que ha funcionado:
+
+```sql
+MariaDB [(none)]> SELECT @@max_password_errors;
++-----------------------+
+| @@max_password_errors |
++-----------------------+
+|                     3 |
++-----------------------+
+1 row in set (0.001 sec)
+```
+
+### 3. Ejercicio 4
+
+> Dar el privilegio de modificar índices en cualquier esquema, pudiendo pasarlo a quien quiera
+
+En MariaDB no existe un `ALTER INDEX` como en Oracle, simplemente existe un privilegio general:
+
+```sql
+GRANT INDEX ON *.* TO 'becario'@'%' IDENTIFIED BY '1234' WITH GRANT OPTION;
+```
+
+### 3. Ejercicio 5
+
+> Dar el privilegio de inserción de filas en scott.emp, pudiendo pasarlo a quien quiera
+
+```sql
+GRANT INSERT ON scott.emp TO 'becario'@'%' WITH GRANT OPTION;
+```
+
+### 3. Ejercicio 6
+
+> Dar el privilegio de almacenamiento ilimitado en cualquier tablespace
+
+No existe una equivalencia para el privilegio `UNLIMITED TABLESPACE` en MariaDB.
+
+### 3. Ejercicio 7
+
+> Dar gestión completa de usuarios
+
+```sql
+GRANT CREATE USER ON *.* TO 'becario'@'%';
+```
+
+El privilegio `CREATE USER` en MariaDB incluye las funciones de `ALTER USER` y `DROP USER` de Oracle.
+
+### 3. Ejercicio 8
+
+> Dar gestión completa de privilegios
+
+En MariaDB tampoco existe `GRANT ANY PRIVILEGE` ni `GRANT ANY OBJECT PRIVILEGE`, pero como existe `WITH GRANT OPTION` podemos llegar a una solución similar a lo que hicimos en PostgreSQL.
+
+La diferencia es que en MariaDB existe `ALL PRIVILEGES`, facilitándonos el trabajo en una línea:
+
+```sql
+GRANT ALL PRIVILEGES ON *.* TO 'becario'@'%' WITH GRANT OPTION;
+```
+
+### 3. Ejercicio 9
+
+> Dar gestión completa de roles
+
+Para gestionar los roles lo único que se necesita es el privilegio `CREATE USER`, que ya dimos antes.
