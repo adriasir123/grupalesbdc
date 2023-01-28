@@ -1,6 +1,8 @@
-# Ejercicio 1
+# Ejercicio 1 (Oracle)
 
-## 1. (ORACLE) La vida de un DBA es dura. Tras pedirlo insistentemente, en tu empresa han contratado una persona para ayudarte. Decides que se encargará de las siguientes tareas:
+## Enunciado
+
+La vida de un DBA es dura. Tras pedirlo insistentemente, en tu empresa han contratado una persona para ayudarte. Decides que se encargará de las siguientes tareas:
 
 - Resetear los archivos de log en caso de necesidad.
 - Crear funciones de complejidad de contraseña y asignárselas a  usuarios.
@@ -12,6 +14,8 @@
 Crea un usuario llamado Ayudante y, sin usar los roles predefinidos de ORACLE, dale  los privilegios mínimos para que pueda resolver dichas tareas.
 
 Pista: Si no recuerdas el nombre de un privilegio, puedes buscarlo en el diccionario de datos.
+
+## Realización
 
 Vamos a crear un usuario llamado ayudante:
 
@@ -37,6 +41,8 @@ GRANT ALTER TABLESPACE TO rol_ayudante;
 
 GRANT rol_ayudante TO ayudante;
 ```
+
+## Comprobaciones
 
 Aquí vamos a ver que con el usuario ayudante gracias al rol que ahora tenemos podemos ver las tablas de SCOTT.DEPT:
 
