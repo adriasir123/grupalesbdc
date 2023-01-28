@@ -14,13 +14,14 @@ Crea un usuario llamado Ayudante y, sin usar los roles predefinidos de ORACLE, d
 Pista: Si no recuerdas el nombre de un privilegio, puedes buscarlo en el diccionario de datos.
 
 Vamos a crear un usuario llamado ayudante:
-```
+
+```sql
 CREATE USER ayudante identified by ayudante;
 ```
 
 Ahora vamos a crear el rol:
 
-```
+```sql
 CREATE ROLE rol_ayudante;
 
 GRANT ALTER SYSTEM TO rol_ayudante;
@@ -36,6 +37,7 @@ GRANT ALTER TABLESPACE TO rol_ayudante;
 
 GRANT rol_ayudante TO ayudante;
 ```
+
 Aquí vamos a ver que con el usuario ayudante gracias al rol que ahora tenemos podemos ver las tablas de SCOTT.DEPT:
 
 ![prueba1](/img/capturas-antonio/prueba-funcionamiento-caso2-ejercicio-1.png)
@@ -47,6 +49,3 @@ Ahora vamos a hacer una prueba de perfil en el cual haré que incremente el lím
 Aquí incrementaré el tiempo de conexión del usuario a 10 minutos:
 
 ![prueba1](/img/capturas-antonio/prueba-funcionamiento-caso2-ejercicio-1-2.png)
-
-
-
