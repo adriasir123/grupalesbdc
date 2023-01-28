@@ -1,11 +1,14 @@
-# Ejercicio 3
+# Ejercicio 3 (Oracle, Postgres)
 
-## 3. (ORACLE, Postgres) Realiza un procedimiento que reciba dos nombres de usuario y genere un script que asigne al primero los privilegios de inserción y modificación sobre todas las tablas del segundo, así como el de ejecución de cualquier procedimiento que tenga el segundo usuario.
+## Enunciado
 
+Realiza un procedimiento que reciba dos nombres de usuario y genere un script que asigne al primero los privilegios de inserción y modificación sobre todas las tablas del segundo, así como el de ejecución de cualquier procedimiento que tenga el segundo usuario.
+
+## Código
 
 Primero vamos a crear el procedimiento que cederá los privilegios sobre objetos sobre el segundo usuario:
 
-```
+```sql
 CREATE OR REPLACE PROCEDURE conceder_privilegios (p_privilegiado VARCHAR2, p_cede VARCHAR2)
 AS
   v_sql VARCHAR2(2000);
@@ -30,24 +33,29 @@ END;
 
 Ahora vamos a hacer el código de comprobación de usuario:
 
-```
-CREATE OR REPLACE PROCEDURE COMPROBARUSUARIO (p_privilegiado varchar2,p_cede varchar2)
-IS
-v_resultado number;
+```sql
+CREATE OR REPLACE PROCEDURE comprobarusuario (
+    p_privilegiado VARCHAR2,
+    p_cede VARCHAR2
+) IS
+    v_resultado NUMBER;
 BEGIN
-select count (USERNAME) into v_resultado from DBA_USERS WHERE USERNAME = p_privilegiado OR USERNAME = p_cede;
-IF v_resultado < 2 THEN
-  raise_application_error(-20110,'Hay uno o varios usuarios que no existen');
-END IF;
+    SELECT COUNT (username) INTO v_resultado
+    FROM dba_users
+    WHERE username = p_privilegiado
+       OR username = p_cede;
+    IF v_resultado < 2 THEN
+        raise_application_error(-20110, 'Hay uno o varios usuarios que no existen');
+    END IF;
 END;
 /
 ```
 
+## Comprobaciones
 
 Ahora procedemos a hacer la prueba de ingresar un usuario que no exista, tras esto introduciremos el usuario válido:
 
 ![prueba1](/img/capturas-antonio/prueba-funcionamiento-caso2-ejercicio-2.png)
-
 
 Ahora la prueba de funcionamiento, entramos en el usuario antonio para ver si tenemos acceso a las tablas:
 
