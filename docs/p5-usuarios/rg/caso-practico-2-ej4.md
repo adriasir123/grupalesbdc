@@ -1,6 +1,10 @@
-# Ejercicio 4
+# Ejercicio 4 (Oracle)
 
-## 4. (ORACLE) Realiza un procedimiento que genere un script que cree un rol conteniendo todos los permisos que tenga el usuario cuyo nombre reciba como parámetro, le hayan sido asignados a aquél directamente o a traves de roles. El nuevo rol deberá llamarse BackupPrivsNombreUsuario
+## Enunciado
+
+Realiza un procedimiento que genere un script que cree un rol conteniendo todos los permisos que tenga el usuario cuyo nombre reciba como parámetro, le hayan sido asignados a aquél directamente o a traves de roles. El nuevo rol deberá llamarse BackupPrivsNombreUsuario
+
+## Código
 
 Este sería el procedimiento principal, al cual le daríamos un usuario y, si existe, nos mostrará por pantalla la creación del rol y la asignación de todos los privilegios (de sistema, sobre objetos y sobre columnas) al rol creado.
 
@@ -115,7 +119,7 @@ end ComprobarUsuario;
 /
 ```
 
-### Comprobación
+## Comprobación
 
 En la captura de pantalla vemos que si usamos el procedimiento CrearRol con un usuario que no existe nos aparece el mensaje "No existe el usuario usuario". En cambio si lo usamos con el usuario ADMIN nos mostrará todos los grant que deberemos aplicar al nuevo rol creado, que en este caso serán todos, ya que el usuario admin tiene todos los privilegios otorgados.
 
