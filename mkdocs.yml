@@ -73,6 +73,28 @@ nav:
                 - 'Ejercicio 3': 'p5-usuarios/rg/caso-practico-2-ej3.md'
                 - 'Ejercicio 4': 'p5-usuarios/rg/caso-practico-2-ej4.md'
             - 'Ejercicio grupal 3': 'p5-usuarios/rg/ejercicio-grupal-3.md'
+    - Práctica 6 almacenamiento:
+        - 'Introducción': 'p6-almacenamiento/intro.md'
+        - Responsabilidad individual:
+            - 'Alumno 1: Antonio': 'p6-almacenamiento/ri/alumno1.md'
+            - 'Alumno 2: José Juan': 'p6-almacenamiento/ri/alumno2.md'
+            - 'Alumno 3: Arantxa': 'p6-almacenamiento/ri/alumno3.md'
+            - 'Alumno 4: Adrián': 'p6-almacenamiento/ri/alumno4.md'
+        - Responsabilidad grupal:
+            - 'Ejercicio 1': 'p6-almacenamiento/rg/ejercicio1.md'
+            - 'Ejercicio 2': 'p6-almacenamiento/rg/ejercicio2.md'
+            - 'Ejercicio 3': 'p6-almacenamiento/rg/ejercicio3.md'
+            - 'Ejercicio 4': 'p6-almacenamiento/rg/ejercicio4.md'
+            - 'Ejercicio 5': 'p6-almacenamiento/rg/ejercicio5.md'
+            - 'Ejercicio 6': 'p6-almacenamiento/rg/ejercicio6.md'
+            - 'Ejercicio 7': 'p6-almacenamiento/rg/ejercicio7.md'
+            - Caso práctico:
+                - 'Parte A': 'p6-almacenamiento/rg/caso-practico-parte-a.md'
+                - 'Parte B': 'p6-almacenamiento/rg/caso-practico-parte-b.md'
+                - 'Parte C': 'p6-almacenamiento/rg/caso-practico-parte-c.md'
+                - 'Parte D': 'p6-almacenamiento/rg/caso-practico-parte-d.md'
+                - 'Parte F': 'p6-almacenamiento/rg/caso-practico-parte-f.md'
+            - 'Vídeo grupal': 'p6-almacenamiento/rg/video-grupal.md'
 markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
