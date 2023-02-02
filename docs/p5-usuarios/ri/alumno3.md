@@ -232,4 +232,22 @@ En el anterior caso comprobamos que mi usuario puede consultar (select) la tabla
        
 ### 1. Realiza un procedimiento llamado PermisosdeAsobreB que reciba dos nombres de usuario y muestre los permisos que tiene el primero de ellos sobre objetos del segundo.
 
+```sql
+CREATE OR REPLACE PROCEDURE PermisosdeAsobreB (p_usuarioA VARCHAR2, p_usuarioB VARCHAR2)
+AS
+BEGIN
+  FOR obj IN (SELECT grantee, owner, table_name, privilege
+              FROM dba_tab_privs
+              WHERE grantee = p_usuarioA AND owner = p_usuarioB)
+  LOOP
+    DBMS_OUTPUT.PUT_LINE('El usuario ' || p_usuarioA || ' tiene el privilegio ' || obj.privilege || ' sobre la tabla ' || obj.table_name || ' de ' || obj.owner);
+  END LOOP;
+END;
+/
+
+exec PermisosdeAsobreB ('ARANTXA','ADMIN');
+```
+
+![comprobacion](/img/capturas-arantxa/91.png)
+
 ### 2. Realiza un procedimiento llamado MostrarInfoPerfil que reciba el nombre de un perfil y muestre su composición y los usuarios que lo tienen asignado.
