@@ -66,7 +66,7 @@ Ejemplo:
 ```sql
 revoke select on maravilla.actor from 'arantxa'@'loaclhost';
 ```
-       
+
 ### 3. Averigua si existe el concepto de rol en MySQL y señala las diferencias con los roles de ORACLE.
 
 En MySQL sí existen los roles. Los roles de MySQL son colecciones de privilegios. Al igual que a los usuarios, a los roles se le pueden otorgar o revocar privilegios.
@@ -148,14 +148,85 @@ SELECT * FROM DBA_ROLES;
 
 Por último, en MySQL he visto que existen los roles obligatorios (mandatory roles). Los roles obligatorios permiten especificar roles como obligatorios nombrándolos en el valor de la variable de sistema mandatory_roles. El servidor trata un rol obligatorio como si fuera otorgado a todos los usuarios, por lo que no es necesario otorgarlo explícitamente a ninguna cuenta. Para especificar funciones obligatorias al inicio del servidor se definen los mandatory_roles en el archivo my.cnf del servidor.
 
-       
 ### 4. Averigua si existe el concepto de perfil como conjunto de límites sobre el uso de recursos o sobre la contraseña en MySQL y señala las diferencias con los perfiles de ORACLE.
+
+En MySQL no existe la creación de perfiles en sí, la forma de limitar los recursos a los usuarios se hace de forma diferente a como se hace en Oracle.
+
+Para restringir el uso que los usuarios hacen del servidor MySQL se debe establecer la variable del sistema **max_user_connections** en un valor distinto a cero. Esto limita la cantidad de conexiones simultáneas que puede realizar una cuenta determinada, pero no impone límites a lo que un cliente puede hacer una vez conectado. Configurar max_user_connections no habilita la administración de cuentas individuales, opción que es interesante para los administradores y que sí tenemos en Oracle.
+
+Para contrarrestar esta limitación MySQL, a la hora de usar alguno de los siguientes recursos, sí permite poner límites para cuentas individuales. Esos recursos son:
+
+- El número de consultas que una cuenta puede emitir por hora.
+- La cantidad de actualizaciones que una cuenta puede emitir por hora.
+- La cantidad de veces que una cuenta puede conectarse al servidor por hora.
+- El número de conexiones simultáneas al servidor por una cuenta.
+
+Cualquier declaración que un cliente pueda emitir tiene en contra el límite de consultas. Solo las declaraciones que modifican bases de datos o tablas cuentan para el límite de actualización.
+
+Se pueden limitar los recursos de una cuenta a la vez que se utiliza CREATE USER O ALTER USER, usándolo junto con WITH y el recurso a limitar. Por ejemplo:
+
+```sql
+CREATE USER 'arantxa'@'localhost' IDENTIFIED BY '1234'
+    ->     WITH MAX_QUERIES_PER_HOUR 20
+    ->          MAX_UPDATES_PER_HOUR 10
+    ->          MAX_CONNECTIONS_PER_HOUR 5
+    ->          MAX_USER_CONNECTIONS 2;
+
+ALTER USER 'arantxa'@'localhost' WITH MAX_QUERIES_PER_HOUR 100;
+
+--Para eliminar la limitación de un recurso habrá que ponerlo a 0
+ALTER USER 'arantxa'@'localhost' WITH MAX_CONNECTIONS_PER_HOUR 0;
+```
+
+En cuanto a las contraseñas, MySQL permite las siguientes opciones de administración:
+
+- Caducidad de la contraseña, para exigir que las contraseñas se cambien periódicamente.
+- Restricciones de reutilización de contraseñas, para evitar que se vuelvan a elegir contraseñas antiguas.
+- Verificación de contraseña, para solicitar que los cambios de contraseña también especifiquen la contraseña actual para ser reemplazada.
+- Contraseñas duales, para permitir que los clientes se conecten usando una contraseña principal o secundaria.
+- Evaluación de la seguridad de la contraseña, para exigir contraseñas seguras.
+- Generación aleatoria de contraseñas, como alternativa a la necesidad de contraseñas literales explícitas especificadas por el administrador.
+- Seguimiento de fallas de contraseña, para habilitar el bloqueo temporal de la cuenta después de demasiadas fallas consecutivas de inicio de sesión con contraseña incorrecta.
+
+Para más información sobre cómo se gestionan las anteriores limitaciones y la sintaxis que se utiliza se puede consultar la [web oficial](https://dev.mysql.com/doc/mysql-security-excerpt/8.0/en/password-management.html).
+
+En Oracle la creación de perfiles se utiliza para limitar los recursos que pueda utilizar el usuario. A cada usuario se le puede asignar un perfil ya creado, y cada perfil puede tener diferentes limitaciones, por ejemplo limitaciones de los recursos del kernel (uso de la CPU, duración de la sesión...) y limitaciones en el uso de las contraseñas de acceso (duración, intentos de acceso, cambio de contraseñas, longitud y caráceres permitidos...).
+
+Que las limitaciones se puedan agrupar en un perfil concreto es una gran ventaja para Oracle, ya que no habrá que asignar las limitaciones a cada usuario concreto, se podrá crear un perfil que sirva para muchos usuarios. Además Oracle tiene más opciones de limitación y permite al administrador llevar un mayor y mejor control de lo que hacen los usuarios en la base de datos.
 
 ### 5. Realiza consultas al diccionario de datos de MySQL para averiguar todos los privilegios que tiene un usuario concreto.
 
+Como hemos dicho anteriormente, para consultar los privilegios de un usuario concreto habrá que utilizar SHOW GRANT. En ese caso vamos a consultar los privilegios que tiene mi usuario llamado "arantxa".
+
+```sql
+mysql> show grants for arantxa;
++--------------------------------------------------------+
+| Grants for arantxa@%                                   |
++--------------------------------------------------------+
+| GRANT USAGE ON *.* TO `arantxa`@`%`                    |
+| GRANT ALL PRIVILEGES ON `maravilla`.* TO `arantxa`@`%` |
+| GRANT SELECT ON `maravilla`.`actor` TO `arantxa`@`%`   |
++--------------------------------------------------------+
+3 rows in set (0,00 sec)
+```
+
 ### 6. Realiza consultas al diccionario de datos en MySQL para averiguar qué usuarios pueden consultar una tabla concreta.
 
+En el primer ejercicio vimos que los privilegios a nivel de tabla se almacenan en la tabla del sistema **mysql.tables_priv**. Por tanto, para comprobar los usuarios que pueden consultar una tabla concreta habrá que hacer una consulta a mysql.tables_priv.
 
+```sql
+mysql> select * from mysql.tables_priv;
++-----------+-----------+---------------+------------+----------------+---------------------+------------+-------------+
+| Host      | Db        | User          | Table_name | Grantor        | Timestamp           | Table_priv | Column_priv |
++-----------+-----------+---------------+------------+----------------+---------------------+------------+-------------+
+| %         | maravilla | arantxa       | actor      | root@localhost | 2023-02-02 18:17:23 | Select     |             |
+| localhost | mysql     | mysql.session | user       | boot@          | 2022-10-26 09:23:03 | Select     |             |
+| localhost | sys       | mysql.sys     | sys_config | root@localhost | 2022-10-26 09:23:03 | Select     |             |
++-----------+-----------+---------------+------------+----------------+---------------------+------------+-------------+
+3 rows in set (0,00 sec)
+```
+
+En el anterior caso comprobamos que mi usuario puede consultar (select) la tabla actor de la base de datos maravilla, y que el usuario que le ha dado los permisos es root.
 
 ## ORACLE:
        
