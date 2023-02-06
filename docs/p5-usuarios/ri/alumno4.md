@@ -23,11 +23,15 @@ db.createUser({user: "antonio", pwd: "antonio", roles: ["readWrite"]})
 
 db.revokeRolesFromUser("antonio",[ { "role" : "readWrite", db : "ejemplo" } ])
 
+db.createCollection("coleccion2")
 
+db.createRole({role: "leer_coleccion", privileges: [{resource: {db: "ejemplo", collection: "coleccion"}, actions: ["find"]}], roles: []})
+
+db.grantRolesToUser("antonio", [{role: "leer_coleccion", db: "ejemplo"}])
 ```
 
 
-Con esto al haber creado el usuario, se le da con derechos de lectura y escritura por defecto en la base de datos en la que ha sido creada, lo que ocurre es que al hacer un RevoqueRolesFromUser pues ha perdido su rol de readWrite, por tanto no podrá ver las colecciones:
+Con esto al haber creado el usuario, se le da con derechos de lectura y escritura por defecto en la base de datos en la que ha sido creada, lo que ocurre es que al hacer un RevoqueRolesFromUser pues ha perdido su rol de readWrite, por tanto sólo podrá ver la colección "coleccion":
 
 ![prueba1](/img/capturas-antonio/prueba-funcionamiento-individual-ejercicio-1-1.png)
 
@@ -38,6 +42,31 @@ Si volvemos a entrar como administrador en el sistema y volvemos a entrar en la 
 use ejemplo
 
 db.grantRolesToUser("antonio",[ { "role" : "readWrite", db : "ejemplo" } ])
+
+
+> db.getUser("antonio")
+{
+	"_id" : "ejemplo.antonio",
+	"userId" : UUID("722d3e71-2c31-4371-803d-21c4ba8ba622"),
+	"user" : "antonio",
+	"db" : "ejemplo",
+	"roles" : [
+		{
+			"role" : "leer_coleccion",
+			"db" : "ejemplo"
+		},
+		{
+			"role" : "readWrite",
+			"db" : "ejemplo"
+		}
+	],
+	"mechanisms" : [
+		"SCRAM-SHA-1",
+		"SCRAM-SHA-256"
+	]
+}
+> 
+
 ```
 
 Y de esta manera al listar las colecciones podemos ver que estará disponible la que hemos otorgado a través del rol:
