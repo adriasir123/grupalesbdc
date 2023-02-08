@@ -163,7 +163,7 @@ Para contrarrestar esta limitación MySQL, a la hora de usar alguno de los sigui
 
 Cualquier declaración que un cliente pueda emitir tiene en contra el límite de consultas. Solo las declaraciones que modifican bases de datos o tablas cuentan para el límite de actualización.
 
-Se pueden limitar los recursos de una cuenta a la vez que se utiliza CREATE USER O ALTER USER, usándolo junto con WITH y el recurso a limitar. Por ejemplo:
+Se pueden limitar los recursos de una cuenta a la vez que se utiliza CREATE USER o ALTER USER, usándolo junto con WITH y el recurso a limitar. Por ejemplo:
 
 ```sql
 CREATE USER 'arantxa'@'localhost' IDENTIFIED BY '1234'
@@ -229,25 +229,91 @@ mysql> select * from mysql.tables_priv;
 En el anterior caso comprobamos que mi usuario puede consultar (select) la tabla actor de la base de datos maravilla, y que el usuario que le ha dado los permisos es root.
 
 ## ORACLE:
-       
+
 ### 1. Realiza un procedimiento llamado PermisosdeAsobreB que reciba dos nombres de usuario y muestre los permisos que tiene el primero de ellos sobre objetos del segundo.
 
 ```sql
 CREATE OR REPLACE PROCEDURE PermisosdeAsobreB (p_usuarioA VARCHAR2, p_usuarioB VARCHAR2)
 AS
 BEGIN
-  FOR obj IN (SELECT grantee, owner, table_name, privilege
-              FROM dba_tab_privs
-              WHERE grantee = p_usuarioA AND owner = p_usuarioB)
-  LOOP
-    DBMS_OUTPUT.PUT_LINE('El usuario ' || p_usuarioA || ' tiene el privilegio ' || obj.privilege || ' sobre la tabla ' || obj.table_name || ' de ' || obj.owner);
-  END LOOP;
+    FOR obj IN (SELECT grantee, owner, table_name, privilege
+                FROM dba_tab_privs
+                WHERE grantee = p_usuarioA AND owner = p_usuarioB)
+    LOOP
+        DBMS_OUTPUT.PUT_LINE('El usuario ' || p_usuarioA || ' tiene el privilegio ' || obj.privilege || ' sobre la tabla ' || obj.table_name || ' de ' || obj.owner);
+    END LOOP;
 END;
 /
 
 exec PermisosdeAsobreB ('ARANTXA','ADMIN');
 ```
 
+**Comprobación:**
+
+> Los nombres de los usuarios deben estar en mayúsculas, ya que así es como se guardan en las vistas del diccionario de datos.
+
 ![comprobacion](/img/capturas-arantxa/91.png)
 
 ### 2. Realiza un procedimiento llamado MostrarInfoPerfil que reciba el nombre de un perfil y muestre su composición y los usuarios que lo tienen asignado.
+
+```sql
+create or replace procedure MostrarInfoPerfil (p_perfil_name dba_profiles.profile%type)
+is
+    cursor c_informacion is
+        select resource_name, resource_type, limit
+        from dba_profiles
+        where profile = p_perfil_name;
+    cursor c_usuarios is
+        select username
+        from dba_users
+        where profile = p_perfil_name;
+
+begin
+    dbms_output.put_line(CHR(10)||'Composicion del perfil '|| p_perfil_name );
+    dbms_output.put_line('--------------------------');
+    for i in c_informacion loop
+        dbms_output.put_line('Recurso: '|| i.resource_name ||CHR(9)||CHR(9)||'Tipo de recurso: '|| i.resource_type ||CHR(9)||CHR(9)||' Limite: '|| i.limit);
+    end loop;
+    dbms_output.put_line(CHR(10)||'Usuarios con ese perfil: ');
+    dbms_output.put_line('--------------------------');
+    for i in c_usuarios loop
+        dbms_output.put_line(i.username);
+    end loop;
+end MostrarInfoPerfil;
+/
+```
+
+![compilacion](/img/capturas-arantxa/94.png)
+
+**Comprobación:**
+
+Habilitar los perfiles de ususario en Oracle:
+
+```sql
+alter session set "_ORACLE_SCRIPT"=true;
+ALTER SYSTEM SET RESOURCE_LIMIT=TRUE;
+```
+
+He creado un perfil de prueba para el usuario 'arantxa' y 'admin' que solo permite tres sesiones concurrentes, el tiempo de conexión es de 240 minutos y el tiempo de inactividad no es mayor a 5 minutos. Los demás valores serán por defecto. Le asigno el nuevo perfil a los usuarios.
+
+```sql
+CREATE PROFILE admin_perfil_prueba
+LIMIT
+  SESSIONS_PER_USER 3
+  CONNECT_TIME 240
+  IDLE_TIME 5;
+
+ALTER USER arantxa PROFILE admin_perfil_prueba;
+ALTER USER admin PROFILE admin_perfil_prueba;
+
+```
+
+![comprobacion](/img/capturas-arantxa/92.png)
+
+Probamos el procedimiento creado anteriormente:
+
+```sql
+exec MostrarInfoPerfil('ADMIN_PERFIL_PRUEBA');
+```
+
+![comprobacion](/img/capturas-arantxa/93.png)
