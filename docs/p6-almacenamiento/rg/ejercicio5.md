@@ -1,12 +1,8 @@
 # Ejercicio 5
 
-Meted las tablas EMP y DEPT de SCOTT en un cluster.
+## Meted las tablas EMP y DEPT de SCOTT en un cluster
 
 Primero creo un tablespace que nos permitirá controlar el espacio de almacenamiento que se asigna a las tablas agrupadas en el cluster.
-
-> En la cláusula DATAFILE especificamos la ubicación del archivo de datos, ya que esto permite controlar la ubicación física de los datos y, por tanto, mejorar el rendimiento y la disponibilidad de las aplicaciones. Si no se especifica la ubicación del archivo de datos, Oracle utilizará la ubicación predeterminada.
-> La cláusula SIZE especifica el tamaño inicial del archivo de datos en 64 MB.
-> La cláusula 'AUTOEXTEND ON NEXT 64M MAXSIZE 512M' indica que el archivo de datos se ampliará automáticamente en bloques de 64 MB cuando sea necesario, hasta un máximo de 512 MB.
 
 ```sql
 CREATE TABLESPACE ts_empdept
@@ -14,14 +10,19 @@ CREATE TABLESPACE ts_empdept
   AUTOEXTEND ON NEXT 64M MAXSIZE 512M;
 ```
 
-Creamos el cluster para las tablas emp y dept. Como la columna que tienen en común es DEPTNO añadimos esta al cluster para que se alamacenen los datos de ambas tablas en la misma página y cada valor clave del cluster solo se almacenará una vez.
+!!! note "Cláusulas del Tablespace:"
+    En la cláusula **DATAFILE** especificamos la ubicación del archivo de datos, ya que esto permite controlar la ubicación física de los datos y, por tanto, mejorar el rendimiento y la disponibilidad de las aplicaciones. Si no se especifica la ubicación del archivo de datos, Oracle utilizará la ubicación predeterminada.  
+    La cláusula **SIZE** especifica el tamaño inicial del archivo de datos en 64 MB.  
+    La cláusula **'AUTOEXTEND ON NEXT 64M MAXSIZE 512M'** indica que el archivo de datos se ampliará automáticamente en bloques de 64 MB cuando sea necesario, hasta un máximo de 512 MB.
+
+Ahora creamos el cluster para las tablas emp y dept. Como la columna que tienen en común es DEPTNO, añadimos esta al cluster, así se alamacenarán los datos de ambas tablas en la misma página y cada valor clave del cluster solo se almacenará una vez.
 
 ```sql
 CREATE CLUSTER cluster_empdept (deptno number(2))
 TABLESPACE ts_empdept;
 ```
 
-Creamos un índice para el cluster. Esto es obligatorio ya que si no se hiciera no se podría ejecutar ninguna sentencia DML de las tablas del cluster. El índice se utiliza para localizar una fila en el cluster, ya que apunta a la página asociada con cada valor de clave del cluster.
+Creamos un índice para el cluster. Esto es obligatorio ya que si no se hiciera no se podría ejecutar ninguna sentencia DML de las tablas del cluster. El índice se utiliza para localizar una fila en el cluster. Apunta a la página asociada con cada valor de clave del cluster.
 
 ```sql
 CREATE INDEX indice_cluster_empdept ON CLUSTER cluster_empdept;
@@ -29,7 +30,7 @@ CREATE INDEX indice_cluster_empdept ON CLUSTER cluster_empdept;
 
 A continuación habría que crear las tablas asociadas al cluster, pero en nustro caso ya tenemos creadas las tablas emp y dept con datos añadidos, por lo que vamos a realizar los siguientes pasos:
 
-1. Crear una nueva tabla en el cluster con la misma estructura que la tabla DEPT:
+- Crear una nueva tabla en el cluster con la misma estructura que la tabla DEPT:
 
 ```sql
 CREATE TABLE dept_cluster (
@@ -41,13 +42,13 @@ CREATE TABLE dept_cluster (
 CLUSTER cluster_empdept (deptno);
 ```
 
-2. Copiar los datos de la tabla DEPT a la tabla DEPT_CLUSTER:
+- Copiar los datos de la tabla DEPT a la tabla DEPT_CLUSTER:
 
 ```sql
 INSERT INTO dept_cluster SELECT * FROM dept;
 ```
 
-3. Hacer lo mismo con la tabla EMP.
+- Hacer lo mismo con la tabla EMP.
 
 ```sql
 CREATE TABLE cluster_emp (
@@ -67,19 +68,21 @@ CLUSTER cluster_empdept (deptno);
 INSERT INTO cluster_emp SELECT * FROM emp;
 ```
 
-4. Borrar la tabla EMP y DEPT originales:
+- Borrar la tabla EMP y DEPT originales:
 
 ```sql
 DROP TABLE emp;
 DROP TABLE dept;
 ```
 
-5. Renombrar la tabla CLUSTER_EMP y DEPT_CLUSTER a EMP y DEPT:
+- Renombrar la tabla CLUSTER_EMP y DEPT_CLUSTER a EMP y DEPT:
 
 ```sql
 ALTER TABLE dept_cluster RENAME TO dept;
 ALTER TABLE cluster_emp RENAME TO emp;
 ```
+
+### Comprobaciones generales
 
 **Comprobamos que el cluster se ha creado:**
 
@@ -89,7 +92,7 @@ SELECT cluster_name FROM DBA_CLUSTERS;
 
 ![cluster](/img/capturas-arantxa/96.png)
 
-**Comprobamos que las tablas están en el cluster creado:**
+**Comprobamos que las tablas pertenecen en el cluster creado:**
 
 ```sql
 SELECT table_name, cluster_name FROM USER_TABLES where table_name='DEPT' or table_name='EMP';
