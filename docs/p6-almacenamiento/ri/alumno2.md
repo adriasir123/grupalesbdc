@@ -88,8 +88,8 @@ TS1				        2,1953125 -18,585938
 
 Este comando borrará la tabla tabla1 y luego mostrará el nombre del tablespace, su tamaño en MB y la cantidad de espacio libre en MB, lo que te permitirá ver si el espacio disponible en el tablespace ha aumentado después de borrar la tabla.
 
-Explica la razón.
-```
+Explica la razón:
+
 Es posible que el espacio liberado por la eliminación de la tabla no se haya reflejado en el tablespace inmediatamente después de la eliminación debido a que Oracle no libera de forma automática el espacio ocupado por las tablas eliminadas. 
 
 Oracle utiliza un mecanismo llamado "asignación en bloques" que reserva bloques de espacio en el tablespace para una tabla y, aunque la tabla se elimine, los bloques asignados a ella pueden continuar ocupados hasta que se necesiten para nuevos datos.
@@ -97,7 +97,7 @@ Oracle utiliza un mecanismo llamado "asignación en bloques" que reserva bloques
 Para liberar de forma explícita el espacio ocupado por las tablas eliminadas en el tablespace, puedes ejecutar el comando SHRINK SPACE en la base de datos. Sin embargo, tenga en cuenta que este proceso puede ser costoso y requiere una cantidad significativa de recursos. 
 
 Por lo tanto, solo se recomienda ejecutar este comando cuando sea necesario y después de haber evaluado cuidadosamente sus posibles impactos en el rendimiento de la base de datos.
-```
+
 
 3- Convierte a TS1 en un tablespace de sólo lectura.
 
@@ -122,12 +122,12 @@ ORA-01110: archivo de datos 14: '/opt/oracle/product/19c/dbhome_1/dbs/TS1.dbf'
 ```
 
 ¿Qué ocurre?
-```
+
 Si intentamos insertar un registro en una tabla que se encuentra en un tablespace que se ha convertido en sólo lectura, recibirás un error indicando que el tablespace es de sólo lectura y no se pueden realizar operaciones de escritura en el mismo. 
 
 Esto significa que los datos en el tablespace no se pueden modificar o insertar nuevos datos.
-```
-Intenta ahora borrar la tabla.
+
+Intenta ahora borrar la tabla:
 
 ```sql
 SQL> drop table tabla2;
@@ -136,15 +136,15 @@ Tabla borrada.
 ```
 
 ¿Qué ocurre?
-```
+
 Que he eliminado la tabla 'tabla2'.
-```
+
 ¿Porqué crees que pasa eso?
-```
+
 Puede ser debido a que estamos utilizando una versión más reciente de Oracle que permite esta acción. 
 
 En versiones anteriores de Oracle, los tablespaces de sólo lectura no permitían realizar operaciones de escritura, incluyendo la eliminación de tablas. Sin embargo, en versiones más recientes, Oracle ha mejorado la gestión de los tablespaces de sólo lectura y es posible que permitan realizar ciertas operaciones de escritura, como la eliminación de tablas.
-```
+
 4- Crea un espacio de tablas TS2 con dos ficheros en rutas diferentes de 1M cada uno no autoextensibles. 
 
 ```sql
@@ -201,7 +201,7 @@ Procedimiento PL/SQL terminado correctamente.
 ```
 
 ¿Qué ocurre?
-```
+
 Lo que ocurre depende de varios factores, como la configuración y el tamaño de su base de datos, la cantidad de espacio disponible en el disco duro y la configuración del espacio de tablas.
 
 Si el espacio de tablas no está lleno, el bucle seguirá insertando registros hasta que se alcance el número especificado de registros o hasta que se produzca un error.
@@ -215,7 +215,7 @@ También es recomendable tener una política de gestión de espacio de tablas pa
 El bucle LOOP se ejecutará hasta que se hayan insertado 1000 registros o hasta que se produzca un error. Cada registro se inserta en la tabla "EMPLOYEES" con un ID incremental, un nombre generado, un departamento generado y un salario generado. 
 
 El bloque EXCEPTION maneja cualquier error que pueda ocurrir durante la ejecución del bucle.
-```
+
 5- Hacer un procedimiento llamado MostrarUsuariosporTablespace que muestre por pantalla un listado de los tablespaces existentes con la lista de usuarios que tienen asignado cada uno de ellos por defecto y el número de los mismos, así:
 ```
 
