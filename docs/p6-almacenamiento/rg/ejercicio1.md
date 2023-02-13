@@ -24,6 +24,11 @@ select id,operation,cpu_cost,cost,time,object_name from PLAN_TABLE;
 ![wireguard-site-1.png](/img/capturas-antonio/grupal1-1.png)
 
 
+
+Vamos a crear un tablespace para los índices y vamos a crear un índice para el nombre de los empleados, de esta manera almacenaremos en un tablespace aparte los índices y será mucho más rápido la búsqueda de los nombres de los empleados.
+
+
+
 Una vez hecho esto vamos a montar un disco rápido en el sistema donde albergará el tablespace del índice para que funcione lo más rápido posible y la búsqueda del nombre sea mucho más eficiente.
 
 ![wireguard-site-1.png](/img/capturas-antonio/grupal1-2.png)
@@ -62,23 +67,21 @@ autoextend on;
 ```
 
 ```sql
+CREATE TABLESPACE TS_INDICE
+DATAFILE 'ts_indice.dbf'
+SIZE 150M;
+
+CREATE INDEX index_emp_ename ON emp(ename)
+TABLESPACE TS_INDICE;
+```
+
+```sql
 set autotrace on;
-     create tablespace indices
-  2  datafile 'ename.dbf'
-  3  size 10M
-  4  autoextend on;
-
-Tablespace creado.
-
-```
-
-```
-CREATE INDEX nombres_empleados ON emp(ename)
-      TABLESPACE indices;
 ```
 
 
-![wireguard-site-1.png](/img/capturas-antonio/grupal1-4.png)
+
+![wireguard-site-1.png](/img/capturas-antonio/plan.png)
 
 
 
