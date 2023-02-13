@@ -98,6 +98,7 @@ Para liberar de forma explícita el espacio ocupado por las tablas eliminadas en
 
 Por lo tanto, solo se recomienda ejecutar este comando cuando sea necesario y después de haber evaluado cuidadosamente sus posibles impactos en el rendimiento de la base de datos.
 ```
+
 3- Convierte a TS1 en un tablespace de sólo lectura.
 
 ```sql
