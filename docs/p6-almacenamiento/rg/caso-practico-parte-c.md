@@ -13,4 +13,6 @@ CREATE TABLE Prueba (
   TABLESPACE ts_venta;
 ```
 
+**Captura de la creación:**
+
 ![Prueba](/img/capturas-arantxa/95.png)
