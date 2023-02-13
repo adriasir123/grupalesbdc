@@ -40,7 +40,7 @@ ALTER USER JUAN QUOTA 0 ON SYSTEM;
 ALTER USER CLARA QUOTA 0 ON SYSTEM;
 ```
 
-!!! note aprendiendo sobre los tablespaces:
+!!! note "Aprendiendo sobre los tablespaces:"
     UNLIMITED TABLESPACE lo que hace es tener derecho de almacenamiento ilimitado sobre cualquier espacio de tablas, lo cual te da derecho también a escribir sobre ellas.
 
     DEFAULT TABLESPACE con ello al crear un objeto sin especificar a que tablespace pertenece, se creará en el de por defecto, que en el caso del ejercicio es system.
