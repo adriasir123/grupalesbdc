@@ -7,25 +7,40 @@ Realiza un procedimiento que muestre los usuarios que pueden conceder privilegio
 ## Código
 
 ```sql
-CREATE OR REPLACE PROCEDURE MostrarUsuariosPrivilegios
-IS
-cursor c_usuarios is select grantee FROM dba_sys_privs;
+SQL> CREATE OR REPLACE PROCEDURE mostrar_privilegios_sistema
+AS
+  CURSOR c_info IS
+    SELECT USERNAME, PRIVILEGE
+    FROM USER_SYS_PRIVS
+    WHERE PRIVILEGE IN ('CREATE USER', 'ALTER USER', 'DROP USER');
+  v_usuario VARCHAR2(30);
+  v_privilegio VARCHAR2(30);
 BEGIN
-  for i in c_usuarios loop
-    DBMS_OUTPUT.PUT_LINE(i.grantee || ' puede conceder los siguientes privilegios: ');
-    DBMS_OUTPUT.PUT_LINE('  ');
-    MostrarPrivilegios(i.grantee);
-  end loop;
-END;
+  DBMS_OUTPUT.PUT_LINE('Usuarios que tienen privilegios de sistema y sus privilegios:');
+  DBMS_OUTPUT.PUT_LINE('--------------------------------------------------------------');
+  FOR i IN c_info LOOP
+    v_usuario := i.USERNAME;
+    v_privilegio := i.PRIVILEGE;
+    DBMS_OUTPUT.PUT_LINE(v_usuario || ' tiene el privilegio de ' || v_privilegio);
+  END LOOP;
+END mostrar_privilegios_sistema;
 /
 
-CREATE OR REPLACE PROCEDURE MostrarPrivilegios(p_usuario dba_sys_privs.GRANTEE%type)
-IS
-cursor c_privilegios is select privilege FROM dba_sys_privs;
-BEGIN
-  for i in c_privilegios loop
-    DBMS_OUTPUT.PUT_LINE( i.privilege );
-  end loop;
-END;
-/
+Procedimiento creado.
+```
+
+## Comprobación
+
+```sql
+SQL> exec mostrar_privilegios_sistema;
+
+Usuarios que tienen privilegios de sistema y sus privilegios:
+--------------------------------------------------------------
+SYS tiene el privilegio de ALTER USER
+SYS tiene el privilegio de DROP USER
+SYS tiene el privilegio de CREATE USER
+
+PL/SQL procedure successfully completed.
+
+Commit complete.
 ```
