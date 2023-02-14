@@ -1,14 +1,14 @@
 # Alumno 1
 
 
-1. Muestra los espacios de tablas existentes en tu base de datos y la ruta de los ficheros que los componen. ¿Están las extensiones gestionadas localmente o por diccionario?
+## 1. Muestra los espacios de tablas existentes en tu base de datos y la ruta de los ficheros que los componen. ¿Están las extensiones gestionadas localmente o por diccionario?
 
 
 ```sql
 select FILE_NAME, TABLESPACE_NAME, BLOCKS from dba_data_files UNION select FILE_NAME, TABLESPACE_NAME, BLOCKS from dba_temp_files;
 ```
 
-2. Usa la vista del diccionario de datos v$datafile para mirar cuando fue la última vez que se ejecutó el proceso CKPT en tu base de datos.
+## 2. Usa la vista del diccionario de datos v$datafile para mirar cuando fue la última vez que se ejecutó el proceso CKPT en tu base de datos.
 
 ```sql
 
@@ -31,7 +31,7 @@ select min(CHECKPOINT_TIME) from v$datafile;
     * el número de bloques escritos en el redo log desde el último checkpoint alcanza el límite definido en el parámetro LOG_CHECKPOINT_INTERVAL,
     * cuando transcurra el número de segundos indicado por el parámetro LOG_CHECKPOINT_TIMEOUT desde el último checkpoint.
 
-3. Intenta crear el tablespace TS1 con un fichero de 2M en tu disco que crezca automáticamente cuando sea necesario. ¿Puedes hacer que la gestión de extensiones sea por diccionario? Averigua la razón.
+## 3. Intenta crear el tablespace TS1 con un fichero de 2M en tu disco que crezca automáticamente cuando sea necesario. ¿Puedes hacer que la gestión de extensiones sea por diccionario? Averigua la razón.
 
 ```sql
 create tablespace ts1 
@@ -56,7 +56,7 @@ MAXEXTENTS 121
 PCTINCREASE 0);
 ```
 
-4. Averigua el tamaño de un bloque de datos en tu base de datos. Cámbialo al doble del valor que tenga.
+## 4. Averigua el tamaño de un bloque de datos en tu base de datos. Cámbialo al doble del valor que tenga.
 
 ```sql
 select distinct bytes/blocks from user_segments;
@@ -88,7 +88,7 @@ select tablespace_name, block_size from dba_tablespaces where tablespace_name='t
 ![alumno1.png](/img/capturas-antonio/practica5-ejercicio4-2.png)
 
 
-5. Realiza un procedimiento MostrarObjetosdeUsuarioenTS que reciba el nombre de un tablespace y el de un usuario y muestre qué objetos tiene el usuario en dicho tablespace y qué tamaño tiene cada uno de ellos.
+## 5. Realiza un procedimiento MostrarObjetosdeUsuarioenTS que reciba el nombre de un tablespace y el de un usuario y muestre qué objetos tiene el usuario en dicho tablespace y qué tamaño tiene cada uno de ellos.
 
 ```sql
 create or replace procedure MostrarObjetosdeUsuarioenTS(p_tablespace VARCHAR2,p_usuario VARCHAR2)
@@ -107,7 +107,7 @@ end;
 
 ![alumno1.png](/img/capturas-antonio/practica5-ejercicio5-1.png)
 
-6. Realiza un procedimiento llamado MostrarUsrsCuotaIlimitada que muestre los usuarios que puedan escribir de forma ilimitada en más de uno de los tablespaces que cuentan con ficheros en la unidad C:
+## 6. Realiza un procedimiento llamado MostrarUsrsCuotaIlimitada que muestre los usuarios que puedan escribir de forma ilimitada en más de uno de los tablespaces que cuentan con ficheros en la unidad C:
 
 
 ```sql
@@ -135,7 +135,7 @@ Aquí relacionamos al usuario con la cuota ilimitada y los tablespaces que tiene
 
 Postgres:
        
-7. Averigua si existe el concepto de tablespace en Postgres, en qué consiste y las diferencias con los tablespaces de ORACLE.
+## 7. Averigua si existe el concepto de tablespace en Postgres, en qué consiste y las diferencias con los tablespaces de ORACLE.
 
 Los tablespaces en Postgres es la versión reducida de la de Oracle, pero presenta una mejora, ya que se pueden almacenar estos tablespaces en diferentes directorios, lo que permite una mejor gestión de los mismos.
 
@@ -152,7 +152,7 @@ LOCATION directory_path;
 
 MySQL:
 
-8. Averigua si pueden establecerse claúsulas de almacenamiento para las tablas o los espacios de tablas en MySQL.
+## 8. Averigua si pueden establecerse claúsulas de almacenamiento para las tablas o los espacios de tablas en MySQL.
 
 Existe, pero es una extensión de la base de datos llamada InnoDB, que es la que permite el uso de estos tablespaces.
 
@@ -167,7 +167,7 @@ Como podemos observar, la sintaxis es bastante parecida a la que encontramos en 
 
 MongoDB:
 
-9. Averigua si existe el concepto de índice en MongoDB y las diferencias con los índices de ORACLE. Explica los distintos tipos de índice que ofrece MongoDB.
+## 9. Averigua si existe el concepto de índice en MongoDB y las diferencias con los índices de ORACLE. Explica los distintos tipos de índice que ofrece MongoDB.
 
 
 En Oracle y MongoDB, los índices son responsables de acelerar la consulta de búsqueda proporcionando un acceso rápido. Los índices en el sistema de gestión de bases de datos relacional o no relacional no siempre son relevantes. Los índices son excelentes para reducir el tiempo que requiere buscar y obtener datos utilizando las declaraciones SELECT.
