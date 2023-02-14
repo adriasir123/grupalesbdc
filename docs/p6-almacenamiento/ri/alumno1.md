@@ -4,20 +4,20 @@
 1. Muestra los espacios de tablas existentes en tu base de datos y la ruta de los ficheros que los componen. ¿Están las extensiones gestionadas localmente o por diccionario?
 
 
-
+```sql
 select FILE_NAME, TABLESPACE_NAME, BLOCKS from dba_data_files UNION select FILE_NAME, TABLESPACE_NAME, BLOCKS from dba_temp_files;
-
+```
 
 2. Usa la vista del diccionario de datos v$datafile para mirar cuando fue la última vez que se ejecutó el proceso CKPT en tu base de datos.
 
-
+´´´sql
 select max(CHECKPOINT_TIME) from v$datafile;
 
 
 select min(CHECKPOINT_TIME) from v$datafile;
+´´´
 
-
-!![alumno1.png](/img/capturas-antonio/practica5-ejercicio1-1.png)
+![alumno1.png](/img/capturas-antonio/practica5-ejercicio1-1.png)
 
 
 !!! note "Qué es CKPT?"
@@ -150,7 +150,7 @@ LOCATION directory_path;
 
 MySQL:
 
-1. Averigua si pueden establecerse claúsulas de almacenamiento para las tablas o los espacios de tablas en MySQL.
+8. Averigua si pueden establecerse claúsulas de almacenamiento para las tablas o los espacios de tablas en MySQL.
 
 Existe, pero es una extensión de la base de datos llamada InnoDB, que es la que permite el uso de estos tablespaces.
 
