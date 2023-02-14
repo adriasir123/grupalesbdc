@@ -10,7 +10,6 @@ SQL> CREATE ROLE programadores;
 SQL> GRANT CONNECT, SELECT, INSERT, UPDATE, DELETE ON Prueba TO programadores;
 Rol creado.
 ```
-GRANT OPTION ON Prueba TO programadores;
 
 2- Asignar el rol de programadores a los programadores deseados. Por ejemplo:
 

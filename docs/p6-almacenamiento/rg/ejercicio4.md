@@ -75,7 +75,6 @@ PSQLU  =
 
 4- Eliminamos las entradas que no estén siendo utilizadas, en nuestro caso eliminaríamos las entradas de LISTERNER_ORCLCDB y PSQLU:
 
-
 ```shell
 oracle@oracle:/opt/oracle/product/19c/dbhome_1$ nano network/admin/tnsnames.ora 
 

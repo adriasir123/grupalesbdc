@@ -91,9 +91,15 @@ Realiza consultas al diccionario de datos en Postgres para averiguar qué usuari
 Para obtener una lista de usuarios y roles que tienen permisos de SELECT en una tabla específica, ejecutamos la siguiente consulta:
 
 ```sql
-SELECT grantee, privilege_type
+postgres=# SELECT grantee, privilege_type
 FROM information_schema.table_privileges
-WHERE table_name = 'nombre_tabla' AND privilege_type = 'SELECT';
+WHERE table_name = 'pg_aggregate' AND privilege_type = 'SELECT';
+
+ grantee  | privilege_type 
+----------+----------------
+ postgres | SELECT
+ PUBLIC   | SELECT
+(2 filas)
 ```
 
 Debemos tener en cuenta que tenemos que reemplazar 'nombre_tabla' con el nombre de la tabla para la cual deseas obtener información de permisos.
