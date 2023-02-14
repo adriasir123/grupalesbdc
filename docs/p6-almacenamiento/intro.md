@@ -14,3 +14,5 @@ Puedes empezar a navegar por la documentación utilizando el navbar a tu izquier
 Esperamos que esta documentación sea clara, y de utilidad.
 
 ![almacenamiento](https://cdn.pixabay.com/photo/2013/07/12/17/22/database-152091_960_720.png)
+
+<img src="https://cdn.pixabay.com/photo/2013/07/12/17/22/database-152091_960_720.png" alt= “almacenamiento” width="400" height="450">
