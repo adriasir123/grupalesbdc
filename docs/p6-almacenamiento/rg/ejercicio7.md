@@ -31,11 +31,11 @@ Para implementar una configuración de sharding en MongoDB, debemos tener tres c
 
 - Un servior **mongos**: estos actúan como intermediarios entre las aplicaciones cliente y los servidores de datos. Los servidores mongos gestionan la distribución de los chunks de datos entre los servidores de datos y redirigen las consultas a los servidores apropiados.
 
-- Servidores de datos (**shards**): estos son servidores que almacenan los chunks de datos y ejecutan las operaciones CRUD.
+- Servidores de datos fragmentados (**shards**): estos son servidores que almacenan los chunks de datos y ejecutan las operaciones CRUD.
 
-- Al menos un **servidor de configuración** de sharding: que mantiene información sobre la configuración de sharding, incluyendo la asignación de chunks a servidores de datos.
+- Al menos un **servidor de configuración** de fragmentación: que mantiene información sobre la configuración de sharding, incluyendo la asignación de chunks a servidores de datos.
 
-Una vez configurados los componentes, se debe shardear una base de datos o colección específica en MongoDB. Esto se hace asignando una clave de sharding a la colección, que se utiliza para fragmentar los datos en chunks. Para especificar la clave de sharding se utiliza la siguiente sintaxis en la línea de comandos:
+Una vez realizada la configuración de los nodos, se debe fragmentar una base de datos o colección específica. Esto se hace asignando una clave de sharding a la colección, que se utiliza para fragmentar los datos en chunks. Para especificar la clave de sharding se utiliza la siguiente sintaxis en la línea de comandos:
 
 ```bash
 sh.enableSharding("database_name")
@@ -48,9 +48,11 @@ sh.shardCollection("database_name.collection_name", { shard_key: 1 } )
 
 Una vez shardeada la colección, los chunks de datos se distribuirán automáticamente entre los servidores de datos y las consultas se redirigirán a los servidores apropiados utilizando los servidores mongos.
 
-#### Ejemplo de implementación
+Veremos más detenidamente cuáles son los pasos a seguir en el siguiente ejemplo de implementación.
 
-En nuestro caso vamos a crear un cluster shardeado usando Docker-Compose, por lo que el primer paso será instalar el paquete.
+### Ejemplo de implementación
+
+En nuestro caso vamos a crear un cluster shardeado (fragmentado) usando Docker-Compose, por lo que el primer paso será instalar el paquete.
 
 ```bash
 sudo apt install docker-compose
@@ -64,7 +66,7 @@ sudo systemctl start docker
 
 Vamos a descargar los ficheros del siguiente repositorio: [MongoDB Sharding with Docker](https://github.com/kayne87/mongodb-sharding-docker)
 
-Entramos en el repositorio descargado. Si queremos modificar las instancias que se crearán, nombres o eliminar/añadir algún shard o servidor de configuración, podemos ver el fichero docker-compose.yml. Para nuestro caso no voy a modificar nada, ya que esto es un ejemplo de creación de configuración de sharding. Así pues, iniciamos docker-compose.
+Entramos en el repositorio descargado. Si queremos modificar las instancias que se crearán, nombres o eliminar/añadir algún servidor shard o de configuración, podemos ver el fichero docker-compose.yml del repositorio. Para nuestro caso no voy a modificar nada, ya que esto es un ejemplo de creación de configuración de sharding. Así pues, iniciamos docker-compose.
 
 ```bash
 cd Descargas/mongodb-sharding-docker-master
@@ -75,7 +77,7 @@ sudo docker-compose up -d
 ![docker-compose](/img/capturas-arantxa/99.png)
 ![docker-compose](/img/capturas-arantxa/100.png)
 
-Entramos en el servidor de configuración **mongocfg1** e iniciamos el Replica Set (conjunto de réplicas) mediante rs.initiate(). Este comando iniciará la replicación con la configuración predeterminada inferida por el servidor MongoDB. Al configurar un conjunto de réplicas que consta de varios servidores independientes, tengo que poner el nombre del Replica Set, el valor configsvr en true y la información de los hosts creados.
+Entramos en el servidor de configuración **mongocfg1** e iniciamos el Replica Set (conjunto de réplicas) mediante `rs.initiate()`. Este comando iniciará la replicación con la configuración predeterminada inferida por el servidor MongoDB, así que si quiero configurar un conjunto de réplicas que consta de varios servidores independientes, tengo que poner algunos datos: como el nombre del Replica Set, el valor configsvr en true y la información de los hosts creados.
 
 ```bash
 docker exec -it mongocfg1 /bin/bash
@@ -85,7 +87,7 @@ mongosh
 rs.initiate({_id: "cfg", configsvr: true, members: [{_id: 0, host: "mongocfg1"},{_id: 1, host: "mongocfg2"}, {_id: 2, host : "mongocfg3"}]})
 ```
 
-Comprobamos el resultado con rs.status(). Debería salirnos algo parecido a lo siguiente:
+Comprobamos el resultado con `rs.status()`. Debería salirnos algo parecido a lo siguiente:
 
 ```bash
 cfg [direct: primary] test> rs.status()
@@ -472,7 +474,7 @@ shard2 [direct: secondary] test> rs.status()
 }
 ```
 
-Salimos y entramos en el nodo **mongos1** para añadir los clústeres fragmentados. Esto lo haremos con sh.addShard().
+Salimos y entramos en la instancia **mongos1** para añadir los clústeres fragmentados. Esto lo haremos con `sh.addShard()`.
 
 ```bash
 exit
@@ -728,7 +730,9 @@ databases
 ]
 ```
 
-Vamos a hacerlo con otro ejemplo.
+#### Base de datos con uno de los campos de la colección fragmentado
+
+Vamos a hacerlo con otra base de datos de ejemplo.
 
 Activamos la fragmentación para la base de datos **populations**.
 
@@ -814,4 +818,5 @@ Totals
 }
 ```
 
-> Para más información y aprender a configurar el Sharding (fragmentación) en MongoDB sin utilizar Docker se puede seguir el siguiente [tutorial](https://www.digitalocean.com/community/tutorials/how-to-use-sharding-in-mongodb).
+!!! note "Más info"
+    Para más información y aprender a configurar el Sharding (fragmentación) en MongoDB sin utilizar Docker se puede seguir el siguiente [tutorial](https://www.digitalocean.com/community/tutorials/how-to-use-sharding-in-mongodb).
