@@ -25,7 +25,7 @@ select id,operation,cpu_cost,cost,time,object_name from PLAN_TABLE;
 
 
 
-Vamos a crear un tablespace para los índices y vamos a crear un índice para el nombre de los empleados, de esta manera almacenaremos en un tablespace aparte los índices y será mucho más rápido la búsqueda de los nombres de los empleados.
+
 
 
 
@@ -59,6 +59,8 @@ systemctl start opt-oracle-oradata-ORCLCDB-vdb.mount
 
 Ahora entramos como administrador a sqlplus y creamos el tablespace en el disco que hemos montado.
 
+Vamos a crear un tablespace para los índices y vamos a crear un índice para el nombre de los empleados, de esta manera almacenaremos en un tablespace aparte los índices y será mucho más rápido la búsqueda de los nombres de los empleados.
+
 ```sql
 create tablespace indices
 datafile 'ename.dbf'
@@ -75,13 +77,8 @@ CREATE INDEX index_emp_ename ON emp(ename)
 TABLESPACE TS_INDICE;
 ```
 
-```sql
-set autotrace on;
-```
 
 
 
 ![wireguard-site-1.png](/img/capturas-antonio/plan.png)
-
-
 

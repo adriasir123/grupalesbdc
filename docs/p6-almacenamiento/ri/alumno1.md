@@ -10,12 +10,14 @@ select FILE_NAME, TABLESPACE_NAME, BLOCKS from dba_data_files UNION select FILE_
 
 2. Usa la vista del diccionario de datos v$datafile para mirar cuando fue la última vez que se ejecutó el proceso CKPT en tu base de datos.
 
-´´´sql
+```sql
+
 select max(CHECKPOINT_TIME) from v$datafile;
 
 
 select min(CHECKPOINT_TIME) from v$datafile;
-´´´
+
+```
 
 ![alumno1.png](/img/capturas-antonio/practica5-ejercicio1-1.png)
 
