@@ -81,4 +81,3 @@ TABLESPACE TS_INDICE;
 
 
 ![wireguard-site-1.png](/img/capturas-antonio/plan.png)
-
