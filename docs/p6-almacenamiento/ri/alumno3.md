@@ -30,20 +30,86 @@ alter tablespace ts2 add datafile '/home/usuario/ts23/ts2_3.dbf' size 1M;
 
 ### 3. Crea el tablespace TS3 gestionado localmente con un tamaño de extension uniforme de 128K y un fichero de datos asociado. Cambia la ubicación del fichero de datos y modifica la base de datos para que pueda acceder al mismo. Crea en TS3 dos tablas e inserta registros en las mismas. Comprueba que segmentos tiene TS3, qué extensiones tiene cada uno de ellos y en qué ficheros se encuentran.
 
-MODIFICAR!!!
+En el home de mi usuario:
+
+```bash
+mkdir ts23
+sudo chown oracle: ts23/
+```
+
+Creamos el tablespace TS3.
 
 ```sql
-create tablespace ts3 datafile '/home/usuario/ts3/ts3_1.dbf' size 1M extent management local uniform size 128K;
-alter database datafile '/home/usuario/ts3/ts3_1.dbf' offline;
-alter database datafile '/home/usuario/ts3/ts3_1.dbf' online;
-create table t1 (id number(10)) tablespace ts3;
-create table t2 (id number(10)) tablespace ts3;
-insert into t1 values (1);
-insert into t2 values (1);
-select segment_name, segment_type, extent_id, bytes, file_id
-from dba_extents
+create tablespace ts3 datafile '/home/usuario/ts23/ts3.dbf' size 1M extent management local uniform size 128K;
+```
+
+Ponemos el tablespaces offline:
+
+```sql
+ALTER TABLESPACE ts3 OFFLINE NORMAL;
+```
+
+Cambiamos la ubicación del fichero de datos desde la terminal a la carpeta ts21.
+
+```bash
+sudo mv ts23/ts3.dbf ts22/
+```
+
+Usamos ALTER TABLESPACE con RENAME DATAFILE para cambiar la ubicación en la que se encuentra el fichero de datos.
+
+```sql
+alter tablespace ts3
+rename datafile '/home/usuario/ts23/ts3.dbf'
+to '/home/usuario/ts22/ts3.dbf';
+```
+
+Activamos el tablespace.
+
+```sql
+ALTER TABLESPACE ts3 ONLINE;
+```
+
+Creamos dos tablas e insertamos registros.
+
+```sql
+create table tabla1
+  (codigo varchar2(15),
+  nombre varchar2(15))
+  tablespace ts3;
+
+create table tabla2
+  (codigo varchar2(15),
+  nombre varchar2(15))
+  tablespace ts3;
+
+insert into tabla1 values ('A1234', 'Pepito');
+insert into tabla2 values ('B5678', 'Camionero');
+```
+
+Comprobamos los segmentos que tiene TS3 y las extensiones que tiene cada uno de ellos y en qué ficheros se encuentran.
+
+```sql
+--Comprobar segmentos
+select owner, segment_name, segment_type, bytes from dba_segments
 where tablespace_name = 'TS3';
 ```
+
+![segmentos](/img/capturas-arantxa/105.png)
+
+```sql
+--Comprobar extensiones de esos segmentos
+select segment_name, extent_id, bytes, file_id from dba_extents
+where segment_name = 'TABLA1' or segment_name = 'TABLA2';
+```
+
+![extensiones](/img/capturas-arantxa/106.png)
+
+```sql
+--Comprobar fichero donde se encuentra 
+select file_name from dba_data_files where file_id=19;
+```
+
+![fichero](/img/capturas-arantxa/107.png)
 
 ### 4. Redimensiona los ficheros asociados a los tres tablespaces que has creado de forma que ocupen el mínimo espacio posible para alojar sus objetos.
 
