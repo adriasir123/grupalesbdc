@@ -113,6 +113,142 @@ select file_name from dba_data_files where file_id=19;
 
 ### 4. Redimensiona los ficheros asociados a los tres tablespaces que has creado de forma que ocupen el mínimo espacio posible para alojar sus objetos.
 
+Comprobar el espacio utilizado por los datafile de los tablespace.
+
+```sql
+--TS1
+select segment_name, bytes from dba_segments
+where tablespace_name = 'TS1';
+
+SEGMENT_NAME
+--------------------------------------------------------------------------------
+     BYTES
+----------
+LIBROS
+     65536
+
+select segment_name, extent_id, bytes/1024 as tamano_K, file_id from dba_extents
+where segment_name = 'LIBROS';
+
+SEGMENT_NAME
+--------------------------------------------------------------------------------
+ EXTENT_ID   TAMANO_K	 FILE_ID
+---------- ---------- ----------
+LIBROS
+	 0	   64	      20
+
+
+select file_name from dba_data_files where file_id=20;
+
+FILE_NAME
+--------------------------------------------------------------------------------
+/home/usuario/ts11/ts1.dbf
+```
+
+Podemos comprobar que TS1 está utilizando el fichero ts1.dbf (con id 20) y que su tamaño en K es de 64.
+
+```sql
+--TS2
+select segment_name, bytes from dba_segments
+where tablespace_name = 'TS2';
+
+SEGMENT_NAME
+--------------------------------------------------------------------------------
+     BYTES
+----------
+EMPLOYEES
+     65536
+
+
+select segment_name, extent_id, bytes/1024 as tamano_K, file_id from dba_extents
+where segment_name = 'EMPLOYEES';
+
+SEGMENT_NAME
+--------------------------------------------------------------------------------
+ EXTENT_ID	TAMANO_K	 FILE_ID
+---------- ---------- ----------
+EMPLOYEES
+	 0			64	      16
+
+
+select file_name from dba_data_files where file_id=16;
+FILE_NAME
+--------------------------------------------------------------------------------
+/home/usuario/ts21/ts2_1.dbf
+```
+
+Podemos comprobar que en TS2 el datafile utilizado para la tabla employees es ts2_1.dbf y su tamaño de 64K.
+
+```sql
+--TS3
+--En el ejercicio anterior pudimos comprobar que el datafile es ts3.dbf y que tiene un tamaño de 128K cada segmento
+select segment_name, bytes from dba_segments
+where tablespace_name = 'TS3';
+
+SEGMENT_NAME
+--------------------------------------------------------------------------------
+     BYTES
+----------
+TABLA1
+    131072
+
+TABLA2
+    131072
+
+
+select segment_name, extent_id, bytes/1024 as tamano_K, file_id from dba_extents
+where segment_name = 'TABLA1' or segment_name = 'TABLA2';
+
+SEGMENT_NAME
+--------------------------------------------------------------------------------
+ EXTENT_ID   TAMANO_K	 FILE_ID
+---------- ---------- ----------
+TABLA1
+	 0	  128	      19
+
+TABLA2
+	 0	  128	      19
+
+
+select file_name from dba_data_files where file_id=19;
+
+FILE_NAME
+--------------------------------------------------------------------------------
+/home/usuario/ts22/ts3.dbf
+```
+
+También podemos verlo de la siguiente forma:
+
+```sql
+SELECT tablespace_name, SUM(bytes)/1024 AS size_mb
+FROM dba_segments where tablespace_name='TS1' or tablespace_name='TS2' or tablespace_name='TS3'
+GROUP BY tablespace_name;
+
+TABLESPACE_NAME      	  SIZE_MB
+----------------------- ----------
+TS1				             64
+TS3				            256
+TS2				             64
+```
+
+Por tanto el resultado sería:
+- TS1 (/home/usuario/ts11/ts1.dbf): 64K
+- TS2 (/home/usuario/ts21/ts2_1.dbf): 64K
+- TS3 (/home/usuario/ts22/ts3.dbf): 256K
+
+Así pues redimensionamos los datafile a esos tamaños para tener el mínimo espacio posible para alojar sus objetos.
+
+```sql
+--Quitar solo lectura del fichero de TS1
+ALTER TABLESPACE TS1 READ WRITE;
+--Redimensionar fichero de TS1
+alter database datafile '/home/usuario/ts11/ts1.dbf' resize 64K;
+--Redimensionar fichero de TS2
+alter database datafile '/home/usuario/ts21/ts2_1.dbf' resize 64K;
+--Redimensionar fichero de TS3
+alter database datafile '/home/usuario/ts22/ts3.dbf' resize 256K;
+```
+
 ### 5. Realiza un procedimiento llamado InformeRestricciones que reciba el nombre de una tabla y muestre los nombres de las restricciones que tiene, a qué columna o columnas afectan y en qué consisten exactamente.
 
 ### 6. Realiza un procedimiento llamado MostrarAlmacenamientoUsuario que reciba el nombre de un usuario y devuelva el espacio que ocupan sus objetos agrupando por dispositivos y archivos:
