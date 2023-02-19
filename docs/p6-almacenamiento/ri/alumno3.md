@@ -145,7 +145,7 @@ FILE_NAME
 /home/usuario/ts11/ts1.dbf
 ```
 
-Podemos comprobar que TS1 está utilizando el fichero ts1.dbf (con id 20) y que su tamaño en K es de 64.
+Podemos comprobar que TS1 está utilizando el fichero ts1.dbf (con id 20) y que su tamaño en K es de 64. Vamos ahora con TS2.
 
 ```sql
 --TS2
@@ -177,7 +177,7 @@ FILE_NAME
 /home/usuario/ts21/ts2_1.dbf
 ```
 
-Podemos comprobar que en TS2 el datafile utilizado para la tabla employees es ts2_1.dbf y su tamaño de 64K.
+Podemos comprobar que en TS2 el datafile utilizado para la tabla employees es ts2_1.dbf y su tamaño de 64K. Por último, vemos TS3.
 
 ```sql
 --TS3
@@ -217,7 +217,7 @@ FILE_NAME
 /home/usuario/ts22/ts3.dbf
 ```
 
-También podemos verlo de la siguiente forma:
+Otra forma de calcularlo más rápidamente es como se muestra a continuación:
 
 ```sql
 SELECT tablespace_name, SUM(bytes)/1024 AS size_mb
@@ -232,8 +232,11 @@ TS2				             64
 ```
 
 Por tanto el resultado sería:
+
 - TS1 (/home/usuario/ts11/ts1.dbf): 64K
+
 - TS2 (/home/usuario/ts21/ts2_1.dbf): 64K
+
 - TS3 (/home/usuario/ts22/ts3.dbf): 256K
 
 Así pues redimensionamos los datafile a esos tamaños para tener el mínimo espacio posible para alojar sus objetos.
@@ -250,6 +253,47 @@ alter database datafile '/home/usuario/ts22/ts3.dbf' resize 256K;
 ```
 
 ### 5. Realiza un procedimiento llamado InformeRestricciones que reciba el nombre de una tabla y muestre los nombres de las restricciones que tiene, a qué columna o columnas afectan y en qué consisten exactamente.
+
+```sql
+CREATE OR REPLACE PROCEDURE InformeRestricciones (p_tabla user_constraints.table_name%TYPE) IS
+BEGIN
+  FOR i IN (SELECT c.constraint_name, c.constraint_type, c.table_name, cc.column_name
+            FROM user_constraints c, user_cons_columns cc
+            WHERE c.constraint_name = cc.constraint_name
+            AND c.table_name = p_tabla)
+  LOOP
+      DBMS_OUTPUT.PUT_LINE('------------------------------------------------------------');
+      DBMS_OUTPUT.PUT_LINE('RESTRICCION: ' || i.constraint_name||CHR(10)||'El tipo de restriccion es "' || i.constraint_type||'".'||CHR(10)||'- Pertenece a la tabla "'|| i.table_name||'" y afecta a la columna "' || i.column_name||'".');
+  END LOOP;
+  DBMS_OUTPUT.PUT_LINE('------------------------------------------------------------');
+  DBMS_OUTPUT.PUT_LINE('Los tipos de restricciones son los siguientes:'||CHR(10)||CHR(9)||'C: Check constraint'||CHR(10)||CHR(9)||'F: Foreign key constraint'||CHR(10)||CHR(9)||'P: Primary key constraint'||CHR(10)||CHR(9)||'R: Referential integrity constraint (equivalente a una restriccion foreign_key)'||CHR(10)||CHR(9)||'U: Unique key constraint');
+END;
+/
+```
+
+Comprobación:
+
+```sql
+exec InformeRestricciones('EMP');
+
+------------------------------------------------------------
+RESTRICCION: FK_CLUSTER_DEPTNO
+El tipo de restriccion es "R".
+- Pertenece a la tabla "EMP" y afecta a la columna "DEPTNO".
+------------------------------------------------------------
+RESTRICCION: PK_CLUSTER_EMP
+El tipo de restriccion es "P".
+- Pertenece a la tabla "EMP" y afecta a la columna "EMPNO".
+------------------------------------------------------------
+Los tipos de restricciones son los siguientes:
+	C: Check constraint
+	F: Foreign key constraint
+	P: Primary key constraint
+	R: Referential integrity constraint (equivalente a una restriccion foreign_key)
+	U: Unique key constraint
+
+Procedimiento PL/SQL terminado correctamente.
+```
 
 ### 6. Realiza un procedimiento llamado MostrarAlmacenamientoUsuario que reciba el nombre de un usuario y devuelva el espacio que ocupan sus objetos agrupando por dispositivos y archivos:
 
@@ -282,14 +326,65 @@ alter database datafile '/home/usuario/ts22/ts3.dbf' resize 256K;
 				Total Espacio Usuario en la BD: nnnnnnn K
 ```
 
+
 ## Postgres:
 
 ### 7. Averigua si es posible establecer cuotas de uso sobre los tablespaces en Postgres.
+
+PostgreSQL permite crear tablespaces pero de una forma más sencilla que en Oracle o MySQL. Muchas de las opciones que encontramos en Oracle a la hora de crear los tablespaces no existen en PostgreSQL. Por ejemplo en PostgreSQL no podemos establecer un tamaño máximo al datafile. No tendremos ninguna opción para asignar cuotas de almacenamiento. La única forma de controlar el espacio es utilizando algunas funciones de PostgreSQL para comprobar el tamaño ocupado por objetos de la base de datos. Por ejemplo, la función pg_total_relation_size() nos dirá el tamaño que ocupa una tabla de la base de datos.
+
+```sql
+--Ver el tamaño de la tabla película con la función pg_total_relation_size() y con la función pg_size_pretty() para que se vea el resultado mejorado en KB
+
+maravilla=# SELECT pg_size_pretty(pg_total_relation_size('pelicula'));
+ pg_size_pretty 
+----------------
+ 24 kB
+(1 fila)
+```
 
 ## MySQL:
 
 ### 8. Averigua si existe el concepto de extensión en MySQL y si coincide con el existente en ORACLE.
 
+Sí existe el concepto de extensión en MySQL. En MySQL el término "extent" se utiliza en el contexto de InnoDB para referirse a un grupo de páginas dentro de un tablespace. Cada extent en InnoDB tiene un tamaño fijo y contiene un número fijo de páginas, según la configuración de tamaño de página de InnoDB y el tamaño de la extensión.
+
+En InnoDB, el tamaño de la extensión se define como 1 MB para los tamaños de página de 4 KB, 8 KB y 16 KB, y aumenta a medida que aumenta el tamaño de la página. Por ejemplo, para un tamaño de página de 32 KB, el tamaño de la extensión es de 2 MB, y para un tamaño de página de 64 KB, el tamaño de la extensión es de 4 MB.
+
+Las operaciones de E/S en InnoDB están diseñadas para trabajar con extensiones, lo que significa que se leen, escriben, asignan o liberan datos una extensión a la vez. Esto mejora la eficiencia de E/S y reduce la fragmentación del tablespace.
+
+MySQL no utiliza el término "extent" en el mismo contexto que Oracle. En Oracle, el término "extent" se refiere a una porción de un tablespace que se utiliza para almacenar segmentos de la base de datos, como tablas, índices y otros objetos. En Oracle, cada extent tiene un tamaño fijo y se utiliza para almacenar un segmento específico. Cuando un segmento de la base de datos crece y no hay más espacio disponible en su extent actual, se asigna un nuevo extent para el segmento.
+
+Por tanto, aunque ambos conceptos se refieren a porciones de almacenamiento utilizadas para almacenar objetos de la base de datos, la implementación de los términos "extent" en MySQL y Oracle son diferentes.
+
 ## MongoDB:
 
 ### 9. Averigua si en MongoDB puede saberse el espacio disponible para almacenar nuevos documentos.
+
+Para obtener información sobre el espacio disponible en un servidor MongoDB podemos utilizar el comando db.stats(). Este comando devuelve una serie de estadísticas sobre una base de datos, incluyendo el tamaño total de la base de datos, el espacio utilizado por la base de datos, y el espacio disponible para la base de datos.
+
+Se pueden utilizar los parámetros **scale** y **freeStorage** para ver, respectivamente, los resultados en KB (poniendo el valor en 1024) y el espacio libre para las colecciones de la base de datos (poniendo el valor en 1).
+
+```sql
+maravilla> db.stats( { freeStorage: 1, scale: 1024 } )
+
+{
+  db: 'maravilla',
+  collections: 5,
+  views: 0,
+  objects: 19,
+  avgObjSize: 73.21052631578948,
+  dataSize: 1.3583984375,
+  storageSize: 68,
+  freeStorageSize: 0,
+  indexes: 5,
+  indexSize: 68,
+  indexFreeStorageSize: 0,
+  totalSize: 136,
+  totalFreeStorageSize: 0,
+  scaleFactor: 1024,
+  fsUsedSize: 34825072,
+  fsTotalSize: 39987708,
+  ok: 1
+}
+```
