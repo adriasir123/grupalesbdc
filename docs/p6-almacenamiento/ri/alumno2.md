@@ -217,8 +217,8 @@ El bucle LOOP se ejecutará hasta que se hayan insertado 1000 registros o hasta 
 El bloque EXCEPTION maneja cualquier error que pueda ocurrir durante la ejecución del bucle.
 
 5- Hacer un procedimiento llamado MostrarUsuariosporTablespace que muestre por pantalla un listado de los tablespaces existentes con la lista de usuarios que tienen asignado cada uno de ellos por defecto y el número de los mismos, así:
-```
 
+```
 Tablespace xxxx:
 
 	Usr1
@@ -240,33 +240,68 @@ Total Usuarios BD: nn
 
 No olvides incluir los tablespaces temporales y de undo.
 
-Primero, creamos y compilamos el código:
+Primero, he dividido el codigo en tres procedimientos, el primero que debemos ejecutar, es el que nos muestra "Total Usuarios BD":
+
+```sql
+SQL> CREATE OR REPLACE PROCEDURE MostrarUsuariosporBD AS
+  2    CURSOR c_us IS SELECT username FROM dba_users;
+  3    v_cont NUMBER := 0;
+  4  BEGIN
+  5    FOR r_us IN c_us LOOP
+  6      v_cont := v_cont + 1;
+  7    END LOOP;
+  8    DBMS_OUTPUT.PUT_LINE('Total Usuarios BD: ' || v_cont);
+  9  END MostrarUsuariosporBD;
+  10  /
+
+PROCEDURE created.
+
+Commit complete.
+```
+
+El segundo, nos muestra "Total Usuarios Tablespace":
+
+```sql
+SQL> CREATE OR REPLACE PROCEDURE MostrarUsuariosporTablespaceTS (v_ts_name VARCHAR2) AS
+  2    CURSOR c_us IS
+  3      SELECT username FROM dba_ts_quotas WHERE tablespace_name = v_ts_name
+  4        UNION
+  5      SELECT username FROM dba_users WHERE default_tablespace = v_ts_name ORDER BY username;
+  6    v_cont NUMBER := 0;
+  7  BEGIN
+  8    DBMS_OUTPUT.PUT_LINE('Tablespace ' || v_ts_name || ':');
+  9    FOR r_us IN c_us LOOP
+  10      DBMS_OUTPUT.PUT_LINE('    ' || r_us.username);
+  11      v_cont := v_cont + 1;
+  12    END LOOP;
+  13    DBMS_OUTPUT.PUT_LINE('Total Usuarios Tablespace ' || v_ts_name || ': ' || v_cont);
+  14  END MostrarUsuariosporTablespaceTS;
+  15  /
+
+PROCEDURE created.
+
+Commit complete.
+```
+
+Y el último procedimiento es el final, el cual nos enseñará el informe al completo:
 
 ```sql
 SQL> CREATE OR REPLACE PROCEDURE MostrarUsuariosporTablespace AS
-  2    CURSOR c_ts IS SELECT tablespace_name, username FROM dba_ts_quotas UNION SELECT default_tablespace, username FROM dba_users WHERE default_tablespace NOT IN ('SYSTEM', 'SYSAUX') ORDER BY tablespace_name;
-  3    v_ts_name VARCHAR2(30);
-  4    v_ts_prev VARCHAR2(30) := NULL;
-  5    v_us_count NUMBER := 0;
-  6    v_tot_count NUMBER := 0;
-  7  BEGIN
+  2    CURSOR c_ts IS
+  3      SELECT DISTINCT tablespace_name FROM (SELECT tablespace_name FROM dba_ts_quotas UNION SELECT default_tablespace AS tablespace_name FROM dba_users);
+  4    v_ts_name VARCHAR2(30);
+  5    v_undo VARCHAR2(30);
+  6  BEGIN
+  7    SELECT value into v_undo FROM v$parameter WHERE name = 'undo_tablespace';
   8    FOR r_ts IN c_ts LOOP
-  9      IF v_ts_prev IS NULL OR v_ts_prev != r_ts.tablespace_name THEN
-  10        IF v_ts_prev IS NOT NULL THEN
-  11          DBMS_OUTPUT.PUT_LINE('Total Usuarios Tablespace ' || v_ts_prev || ': ' || v_us_count);
-  12        END IF;
-  13        DBMS_OUTPUT.PUT_LINE('Tablespace ' || r_ts.tablespace_name || ':');
-  14        v_ts_prev := r_ts.tablespace_name;
-  15        v_us_count := 0;
-  16      END IF;
-  17      DBMS_OUTPUT.PUT_LINE('    ' || r_ts.username);
-  18      v_us_count := v_us_count + 1;
-  19      v_tot_count := v_tot_count + 1;
-  20    END LOOP;
-  21    DBMS_OUTPUT.PUT_LINE('Total Usuarios Tablespace ' || v_ts_prev || ': ' || v_us_count);
-  22    DBMS_OUTPUT.PUT_LINE('Total Usuarios BD: ' || v_tot_count);
-  23  END MostrarUsuariosporTablespace;
-  24  /
+  9      v_ts_name := r_ts.tablespace_name;
+  10      MostrarUsuariosporTablespaceTS(v_ts_name);
+  11    END LOOP;
+  12    MostrarUsuariosporTablespaceTS('TEMP');
+  13    MostrarUsuariosporTablespaceTS(v_undo);
+  14    MostrarUsuariosporBD;
+  15  END MostrarUsuariosporTablespace;
+  16  /
 
 PROCEDURE created.
 
@@ -279,61 +314,86 @@ Posteriormente, lo ejecutamos y comprobamos que funciona:
 SQL> exec MostrarUsuariosporTablespace;
 
 Tablespace SYSAUX:
-APPQOSSYS
-AUDSYS
-DBSFWUSER
-GGSYS
-GSMADMIN_INTERNAL
-MDSYS
-OLAPSYS
+
+  APPQOSSYS
+  AUDSYS
+  DBSFWUSER
+  GGSYS
+  GSMADMIN_INTERNAL
+  MDSYS
+  OLAPSYS
+
 Total Usuarios Tablespace SYSAUX: 7
+
 Tablespace SYSTEM:
-LBACSYS
-MDSYS
-OUTLN
-Total Usuarios Tablespace SYSTEM: 3
+
+  LBACSYS
+  MDSYS
+  OUTLN
+  SYSTEM
+  XS$NULL
+
+Total Usuarios Tablespace SYSTEM: 5
+
 Tablespace TS2:
-ANONYMOUS
-APPQOSSYS
-AUDSYS
-C###JOSEJU10
-CTXSYS
-DBSFWUSER
-DBSNMP
-DIP
-DVF
-DVSYS
-EXAMENPLSQL
-GGSYS
-GSMADMIN_INTERNAL
-GSMCATUSER
-GSMROOTUSER
-GSMUSER
-HIPODROMO
-JOSEJU
-JUVENIL
-LBACSYS
-MDDATA
-MDSYS
-OJVMSYS
-OLAPSYS
-ORACLE_OCM
-ORDDATA
-ORDPLUGINS
-ORDSYS
-OUTLN
-REMOTE_SCHEDULER_AGENT
-SI_INFORMTN_SCHEMA
-SYS
-SYS$UMF
-SYSBACKUP
-SYSDG
-SYSKM
-SYSRAC
-WMSYS
-XDB
+
+  ANONYMOUS
+  APPQOSSYS
+  AUDSYS
+  C###JOSEJU10
+  CTXSYS
+  DBSFWUSER
+  DBSNMP
+  DIP
+  DVF
+  DVSYS
+  EXAMENPLSQL
+  GGSYS
+  GSMADMIN_INTERNAL
+  GSMCATUSER
+  GSMROOTUSER
+  GSMUSER
+  HIPODROMO
+  JOSEJU
+  JUVENIL
+  LBACSYS
+  MDDATA
+  MDSYS
+  OJVMSYS
+  OLAPSYS
+  ORACLE_OCM
+  ORDDATA
+  ORDPLUGINS
+  ORDSYS
+  OUTLN
+  REMOTE_SCHEDULER_AGENT
+  SI_INFORMTN_SCHEMA
+  SYS
+  SYS$UMF
+  SYSBACKUP
+  SYSDG
+  SYSKM
+  SYSRAC
+  WMSYS
+  XDB
+
 Total Usuarios Tablespace TS2: 39
-Total Usuarios BD: 49
+
+Tablespace USERS:
+
+  SCOTT
+
+Total Usuarios Tablespace USERS: 1
+
+Tablespace TEMP:
+
+Total Usuarios Tablespace TEMP: 0
+
+Tablespace UNDOTBS1:
+
+Total Usuarios Tablespace UNDOTBS1: 0
+
+Total Usuarios BD: 52
 
 PL/SQL procedure successfully completed.
 

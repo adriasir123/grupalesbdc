@@ -92,7 +92,7 @@ SELECT cluster_name FROM DBA_CLUSTERS;
 
 ![cluster](/img/capturas-arantxa/96.png)
 
-**Comprobamos que las tablas pertenecen en el cluster creado:**
+**Comprobamos que las tablas pertenecen al cluster creado:**
 
 ```sql
 SELECT table_name, cluster_name FROM USER_TABLES where table_name='DEPT' or table_name='EMP';
