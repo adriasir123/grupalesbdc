@@ -111,29 +111,150 @@ Cada registro es un extent dentro de dicho segmento, y esto queda claro al ver l
 
 ### Ejercicio 5
 
-> Queremos cambiar de ubicación un tablespace, pero antes debemos avisar a los usuarios que tienen acceso de lectura o escritura a cualquiera de los objetos almacenados en el mismo. Escribe un procedimiento llamado MostrarUsuariosAccesoTS que obtenga un listado con los nombres de dichos usuarios.
+> Hacer un procedimiento llamado `MostrarUsuariosAccesoTS` que liste usuarios que tienen permisos de lectura (select) o escritura (insert,update,delete) a cualquiera de los objetos almacenados en el tablespace indicado
 
+```sql
+CREATE OR REPLACE PROCEDURE comprobar_privilegios(
+  p_usuario IN DBA_USERS.username%TYPE,
+  p_tablespace IN DBA_TABLES.tablespace_name%TYPE,
+  p_control OUT BOOLEAN
+) AS
 
+    CURSOR c_lista_privilegios IS
+        SELECT *
+        FROM DBA_TAB_PRIVS
+        WHERE grantee = p_usuario
+            OR grantee IN (
+                SELECT granted_role
+                FROM DBA_ROLE_PRIVS
+                CONNECT BY PRIOR granted_role = grantee START WITH grantee = p_usuario
+            )
+        ORDER BY 1,2,3,4;
 
+    vn_contador NUMBER := 0;
+    vn_objeto_en_tablespace NUMBER;
 
+BEGIN
 
+    FOR i IN c_lista_privilegios LOOP
 
+        IF i.privilege IN ('SELECT','INSERT','UPDATE','DELETE') THEN
 
+            SELECT COUNT(*) INTO vn_objeto_en_tablespace
+            FROM DBA_TABLES
+            WHERE owner = i.owner
+              AND table_name = i.table_name
+              AND tablespace_name = p_tablespace;
+            
+            IF vn_objeto_en_tablespace = 1 THEN
+                vn_contador := vn_contador + 1;
+                vn_objeto_en_tablespace := 0;
+            END IF;
 
+        END IF;
+  
+    END LOOP;
 
+    IF vn_contador > 0 THEN
+        p_control := TRUE;
+    ELSE
+        p_control := FALSE;
+    END IF;
 
+END;
+/
+-- (1)!
+```
 
+1. Este es el procedimiento hijo, aquí se comprueban los privilegios del usuario, y se comprueba si los objetos sobre los que tiene privilegios están en el tablespace que se busca
 
+```sql
+CREATE OR REPLACE PROCEDURE MostrarUsuariosAccesoTS(
+  p_nombre_tablespace IN VARCHAR2
+) AS
 
+    CURSOR c_usuarios IS
+        SELECT username
+        FROM DBA_USERS;
 
+    vb_control BOOLEAN;
 
+BEGIN
 
+  FOR i IN c_usuarios LOOP
 
+    comprobar_privilegios(i.username,p_nombre_tablespace,vb_control);
 
+    IF vb_control THEN
+      DBMS_OUTPUT.PUT_LINE('El usuario ' || i.username || ' tiene acceso en el tablespace ' || p_nombre_tablespace);
+    END IF;
+    
+  END LOOP;
 
+END;
+/
+-- (1)!
+```
 
+1. Este es el procedimmiento padre, y aquí es donde sucede el loop de usuarios. Se mandan ciertos parámetros al hijo para comprobar si tiene alguno de los privilegios que se buscan sobre objetos en el tablespace indicado.
 
+```sql
+EXEC MostrarUsuariosAccesoTS('USERS');
 
+El usuario SYS tiene acceso en el tablespace USERS
+El usuario EXAMENBD34 tiene acceso en el tablespace USERS
+El usuario HIPODROMO tiene acceso en el tablespace USERS
+El usuario ORDSYS tiene acceso en el tablespace USERS
+El usuario USRPRACTICA1 tiene acceso en el tablespace USERS
+
+PL/SQL procedure successfully completed.
+```
+
+Para comprobar que los resultados son correctos, puedo tomar de prueba al usuario `HIPODROMO`.
+
+Siguiendo la lógica de estos procedimientos, puedo por ejemplo primero mostrar el listado completo de privilegios que tiene `HIPODROMO`:
+
+```sql
+SELECT grantee,owner,table_name,privilege
+FROM DBA_TAB_PRIVS
+WHERE grantee = 'HIPODROMO'
+    OR grantee IN (
+        SELECT granted_role
+        FROM DBA_ROLE_PRIVS
+        CONNECT BY PRIOR granted_role = grantee START WITH grantee = 'HIPODROMO'
+    )
+ORDER BY 1,2,3,4;
+```
+
+```sql
+GRANTEE 								                                                                                                                 OWNER	  TABLE_NAME								                                                                                                                   PRIVILEGE
+-------------------------------------------------------------------------------------------------------------------------------- -------------------------------------------------------------------------------------------------------------------------------- -------------------------------------------------------------------------------------------------------------------------------- ----------------------------------------
+HIPODROMO								                                                                                                                 SCOTT	  DEPT								                                                                                                                           DELETE
+HIPODROMO								                                                                                                                 SCOTT	  DEPT								                                                                                                                           SELECT
+```
+
+Vemos que sobre la tabla `DEPT` de `SCOTT` tiene permisos que buscamos.
+
+Ahora sólo quedaría comprobar si efectivamente esa tabla está en el tablespace `USERS`:
+
+```sql
+SELECT owner,table_name,tablespace_name
+FROM DBA_TABLES
+WHERE owner = 'SCOTT'
+  AND table_name = 'DEPT'
+  AND tablespace_name = 'USERS';
+```
+
+```sql
+OWNER								                                                                                                                         TABLE_NAME								                                                                                                                  TABLESPACE_NAME
+-------------------------------------------------------------------------------------------------------------------------------- -------------------------------------------------------------------------------------------------------------------------------- ------------------------------
+SCOTT								                                                                                                                         DEPT	  USERS
+```
+
+Vemos que sí.
+
+Ese usuario por lo tanto queda marcado como que tiene acceso al tablespace `USERS` y se muestra.  
+El mismo proceso de comprobaciones se repite para todos los usuarios.
 
 ### Ejercicio 6
 
