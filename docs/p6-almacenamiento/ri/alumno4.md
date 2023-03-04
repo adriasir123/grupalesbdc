@@ -111,7 +111,11 @@ Cada registro es un extent dentro de dicho segmento, y esto queda claro al ver l
 
 ### Ejercicio 5
 
-> Hacer un procedimiento llamado `MostrarUsuariosAccesoTS` que liste usuarios que tienen permisos de lectura (select) o escritura (insert,update,delete) a cualquiera de los objetos almacenados en el tablespace indicado
+#### 5.1 Enunciado
+
+Hacer un procedimiento llamado `MostrarUsuariosAccesoTS` que liste usuarios que tienen permisos de lectura (select) o escritura (insert,update,delete) a cualquiera de los objetos almacenados en el tablespace indicado
+
+#### 5.2 Código
 
 ```sql
 CREATE OR REPLACE PROCEDURE comprobar_privilegios(
@@ -198,6 +202,10 @@ END;
 
 1. Este es el procedimmiento padre, y aquí es donde sucede el loop de usuarios. Se mandan ciertos parámetros al hijo para comprobar si tiene alguno de los privilegios que se buscan sobre objetos en el tablespace indicado.
 
+#### 5.3 Comprobaciones
+
+Muestro la ejecución y el resultado:
+
 ```sql
 EXEC MostrarUsuariosAccesoTS('USERS');
 
@@ -258,35 +266,395 @@ El mismo proceso de comprobaciones se repite para todos los usuarios.
 
 ### Ejercicio 6
 
-> Realiza un procedimiento llamado MostrarInfoTabla que reciba el nombre de una tabla y muestre la siguiente información sobre la misma: propietario, usuarios que pueden leer sus datos, usuarios que pueden cambiar (insertar, modificar o eliminar) sus datos, usuarios que pueden modificar su estructura, usuarios que pueden eliminarla, lista de extensiones y en qué fichero de datos se encuentran.
+#### 6.1 Enunciado
 
+Realizar un procedimiento llamado `MostrarInfoTabla` que reciba el nombre de una tabla y muestre la siguiente información sobre la misma:
 
+- Propietario
+- Usuarios que pueden leer sus datos (select)
+- Usuarios que pueden cambiar (insert, update o delete) sus datos
+- Usuarios que pueden modificar su estructura
+- Usuarios que pueden eliminarla
+- Lista de extensiones
+- En qué fichero de datos se encuentran
 
+#### 6.2 Código
 
+```sql
+CREATE OR REPLACE PROCEDURE comprobar_privilegios_eliminadores(
+    p_usuario IN DBA_USERS.username%TYPE,
+    p_owner IN DBA_TABLES.owner%TYPE,
+    p_tabla IN DBA_TABLES.table_name%TYPE,
+    p_control OUT BOOLEAN
+) AS
 
+    CURSOR c_lista_privilegios IS
+        SELECT *
+        FROM DBA_SYS_PRIVS
+        WHERE grantee = p_usuario
+            OR grantee IN (
+                SELECT granted_role
+                FROM DBA_ROLE_PRIVS
+                CONNECT BY PRIOR granted_role = grantee START WITH grantee = p_usuario
+            )
+        ORDER BY 1,2,3;
 
+    vn_contador NUMBER := 0;
 
+BEGIN
 
+    FOR i IN c_lista_privilegios LOOP
 
+        IF i.privilege = 'DROP ANY TABLE' THEN
+            vn_contador := vn_contador + 1;
+        END IF;
 
+    END LOOP;
 
+    IF vn_contador > 0 THEN
+        p_control := TRUE;
+    ELSE
+        p_control := FALSE;
+    END IF;
 
+END;
+/
+```
 
+```sql
+CREATE OR REPLACE PROCEDURE comprobar_eliminadores(
+    p_owner IN DBA_TABLES.owner%TYPE,
+    p_tabla IN DBA_TABLES.table_name%TYPE,
+    p_eliminadores OUT VARCHAR2
+) AS
 
+    CURSOR c_usuarios IS
+        SELECT username
+        FROM DBA_USERS;
 
+    vb_control BOOLEAN;
 
+BEGIN
 
+    FOR i IN c_usuarios LOOP
 
+        comprobar_privilegios_eliminadores(i.username,p_owner,p_tabla,vb_control);
 
+        IF i.username = p_owner THEN
+            p_eliminadores := p_eliminadores || i.username || ' (propietario), ';
+        END IF;
 
+        IF vb_control THEN
+            p_eliminadores := p_eliminadores || i.username || ', ';
+        END IF;
+      
+    END LOOP;
 
+    p_eliminadores := RTRIM(p_eliminadores, ', ');
 
+END;
+/
+```
 
+```sql
+CREATE OR REPLACE PROCEDURE comprobar_privilegios_alteradores(
+  p_usuario IN DBA_USERS.username%TYPE,
+  p_owner IN DBA_TABLES.owner%TYPE,
+  p_tabla IN DBA_TABLES.table_name%TYPE,
+  p_control OUT BOOLEAN
+) AS
 
+    CURSOR c_lista_privilegios IS
+        SELECT *
+        FROM DBA_TAB_PRIVS
+        WHERE grantee = p_usuario
+            OR grantee IN (
+                SELECT granted_role
+                FROM DBA_ROLE_PRIVS
+                CONNECT BY PRIOR granted_role = grantee START WITH grantee = p_usuario
+            )
+        ORDER BY 1,2,3,4;
+
+    vn_contador NUMBER := 0;
+
+BEGIN
+
+    FOR i IN c_lista_privilegios LOOP
+
+        IF i.privilege = 'ALTER' AND i.owner = p_owner AND i.table_name = p_tabla THEN
+            vn_contador := vn_contador + 1;
+        END IF;
+
+    END LOOP;
+
+    IF vn_contador > 0 THEN
+        p_control := TRUE;
+    ELSE
+        p_control := FALSE;
+    END IF;
+
+END;
+/
+```
+
+```sql
+CREATE OR REPLACE PROCEDURE comprobar_alteradores(
+    p_owner IN DBA_TABLES.owner%TYPE,
+    p_tabla IN DBA_TABLES.table_name%TYPE,
+    p_alteradores OUT VARCHAR2
+) AS
+
+    CURSOR c_usuarios IS
+        SELECT username
+        FROM DBA_USERS;
+
+    vb_control BOOLEAN;
+
+BEGIN
+
+    FOR i IN c_usuarios LOOP
+
+        comprobar_privilegios_alteradores(i.username,p_owner,p_tabla,vb_control);
+
+        IF vb_control THEN
+            p_alteradores := p_alteradores || i.username || ', ';
+        END IF;
+      
+    END LOOP;
+
+    p_alteradores := RTRIM(p_alteradores, ', ');
+
+END;
+/
+```
+
+```sql
+CREATE OR REPLACE PROCEDURE comprobar_privilegios_modificadores(
+  p_usuario IN DBA_USERS.username%TYPE,
+  p_owner IN DBA_TABLES.owner%TYPE,
+  p_tabla IN DBA_TABLES.table_name%TYPE,
+  p_control OUT BOOLEAN
+) AS
+
+    CURSOR c_lista_privilegios IS
+        SELECT *
+        FROM DBA_TAB_PRIVS
+        WHERE grantee = p_usuario
+            OR grantee IN (
+                SELECT granted_role
+                FROM DBA_ROLE_PRIVS
+                CONNECT BY PRIOR granted_role = grantee START WITH grantee = p_usuario
+            )
+        ORDER BY 1,2,3,4;
+
+    vn_contador NUMBER := 0;
+
+BEGIN
+
+    FOR i IN c_lista_privilegios LOOP
+
+        IF i.privilege IN ('INSERT','UPDATE','DELETE') AND i.owner = p_owner AND i.table_name = p_tabla THEN
+            vn_contador := vn_contador + 1;
+        END IF;
+
+    END LOOP;
+
+    IF vn_contador > 0 THEN
+        p_control := TRUE;
+    ELSE
+        p_control := FALSE;
+    END IF;
+
+END;
+/
+```
+
+```sql
+CREATE OR REPLACE PROCEDURE comprobar_modificadores(
+    p_owner IN DBA_TABLES.owner%TYPE,
+    p_tabla IN DBA_TABLES.table_name%TYPE,
+    p_modificadores OUT VARCHAR2
+) AS
+
+    CURSOR c_usuarios IS
+        SELECT username
+        FROM DBA_USERS;
+
+    vb_control BOOLEAN;
+
+BEGIN
+
+    FOR i IN c_usuarios LOOP
+
+        comprobar_privilegios_modificadores(i.username,p_owner,p_tabla,vb_control);
+
+        IF vb_control THEN
+            p_modificadores := p_modificadores || i.username || ', ';
+        END IF;
+      
+    END LOOP;
+
+    p_modificadores := RTRIM(p_modificadores, ', ');
+
+END;
+/
+```
+
+```sql
+CREATE OR REPLACE PROCEDURE comprobar_privilegios_lectores(
+  p_usuario IN DBA_USERS.username%TYPE,
+  p_owner IN DBA_TABLES.owner%TYPE,
+  p_tabla IN DBA_TABLES.table_name%TYPE,
+  p_control OUT BOOLEAN
+) AS
+
+    CURSOR c_lista_privilegios IS
+        SELECT *
+        FROM DBA_TAB_PRIVS
+        WHERE grantee = p_usuario
+            OR grantee IN (
+                SELECT granted_role
+                FROM DBA_ROLE_PRIVS
+                CONNECT BY PRIOR granted_role = grantee START WITH grantee = p_usuario
+            )
+        ORDER BY 1,2,3,4;
+
+    vn_contador NUMBER := 0;
+
+BEGIN
+
+    FOR i IN c_lista_privilegios LOOP
+
+        IF i.privilege = 'SELECT' AND i.owner = p_owner AND i.table_name = p_tabla THEN
+            vn_contador := vn_contador + 1;
+        END IF;
+  
+    END LOOP;
+
+    IF vn_contador > 0 THEN
+        p_control := TRUE;
+    ELSE
+        p_control := FALSE;
+    END IF;
+
+END;
+/
+```
+
+```sql
+CREATE OR REPLACE PROCEDURE comprobar_lectores(
+    p_owner IN DBA_TABLES.owner%TYPE,
+    p_tabla IN DBA_TABLES.table_name%TYPE,
+    p_lectores OUT VARCHAR2
+) AS
+
+    CURSOR c_usuarios IS
+        SELECT username
+        FROM DBA_USERS;
+
+    vb_control BOOLEAN;
+
+BEGIN
+
+    FOR i IN c_usuarios LOOP
+
+        comprobar_privilegios_lectores(i.username,p_owner,p_tabla,vb_control);
+
+        IF vb_control THEN
+            p_lectores := p_lectores || i.username || ', ';
+        END IF;
+
+    END LOOP;
+
+    p_lectores := RTRIM(p_lectores, ', ');
+
+END;
+/
+```
+
+```sql
+CREATE OR REPLACE PROCEDURE MostrarInfoTabla (
+    p_owner IN VARCHAR2,
+    p_tabla IN VARCHAR2
+) AS
+
+    vv_propietario VARCHAR2(30);
+    vv_lectores VARCHAR2(4000);
+    vv_modificadores VARCHAR2(4000);
+    vv_alteradores VARCHAR2(4000);
+    vv_eliminadores VARCHAR2(4000);
+    vv_extensiones VARCHAR2(4000);
+    vv_datafile VARCHAR2(4000);
+
+BEGIN
+    -- Propietario
+    SELECT owner INTO vv_propietario
+    FROM DBA_TABLES
+    WHERE table_name = p_tabla
+      AND owner = p_owner;
+
+    -- Lectores
+    comprobar_lectores(p_owner,p_tabla,vv_lectores);
+
+    -- Modificadores
+    comprobar_modificadores(p_owner,p_tabla,vv_modificadores);
+
+    -- Alteradores
+    comprobar_alteradores(p_owner,p_tabla,vv_alteradores);
+
+    -- Eliminadores
+    comprobar_eliminadores(p_owner,p_tabla,vv_eliminadores);
+
+    -- Extensiones
+    SELECT extent_id INTO vv_extensiones
+    FROM DBA_EXTENTS
+    WHERE owner = p_owner
+      AND segment_name = p_tabla;
+
+    -- Datafile
+    SELECT file_name INTO vv_datafile
+    FROM DBA_DATA_FILES
+    WHERE file_id = (
+      SELECT file_id
+      FROM DBA_EXTENTS
+      WHERE owner = p_owner
+        AND segment_name = p_tabla
+    );
+
+  -- Informe
+  DBMS_OUTPUT.PUT_LINE('Propietario: ' || vv_propietario);
+  DBMS_OUTPUT.PUT_LINE('Usuarios que pueden leer los datos: ' || vv_lectores);
+  DBMS_OUTPUT.PUT_LINE('Usuarios que pueden cambiar los datos: ' || vv_modificadores);
+  DBMS_OUTPUT.PUT_LINE('Usuarios que pueden modificar la estructura: ' || vv_alteradores);
+  DBMS_OUTPUT.PUT_LINE('Usuarios que pueden eliminar la tabla: ' || vv_eliminadores);
+  DBMS_OUTPUT.PUT_LINE('Lista de extensiones (IDs): ' || vv_extensiones);
+  DBMS_OUTPUT.PUT_LINE('Datafile: ' || vv_datafile);
+END;
+/
+```
+
+#### 6.3 Comprobaciones
+
+Muestro la ejecución y el resultado:
+
+```sql
+EXEC MostrarInfoTabla('SCOTT','DEPT');
+Propietario: SCOTT
+Usuarios que pueden leer los datos: HIPODROMO
+Usuarios que pueden cambiar los datos: EXAMENBD34, HIPODROMO
+Usuarios que pueden modificar la estructura: HIPODROMO
+Usuarios que pueden eliminar la tabla: SYS, SYSTEM, GSMADMIN_INTERNAL, WMSYS, EXAMENBD34, SCOTT (propietario), HIPODROMO
+Lista de extensiones (IDs): 0
+Datafile: /opt/oracle/oradata/ORCLCDB/users01.dbf
+
+PL/SQL procedure successfully completed.
+```
+
+Aparece mucho `HIPODROMO` porque es un usuario que he estado reutilizando para pruebas.
 
 ## PostgreSQL
 
-> Averigua si pueden establecerse claúsulas de almacenamiento para las tablas o los espacios de tablas en Postgres.
+> Averiguar si pueden establecerse claúsulas de almacenamiento para las tablas o los espacios de tablas en Postgres.
 
 
 
@@ -309,12 +677,8 @@ El mismo proceso de comprobaciones se repite para todos los usuarios.
 
 ## MongoDB
 
-> Explica los distintos motores de almacenamiento que ofrece MongoDB, sus características principales y en qué casos es más recomendable utilizar cada uno de ellos.
+> Explicar los distintos motores de almacenamiento que ofrece MongoDB, sus características principales y en qué casos es más recomendable utilizar cada uno de ellos.
 
+Este apartado ya lo he explicado en mi vídeo de la grupal. El enlace aquí abajo se reproduce a partir del momento donde empiezo a hablar de ello:
 
-
-
-
-
-
-
+<iframe width="560" height="315" src="https://www.youtube.com/embed/ht7NDjBt-QA?start=1817" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
