@@ -94,7 +94,7 @@ nav:
                 - 'Parte C': 'p6-almacenamiento/rg/caso-practico-parte-c.md'
                 - 'Parte D': 'p6-almacenamiento/rg/caso-practico-parte-d.md'
                 - 'Parte F': 'p6-almacenamiento/rg/caso-practico-parte-f.md'
-            - 'Vídeo grupal': 'p6-almacenamiento/rg/video-grupal.md'
+            - 'Vídeo grupal': 'https://www.youtube.com/playlist?list=PLEWfYIoqM1BD3n5YrMo9xFvyz9mgQsecH'
 markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true

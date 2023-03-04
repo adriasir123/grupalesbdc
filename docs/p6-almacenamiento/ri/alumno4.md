@@ -681,4 +681,4 @@ Aparece mucho `HIPODROMO` porque es un usuario que he estado reutilizando para p
 
 Este apartado ya lo he explicado en mi vídeo de la grupal. El enlace aquí abajo se reproduce a partir del momento donde empiezo a hablar de ello:
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/ht7NDjBt-QA?start=1817" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/ht7NDjBt-QA?start=1706" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
